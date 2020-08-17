@@ -1,0 +1,34 @@
+{
+  "name": "kununu/collections",
+  "license": "proprietary",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/kununu/kununu-scripts.git",
+      "no-api": true
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kununu\\Collection\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kununu\\Collection\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --coverage-clover tests/.results/coverage.xml --coverage-html tests/.results/html/"
+  },
+  "scripts-descriptions": {
+    "test": "Run all tests"
+  }
+}
