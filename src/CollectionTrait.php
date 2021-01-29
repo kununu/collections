@@ -57,7 +57,7 @@ trait CollectionTrait
         return $this->mapToArray();
     }
 
-    private function mapToArray(bool $withKeys = true): array
+    protected function mapToArray(bool $withKeys = true): array
     {
         return array_map(
             function($element) {
