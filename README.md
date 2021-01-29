@@ -53,7 +53,9 @@ It also provides some interfaces to filter and group data on your collections an
 This is the most basic trait and it provides the following methods to your class:
 
 #### fromIterable
-`public static function fromIterable(iterable $data): self`
+```php
+public static function fromIterable(iterable $data): self;
+```
 
 This method tries to create an instance of your collection class with data from a source that is an `iterable` (e.g. an array).
 
@@ -62,7 +64,7 @@ Internally it is iterating the items in the data source and calling the `append`
 With a concrete implementation on your class of the `append` method you can define on how to transform each iterable element into an instance of a valid object your collection will accept and handle.
 
 #### empty
-```
+```php
 public function empty(): bool;
 ```
 
@@ -70,19 +72,19 @@ Just a shortcut to see if you collection has a count of elements greater than ze
 
 #### add
 
-```
+```php
 public function add($value): self;
 ```
 
 A fluent version of `append`. To do stuff like:
 
-```
+```php
 $collection->add($item1)->add($item2);
 ```
 
 #### unique
 
-```
+```php
 public function unique(): self;
 ```
 
@@ -90,7 +92,7 @@ This method will produce a collection with distinct elements of your collection.
 
 #### reverse
 
-```
+```php
 public function reverse(): self;
 ```
 
@@ -98,7 +100,7 @@ This method will produce a collection with elements of your collection in the re
 
 #### diff
 
-```
+```php
 public function diff(self $other): self;
 ```
 
@@ -106,7 +108,7 @@ This method will produce a collection with the difference between your collectio
 
 #### toArray 
 
-```
+```php
 public function toArray(): array;
 ```
 
@@ -120,8 +122,7 @@ This applies also to collections that are defined inside a class that is an item
 
 Example:
 
-```
-
+```php
 class MyTopCollection implements ToArray
 {
     use CollectionTrait;    
@@ -155,7 +156,7 @@ The following interfaces are defined to easy the process of recursively your col
 
 This interface defines how to convert a collection item (or a collection itself) to an array:
 
-```
+```php
 interface ToArray
 {
     public function toArray(): array;
@@ -166,7 +167,7 @@ interface ToArray
 
 This interface defines how to convert a collection item to an integer:
 
-```
+```php
 interface ToInt
 {
     public function toInt(): int;
@@ -177,7 +178,7 @@ interface ToInt
 
 This interface defines how to convert a collection item to a string:
 
-```
+```php
 interface ToString
 {
     public function toString(): string;
@@ -192,7 +193,7 @@ It provides the following methods to your collection:
 
 #### filter
 
-```
+```php
 public function filter(CollectionFilter $filter): self
 ```
 
@@ -200,7 +201,7 @@ This will accept a `CollectionFilter` instance (with the definitions of the filt
 
 #### groupBy
 
-```
+```php
 public function groupBy(bool $removeEmptyGroups, CollectionFilter ...$filters): array
 ```
 
@@ -208,7 +209,7 @@ This method allows you to apply a series of filters to a collection and group th
 
 The result is returned as an array with the following structure:
 
-```
+```php
 [
     'filter_1_key' => [
         'item_key_1' => item object 1
@@ -228,7 +229,7 @@ The result is returned as an array with the following structure:
 
 #### FilterItem
 
-```
+```php
 interface FilterItem
 {
     public function groupByKey(?array $customData = null): string;
@@ -245,7 +246,7 @@ To filter collections you must define classes that implement the `CollectionFilt
 
 The library already provides a default abstract implementation in the class `BaseFilter`. 
 
-```
+```php
 interface CollectionFilter
 {
     public function key(): string;
@@ -270,7 +271,7 @@ To implement multi-level operation we can use a `CompositeFilter` inside another
 
 ##### FilterOperator
 
-```
+```php
 interface FilterOperator
 {
     public function calculate(bool $operand1, bool $operand2): bool;
@@ -290,7 +291,7 @@ The `exitConditionValue` is the value to use if you want to exit the calculation
 By default the library provides two implementations of this interface: `FilterOperatorAnd` and `FilterOperatorOr`.
 
 A quick example:
-```
+```php
 $filter = CompositeFilter(
     new FilterOperatorAnd(),
     new MyFilter1(),
@@ -301,7 +302,7 @@ $filter = CompositeFilter(
 
 Then the `isSatisfiedBy` method will apply the `FilterOperator` for each filter passed to the `CompositeFilter`. In this example above it will basically perform an `AND` operation for each filter, meaning it can read it as:
 
-```
+```php
 $myFilter1->isSatisfiedBy(...) && $myFilter2->isSatisfiedBy(...) && $myFilter3->isSatisfiedBy(...)  
 ```
 
@@ -309,7 +310,7 @@ $myFilter1->isSatisfiedBy(...) && $myFilter2->isSatisfiedBy(...) && $myFilter3->
 
 So to wrap it up, on how to filter/group a collection:
 
-```
+```php
 $filteredCollection = $collection->filter(
     // Filter1 AND Filter2 AND Filter3    
     new CompositeFilter(
@@ -342,4 +343,34 @@ $groupByResults = $collection->groupBy(
         )
    )
 );
+```
+### AbstractCollection
+
+This is an abstract base class that you can use for your collections. It extends `ArrayIterator` (and already uses the `CollectionTrait`) so you just need to extend it to have a proper collection class.
+
+```php
+use Kununu\Collection\AbstractCollection;
+
+class MyCollection extends AbstractCollection 
+{
+}
+
+$collection = MyCollection::fromIterable($myData);
+```
+### AbstractFilterableCollection
+
+Extending on `AbstractCollection` this class add the `FilterableCollectionTrait` to the base collection.
+
+```php
+use Kununu\Collection\AbstractFilterableCollection;
+
+class MyCollection extends AbstractFilterableCollection
+{
+}
+
+$collection = MyCollection::fromIterable($myData);
+
+$filtered = $collection->filter($filter);
+$groups = $collection->groupBy(true, $group1Filter, $group2Filter);
+
 ```
