@@ -10,7 +10,7 @@ trait CollectionTrait
 {
     public static function fromIterable(iterable $data): self
     {
-        $result = new self();
+        $result = new static();
 
         foreach ($data as $item) {
             $result->append($item);
