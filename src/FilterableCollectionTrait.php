@@ -11,7 +11,7 @@ trait FilterableCollectionTrait
 
     public function filter(CollectionFilter $filter): self
     {
-        $filteredResult = new self();
+        $filteredResult = new static();
         foreach ($this as $item) {
             if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
                 $filteredResult->add($item);

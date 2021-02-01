@@ -5,19 +5,14 @@ namespace Kununu\Collection;
 use ArrayIterator;
 use Kununu\Collection\Convertible\ToArray;
 
+/**
+ * @method static self fromIterable(iterable $data)
+ * @method self add($value)
+ * @method self unique()
+ * @method self reverse()
+ * @method self diff(self $other)
+ */
 abstract class AbstractCollection extends ArrayIterator implements ToArray
 {
-    use CollectionTrait {
-        fromIterable as traitFromIterable;
-    }
-
-    /**
-     * @param iterable $data
-     *
-     * @return CollectionTrait|static
-     */
-    public static function fromIterable(iterable $data): self
-    {
-        return self::traitFromIterable($data);
-    }
+    use CollectionTrait;
 }
