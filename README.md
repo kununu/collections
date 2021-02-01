@@ -359,7 +359,7 @@ $collection = MyCollection::fromIterable($myData);
 ```
 ### AbstractFilterableCollection
 
-Extending on `AbstractCollection` this class add the `FilterableCollectionTrait` to the base collection.
+Using the same concept as `AbstractCollection` this class extends `ArrayIterator` and add the `FilterableCollectionTrait` to it.
 
 ```php
 use Kununu\Collection\AbstractFilterableCollection;

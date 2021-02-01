@@ -33,17 +33,17 @@ trait CollectionTrait
 
     public function unique(): self
     {
-        return self::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
+        return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
     }
 
     public function reverse(): self
     {
-        return self::fromIterable(array_reverse($this->toArray()));
+        return static::fromIterable(array_reverse($this->toArray()));
     }
 
     public function diff(self $other): self
     {
-        return self::fromIterable(array_values(array_map(
+        return static::fromIterable(array_values(array_map(
             'unserialize',
             array_diff(
                 array_map('serialize', $this->toArray()),
