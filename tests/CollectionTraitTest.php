@@ -136,6 +136,41 @@ final class CollectionTraitTest extends TestCase
         $this->assertEquals([6, 7], $collection2->diff($collection1)->toArray());
     }
 
+    /**
+     * @dataProvider eachDataProvider
+     *
+     * @param bool     $rewind
+     * @param int|null $expectedCurrent
+     */
+    public function testEach(bool $rewind, ?int $expectedCurrent): void
+    {
+        $collection = CollectionTraitStub::fromIterable($this->getGenerator(1, 2, 3, 4, 5));
+
+        $collection->each(
+            function(int $value) use (&$collectedValues) {
+                $collectedValues[] = $value * 2;
+            },
+            $rewind
+        );
+
+        $this->assertEquals([2, 4, 6, 8, 10], $collectedValues);
+        $this->assertEquals($expectedCurrent, $collection->current());
+    }
+
+    public function eachDataProvider(): array
+    {
+        return [
+            'rewind' => [
+                true,
+                1
+            ],
+            'no_rewind' => [
+                false,
+                null
+            ]
+        ];
+    }
+
     private function getGenerator(...$items): Generator
     {
         foreach ($items as $item) {

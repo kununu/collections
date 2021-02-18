@@ -11,6 +11,7 @@ use Kununu\Collection\Convertible\ToArray;
  * @method self unique()
  * @method self reverse()
  * @method self diff(self $other)
+ * @method self each(callable $function, bool $rewind = true)
  */
 abstract class AbstractCollection extends ArrayIterator implements ToArray
 {

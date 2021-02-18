@@ -106,6 +106,14 @@ public function diff(self $other): self;
 
 This method will produce a collection with the difference between your collection and another instance.
 
+#### each
+
+```php
+public function each(callable $function, bool $rewind = true): self;
+```
+
+This method will iterate through each item of a collection, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item. 
+
 #### toArray 
 
 ```php

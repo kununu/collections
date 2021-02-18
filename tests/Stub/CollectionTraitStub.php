@@ -2,10 +2,8 @@
 
 namespace Kununu\Collection\Tests\Stub;
 
-use ArrayIterator;
-use Kununu\Collection\CollectionTrait;
+use Kununu\Collection\AbstractCollection;
 
-final class CollectionTraitStub extends ArrayIterator
+final class CollectionTraitStub extends AbstractCollection
 {
-    use CollectionTrait;
 }
