@@ -52,6 +52,21 @@ trait CollectionTrait
         )));
     }
 
+    public function each(callable $function, bool $rewind = true): self
+    {
+        try {
+            foreach ($this as $element) {
+                $function($element, $this->key());
+            }
+        } finally {
+            if ($rewind) {
+                $this->rewind();
+            }
+        }
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->mapToArray();
