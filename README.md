@@ -418,6 +418,9 @@ class MyItem extends AbstractItem
             'createdAt' => function(array $data) {
                 return $data['createdAt'] ?? null;
             },
+            'simpleName' => self::buildStringGetter('simpleName'),
+            'verified'   => self::buildBoolGetter('verified'),
+            'industryId' => self::buildIntGetter('industryId'),
         ];
     }
 }

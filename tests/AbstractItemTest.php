@@ -83,7 +83,7 @@ final class AbstractItemTest extends TestCase
             ],
             'some_fields_1'   => [
                 [
-                    'name' => 'My Name',
+                    'name'     => 'My Name',
                     'verified' => 0,
                 ],
                 null,
@@ -95,8 +95,8 @@ final class AbstractItemTest extends TestCase
             ],
             'some_fields_2'   => [
                 [
-                    'name'      => 'My Name',
-                    'createdAt' => $createdAt = new DateTime(),
+                    'name'       => 'My Name',
+                    'createdAt'  => $createdAt = new DateTime(),
                     'industryId' => '1',
                 ],
                 null,
@@ -108,8 +108,8 @@ final class AbstractItemTest extends TestCase
             ],
             'some_fields_3'   => [
                 [
-                    'id'   => 10,
-                    'name' => 'My Name',
+                    'id'         => 10,
+                    'name'       => 'My Name',
                     'simpleName' => 'Simple name',
                 ],
                 10,
@@ -125,9 +125,9 @@ final class AbstractItemTest extends TestCase
                     'name'                     => 'My Name',
                     'createdAt'                => $createdAt,
                     'extraFieldNotUsedInBuild' => 'THIS VALUE WILL NOT BE USED IN BUILD',
-                    'simpleName' => 'Simple name',
-                    'verified' => true,
-                    'industryId' => 10,
+                    'simpleName'               => 'Simple name',
+                    'verified'                 => true,
+                    'industryId'               => 10,
                 ],
                 10,
                 'My Name',

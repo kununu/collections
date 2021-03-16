@@ -36,17 +36,17 @@ final class AbstractItemStub extends AbstractItem
     protected static function getBuilders(): array
     {
         return [
-            'id'        => function(array $data) {
+            'id'         => function(array $data) {
                 return $data['id'] ?? null;
             },
-            'name'      => function(array $data) {
+            'name'       => function(array $data) {
                 return $data['name'] ?? null;
             },
-            'createdAt' => function(array $data) {
+            'createdAt'  => function(array $data) {
                 return $data['createdAt'] ?? null;
             },
             'simpleName' => self::buildStringGetter('simpleName'),
-            'verified' => self::buildBoolGetter('verified'),
+            'verified'   => self::buildBoolGetter('verified'),
             'industryId' => self::buildIntGetter('industryId'),
         ];
     }
