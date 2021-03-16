@@ -68,6 +68,27 @@ abstract class AbstractItem
         return $set ? $this->setAttribute($attribute, $value) : $this->getAttribute($attribute);
     }
 
+    protected static function buildStringGetter(string $fieldName): callable
+    {
+        return function(array $data) use ($fieldName): ?string {
+            return isset($data[$fieldName]) ? (string) $data[$fieldName] : null;
+        };
+    }
+
+    protected static function buildBoolGetter(string $fieldName): callable
+    {
+        return function(array $data) use ($fieldName): ?bool {
+            return isset($data[$fieldName]) ? (bool) $data[$fieldName] : null;
+        };
+    }
+
+    protected static function buildIntGetter(string $fieldName): callable
+    {
+        return function(array $data) use ($fieldName): ?int {
+            return isset($data[$fieldName]) ? (int) $data[$fieldName] : null;
+        };
+    }
+
     /**
      * Ready to be rewritten in your subclass!
      *

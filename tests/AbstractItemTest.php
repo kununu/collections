@@ -18,12 +18,24 @@ final class AbstractItemTest extends TestCase
         $this->assertNull($item->getId());
         $this->assertEquals('My Name', $item->getName());
         $this->assertNull($item->getCreatedAt());
+        $this->assertNull($item->getSimpleName());
+        $this->assertNull($item->getVerified());
+        $this->assertNull($item->getIndustryId());
 
         $item->setId(100);
         $this->assertEquals(100, $item->getId());
 
         $item->setCreatedAt($createdAt = new DateTime());
         $this->assertEquals($createdAt, $item->getCreatedAt());
+
+        $item->setSimpleName('Simple name');
+        $this->assertEquals('Simple name', $item->getSimpleName());
+
+        $item->setVerified(true);
+        $this->assertEquals(true, $item->getVerified());
+
+        $item->setIndustryId(15);
+        $this->assertEquals(15, $item->getIndustryId());
     }
 
     /**
@@ -33,12 +45,18 @@ final class AbstractItemTest extends TestCase
      * @param int|null      $expectedId
      * @param string|null   $expectedName
      * @param DateTime|null $expectedCreatedAt
+     * @param string|null   $expectedSimpleName
+     * @param bool|null     $expectedVerified
+     * @param int|null      $expectedIndustryId
      */
     public function testItemBuild(
         array $data,
         ?int $expectedId,
         ?string $expectedName,
-        ?DateTime $expectedCreatedAt
+        ?DateTime $expectedCreatedAt,
+        ?string $expectedSimpleName,
+        ?bool $expectedVerified,
+        ?int $expectedIndustryId
     ): void {
         $item = AbstractItemStub::build($data);
 
@@ -46,6 +64,9 @@ final class AbstractItemTest extends TestCase
         $this->assertEquals($expectedName, $item->getName());
         $this->assertEquals($expectedCreatedAt, $item->getCreatedAt());
         $this->assertNull($item->getExtraFieldNotUsedInBuild());
+        $this->assertEquals($expectedSimpleName, $item->getSimpleName());
+        $this->assertEquals($expectedVerified, $item->getVerified());
+        $this->assertEquals($expectedIndustryId, $item->getIndustryId());
     }
 
     public function itemBuildDataProvider(): array
@@ -56,31 +77,46 @@ final class AbstractItemTest extends TestCase
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
             ],
             'some_fields_1'   => [
                 [
-                    'name' => 'My Name',
+                    'name'     => 'My Name',
+                    'verified' => 0,
                 ],
                 null,
                 'My Name',
+                null,
+                null,
+                false,
                 null,
             ],
             'some_fields_2'   => [
                 [
-                    'name'      => 'My Name',
-                    'createdAt' => $createdAt = new DateTime(),
+                    'name'       => 'My Name',
+                    'createdAt'  => $createdAt = new DateTime(),
+                    'industryId' => '1',
                 ],
                 null,
                 'My Name',
                 $createdAt,
+                null,
+                null,
+                1,
             ],
             'some_fields_3'   => [
                 [
-                    'id'   => 10,
-                    'name' => 'My Name',
+                    'id'         => 10,
+                    'name'       => 'My Name',
+                    'simpleName' => 'Simple name',
                 ],
                 10,
                 'My Name',
+                null,
+                'Simple name',
+                null,
                 null,
             ],
             'all_fields'      => [
@@ -89,10 +125,16 @@ final class AbstractItemTest extends TestCase
                     'name'                     => 'My Name',
                     'createdAt'                => $createdAt,
                     'extraFieldNotUsedInBuild' => 'THIS VALUE WILL NOT BE USED IN BUILD',
+                    'simpleName'               => 'Simple name',
+                    'verified'                 => true,
+                    'industryId'               => 10,
                 ],
                 10,
                 'My Name',
                 $createdAt,
+                'Simple name',
+                true,
+                10,
             ],
         ];
     }
