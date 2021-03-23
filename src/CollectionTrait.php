@@ -67,6 +67,37 @@ trait CollectionTrait
         return $this;
     }
 
+    public function map(callable $function, bool $rewind = true): array
+    {
+        $map = [];
+        try {
+            foreach ($this as $element) {
+                $map[] = $function($element, $this->key());
+            }
+        } finally {
+            if ($rewind) {
+                $this->rewind();
+            }
+        }
+
+        return $map;
+    }
+
+    public function reduce(callable $function, $initial = null, bool $rewind = true)
+    {
+        try {
+            foreach ($this as $element) {
+                $initial = $function($initial, $element, $this->key());
+            }
+        } finally {
+            if ($rewind) {
+                $this->rewind();
+            }
+        }
+
+        return $initial;
+    }
+
     public function toArray(): array
     {
         return $this->mapToArray();

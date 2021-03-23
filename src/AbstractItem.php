@@ -92,6 +92,7 @@ abstract class AbstractItem
     /**
      * Ready to be rewritten in your subclass!
      *
+     * @codeCoverageIgnore
      * @return array
      *  [
      *      'itemProperty' => function(array $data) { return $valueForTheProperty; }
