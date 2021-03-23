@@ -4,17 +4,23 @@ The goal of this library is to provide some boilerplate code to assist you in cr
 
 ## Install
 
-#### Add custom private repository to composer.json
+#### Add custom private repositories to composer.json
 
 ```json
-...
-"repositories": [
+{
+  "repositories": [
     {
-        "type": "vcs",
-        "url": "https://github.com/kununu/collections.git",
-        "no-api": true
+      "type": "vcs",
+      "url": "https://github.com/kununu/collections.git",
+      "no-api": true
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kununu/kununu-scripts.git",
+      "no-api": true
     }
-],
+  ]
+}
 ```
 
 #### Require package
@@ -112,7 +118,41 @@ This method will produce a collection with the difference between your collectio
 public function each(callable $function, bool $rewind = true): self;
 ```
 
-This method will iterate through each item of a collection, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item. 
+This method will iterate through each item of a collection, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item.
+
+Callable signature:
+
+```php
+function(mixed $element, string|float|int|bool|null $elementKey): void;
+```
+
+#### map
+
+```php
+public function map(callable $function, bool $rewind = true): array;
+```
+
+This method will map your collection to an array, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item. 
+
+Callable signature:
+
+```php
+function(mixed $element, string|float|int|bool|null $elementKey): mixed;
+```
+
+#### reduce
+
+```php
+public function reduce(callable $function, $initial = null, bool $rewind = true);
+```
+
+This method will reduce your collection to a single value, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item. 
+
+Callable signature:
+
+```php
+function(mixed $carry, mixed $element, string|float|int|bool|null $elementKey): mixed;
+```
 
 #### toArray 
 

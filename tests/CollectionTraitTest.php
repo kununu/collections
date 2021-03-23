@@ -160,14 +160,85 @@ final class CollectionTraitTest extends TestCase
     public function eachDataProvider(): array
     {
         return [
-            'rewind' => [
+            'rewind'    => [
                 true,
-                1
+                1,
             ],
             'no_rewind' => [
                 false,
-                null
-            ]
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider mapDataProvider
+     *
+     * @param bool       $rewind
+     * @param array|null $expectedCurrent
+     */
+    public function testMap(bool $rewind, ?array $expectedCurrent): void
+    {
+        $collection = CollectionTraitStub::fromIterable($this->getGenerator(['id' => 1], ['id' => 2]));
+
+        $mapResult = $collection->map(
+            function(array $value): int {
+                return (int) $value['id'];
+            },
+            $rewind
+        );
+
+        $this->assertEquals([1, 2], $mapResult);
+        $this->assertEquals($expectedCurrent, $collection->current());
+    }
+
+    public function mapDataProvider(): array
+    {
+        return [
+            'rewind'    => [
+                true,
+                ['id' => 1],
+            ],
+            'no_rewind' => [
+                false,
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider reduceDataProvider
+     *
+     * @param bool     $rewind
+     * @param int|null $expectedCurrent
+     */
+    public function testReduce(bool $rewind, ?int $expectedCurrent): void
+    {
+        $collection = CollectionTraitStub::fromIterable($this->getGenerator(1, 2, 3, 4, 5));
+
+        $value = $collection->reduce(
+            function(int $carry, int $element): int {
+                return $carry + $element;
+            },
+            1000,
+            $rewind
+        );
+
+        $this->assertEquals(1015, $value);
+        $this->assertEquals($expectedCurrent, $collection->current());
+    }
+
+    public function reduceDataProvider(): array
+    {
+        return [
+            'rewind'    => [
+                true,
+                1,
+            ],
+            'no_rewind' => [
+                false,
+                null,
+            ],
         ];
     }
 
