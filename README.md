@@ -4,17 +4,23 @@ The goal of this library is to provide some boilerplate code to assist you in cr
 
 ## Install
 
-#### Add custom private repository to composer.json
+#### Add custom private repositories to composer.json
 
 ```json
-...
-"repositories": [
+{
+  "repositories": [
     {
-        "type": "vcs",
-        "url": "https://github.com/kununu/collections.git",
-        "no-api": true
+      "type": "vcs",
+      "url": "https://github.com/kununu/collections.git",
+      "no-api": true
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kununu/kununu-scripts.git",
+      "no-api": true
     }
-],
+  ]
+}
 ```
 
 #### Require package
