@@ -1,19 +1,12 @@
 {
   "name": "kununu/collections",
   "license": "proprietary",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/kununu/kununu-scripts.git",
-      "no-api": true
-    }
-  ],
   "minimum-stability": "stable",
   "require": {
     "php": "^7.2"
   },
   "require-dev": {
-    "kununu/scripts": "^1.1",
+    "kununu/scripts": "^2.0",
     "phpunit/phpunit": "^8.5"
   },
   "autoload": {
