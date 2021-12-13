@@ -7,13 +7,13 @@ use DateTime;
 use Kununu\Collection\AbstractItem;
 
 /**
- * @method null|int getId()
- * @method null|string getName()
- * @method null|DateTime getCreatedAt()
- * @method null|string getExtraFieldNotUsedInBuild()
- * @method null|string getSimpleName()
- * @method null|bool getVerified()
- * @method null|int getIndustryId()
+ * @method int              getId()
+ * @method string|null      getName()
+ * @method DateTime|null    getCreatedAt()
+ * @method string|null      getExtraFieldNotUsedInBuild()
+ * @method string|null      getSimpleName()
+ * @method bool             getVerified()
+ * @method int|null         getIndustryId()
  * @method AbstractItemStub setId(?int $id)
  * @method AbstractItemStub setName(?string $name)
  * @method AbstractItemStub setCreatedAt(?DateTime $createdAt)
@@ -36,17 +36,11 @@ final class AbstractItemStub extends AbstractItem
     protected static function getBuilders(): array
     {
         return [
-            'id'         => function(array $data) {
-                return $data['id'] ?? null;
-            },
-            'name'       => function(array $data) {
-                return $data['name'] ?? null;
-            },
-            'createdAt'  => function(array $data) {
-                return $data['createdAt'] ?? null;
-            },
+            'id'         => self::buildIntGetter('id', 0),
+            'name'       => self::buildStringGetter('name'),
+            'createdAt'  => self::buildDateTimeGetter('createdAt'),
             'simpleName' => self::buildStringGetter('simpleName'),
-            'verified'   => self::buildBoolGetter('verified'),
+            'verified'   => self::buildBoolGetter('verified', false),
             'industryId' => self::buildIntGetter('industryId'),
         ];
     }
