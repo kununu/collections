@@ -5,7 +5,10 @@ namespace Kununu\Collection\Tests;
 
 use BadMethodCallException;
 use DateTime;
+use InvalidArgumentException;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
+use Kununu\Collection\Tests\Stub\AbstractItemWithRequiredFieldsStub;
+use Kununu\Collection\Tests\Stub\DTOStub;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +35,7 @@ final class AbstractItemTest extends TestCase
         $this->assertEquals('Simple name', $item->getSimpleName());
 
         $item->setVerified(true);
-        $this->assertEquals(true, $item->getVerified());
+        $this->assertTrue($item->getVerified());
 
         $item->setIndustryId(15);
         $this->assertEquals(15, $item->getIndustryId());
@@ -60,25 +63,30 @@ final class AbstractItemTest extends TestCase
     ): void {
         $item = AbstractItemStub::build($data);
 
-        $this->assertEquals($expectedId, $item->getId());
-        $this->assertEquals($expectedName, $item->getName());
+        $this->assertSame($expectedId, $item->getId());
+        $this->assertNotNull($item->getId());
+        $this->assertSame($expectedName, $item->getName());
         $this->assertEquals($expectedCreatedAt, $item->getCreatedAt());
         $this->assertNull($item->getExtraFieldNotUsedInBuild());
-        $this->assertEquals($expectedSimpleName, $item->getSimpleName());
-        $this->assertEquals($expectedVerified, $item->getVerified());
-        $this->assertEquals($expectedIndustryId, $item->getIndustryId());
+        $this->assertSame($expectedSimpleName, $item->getSimpleName());
+        $this->assertSame($expectedVerified, $item->getVerified());
+        $this->assertNotNull($item->getVerified());
+        $this->assertSame($expectedIndustryId, $item->getIndustryId());
     }
 
     public function itemBuildDataProvider(): array
     {
+        $createdAt = '2021-12-13 12:00:00';
+        $createdAtDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $createdAt);
+
         return [
             'all_null_fields' => [
                 [],
+                0,
                 null,
                 null,
                 null,
-                null,
-                null,
+                false,
                 null,
             ],
             'some_fields_1'   => [
@@ -86,7 +94,7 @@ final class AbstractItemTest extends TestCase
                     'name'     => 'My Name',
                     'verified' => 0,
                 ],
-                null,
+                0,
                 'My Name',
                 null,
                 null,
@@ -96,14 +104,14 @@ final class AbstractItemTest extends TestCase
             'some_fields_2'   => [
                 [
                     'name'       => 'My Name',
-                    'createdAt'  => $createdAt = new DateTime(),
+                    'createdAt'  => $createdAt,
                     'industryId' => '1',
                 ],
-                null,
+                0,
                 'My Name',
-                $createdAt,
+                $createdAtDateTime,
                 null,
-                null,
+                false,
                 1,
             ],
             'some_fields_3'   => [
@@ -116,7 +124,7 @@ final class AbstractItemTest extends TestCase
                 'My Name',
                 null,
                 'Simple name',
-                null,
+                false,
                 null,
             ],
             'all_fields'      => [
@@ -131,10 +139,93 @@ final class AbstractItemTest extends TestCase
                 ],
                 10,
                 'My Name',
-                $createdAt,
+                $createdAtDateTime,
                 'Simple name',
                 true,
                 10,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider itemBuildRequiredDataProvider
+     *
+     * @param array       $data
+     * @param string|null $expectedExceptionMessage
+     *
+     * @return void
+     */
+    public function testItemBuildRequired(array $data, ?string $expectedExceptionMessage): void
+    {
+        if (null !== $expectedExceptionMessage) {
+            $this->expectException(InvalidArgumentException::class);
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $item = AbstractItemWithRequiredFieldsStub::build($data);
+
+        if (null === $expectedExceptionMessage) {
+            $this->assertIsInt($item->giveMeTheId());
+            $this->assertIsString($item->giveMeTheName());
+            $this->assertInstanceOf(DateTime::class, $item->giveMeTheCreatedAt());
+            $this->assertIsBool($item->giveMeTheVerified());
+            $this->assertIsBool($item->giveMeTheVerified());
+            $this->assertInstanceOf(DTOStub::class, $item->giveMeTheCustom());
+        }
+    }
+
+    public function itemBuildRequiredDataProvider(): array
+    {
+        return [
+            'missing_all_fields' => [
+                [],
+                'Missing "id" field',
+            ],
+            'missing_id'         => [
+                [
+                    'name' => 'The name',
+                ],
+                'Missing "id" field',
+            ],
+            'missing_name'       => [
+                [
+                    'id' => 1,
+                ],
+                'Missing "name" field',
+            ],
+            'missing_created_at' => [
+                [
+                    'id'   => 1,
+                    'name' => 'The name',
+                ],
+                'Missing "createdAt" field',
+            ],
+            'missing_verified'   => [
+                [
+                    'id'        => 1,
+                    'name'      => 'The name',
+                    'createdAt' => '2021-12-13 12:00:00',
+                ],
+                'Missing "verified" field',
+            ],
+            'missing_custom'     => [
+                [
+                    'id'        => 1,
+                    'name'      => 'The name',
+                    'createdAt' => '2021-12-13 12:00:00',
+                    'verified'  => true,
+                ],
+                'Missing "custom" field',
+            ],
+            'all_fields'         => [
+                [
+                    'id'        => 1,
+                    'name'      => 'The name',
+                    'createdAt' => '2021-12-13 12:00:00',
+                    'verified'  => true,
+                    'custom'    => 50.25,
+                ],
+                null,
             ],
         ];
     }

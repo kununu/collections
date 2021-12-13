@@ -104,7 +104,7 @@ abstract class AbstractItem
         );
     }
 
-    protected static function buildIntGetter(string $fieldName, ?int $default): callable
+    protected static function buildIntGetter(string $fieldName, ?int $default = null): callable
     {
         return function(array $data) use ($fieldName, $default): ?int {
             return isset($data[$fieldName]) ? (int) $data[$fieldName] : $default;
@@ -149,7 +149,7 @@ abstract class AbstractItem
     {
         return function(array $data) use ($fieldName, $converter) {
             if (!isset($data[$fieldName])) {
-                throw new InvalidArgumentException(sprintf('Missing %s field', $fieldName));
+                throw new InvalidArgumentException(sprintf('Missing "%s" field', $fieldName));
             }
 
             return $converter($data[$fieldName]);
