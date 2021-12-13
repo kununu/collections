@@ -559,3 +559,88 @@ This method will basically return a map of property => callable to get data for 
     'itemProperty' => function(array $data) { return $valueForTheProperty; }
 ]
 ```
+
+##### Provided builders
+
+###### buildStringGetter
+
+```php
+protected static function buildStringGetter(string $fieldName, ?string $default = null): callable;
+```
+
+Returns a string or `$default` value from the `$fieldName` in the data
+
+###### buildRequiredStringGetter
+
+```php
+protected static function buildRequiredStringGetter(string $fieldName): callable;
+```
+
+Returns a string from the `$fieldName` in the data or throws an exception if no data is found.
+
+###### buildBoolGetter
+
+```php
+protected static function buildBoolGetter(string $fieldName, ?bool $default = null): callable;
+```
+
+Returns a boolean or `$default` value from the `$fieldName` in the data
+
+###### buildRequiredBoolGetter
+
+```php
+protected static function buildRequiredBoolGetter(string $fieldName): callable;
+```
+
+Returns a boolean from the `$fieldName` in the data or throws an exception if no data is found.
+
+###### buildIntGetter
+
+```php
+protected static function buildIntGetter(string $fieldName, ?int $default = null): callable;
+```
+
+Returns an integer or `$default` value from the `$fieldName` in the data
+
+###### buildRequiredIntGetter
+
+```php
+protected static function buildRequiredIntGetter(string $fieldName): callable;
+```
+
+Returns an integer from the `$fieldName` in the data or throws an exception if no data is found.
+
+###### buildDateTimeGetter
+
+```php
+protected static function buildDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT, ?DateTime $default = null): callable
+```
+
+Returns a DateTime or `$default` value from the `$fieldName` in the data.
+
+The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+###### buildRequiredDateTimeGetter
+
+```php
+protected static function buildRequiredIntGetter(string $fieldName): callable;
+```
+
+Returns a DateTime from the `$fieldName` in the data or throws an exception if no data is found.
+
+The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+###### buildGetterRequiredField
+
+```php
+protected static function buildGetterRequiredField(string $fieldName, callable $converter): callable;
+```
+
+Returns a value from the `$fieldName` in the data or throws an exception if no data is found.
+
+The `$converter` callable should implement the logic assuming that the `$fieldName` exists in the data and it will receive the `$value` on that field.  
+
+### AbstractItemToArray
+
+This class provide an abstract "item" that implements the `ToArray` interface.
+
