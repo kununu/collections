@@ -67,7 +67,7 @@ abstract class AbstractItem
 
     protected static function buildStringGetter(string $fieldName, ?string $default = null): callable
     {
-        return function (array $data) use ($fieldName, $default): ?string {
+        return function(array $data) use ($fieldName, $default): ?string {
             return isset($data[$fieldName]) ? (string) $data[$fieldName] : $default;
         };
     }
@@ -76,7 +76,7 @@ abstract class AbstractItem
     {
         return self::buildGetterRequiredField(
             $fieldName,
-            function ($value): string {
+            function($value): string {
                 return (string) $value;
             }
         );
@@ -84,7 +84,7 @@ abstract class AbstractItem
 
     protected static function buildBoolGetter(string $fieldName, ?bool $default = null): callable
     {
-        return function (array $data) use ($fieldName, $default): ?bool {
+        return function(array $data) use ($fieldName, $default): ?bool {
             return isset($data[$fieldName]) ? (bool) $data[$fieldName] : $default;
         };
     }
@@ -93,7 +93,7 @@ abstract class AbstractItem
     {
         return self::buildGetterRequiredField(
             $fieldName,
-            function ($value): bool {
+            function($value): bool {
                 return (bool) $value;
             }
         );
@@ -101,7 +101,7 @@ abstract class AbstractItem
 
     protected static function buildIntGetter(string $fieldName, ?int $default = null): callable
     {
-        return function (array $data) use ($fieldName, $default): ?int {
+        return function(array $data) use ($fieldName, $default): ?int {
             return isset($data[$fieldName]) ? (int) $data[$fieldName] : $default;
         };
     }
@@ -110,7 +110,7 @@ abstract class AbstractItem
     {
         return self::buildGetterRequiredField(
             $fieldName,
-            function ($value): int {
+            function($value): int {
                 return (int) $value;
             }
         );
@@ -121,7 +121,7 @@ abstract class AbstractItem
         string $dateFormat = self::DATE_FORMAT,
         ?DateTime $default = null
     ): callable {
-        return function (array $data) use ($fieldName, $dateFormat, $default): ?DateTime {
+        return function(array $data) use ($fieldName, $dateFormat, $default): ?DateTime {
             if (isset($data[$fieldName])) {
                 return DateTime::createFromFormat($dateFormat, $data[$fieldName]) ?: $default;
             }
@@ -136,7 +136,7 @@ abstract class AbstractItem
     ): callable {
         return self::buildGetterRequiredField(
             $fieldName,
-            function ($value) use ($dateFormat): DateTime {
+            function($value) use ($dateFormat): DateTime {
                 return DateTime::createFromFormat($dateFormat, $value);
             }
         );
@@ -144,7 +144,7 @@ abstract class AbstractItem
 
     protected static function buildGetterRequiredField(string $fieldName, callable $converter): callable
     {
-        return function (array $data) use ($fieldName, $converter) {
+        return function(array $data) use ($fieldName, $converter) {
             if (!isset($data[$fieldName])) {
                 throw new InvalidArgumentException(sprintf('Missing "%s" field', $fieldName));
             }

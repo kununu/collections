@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Kununu\Collection\Tests\Stub;
 
 /**
- * @method ToArrayStub  getExtraData()
+ * @method ToArrayStub getExtraData()
  */
 final class AbstractItemToArrayStub extends AbstractItemToArrayStubBase
 {
@@ -19,7 +19,7 @@ final class AbstractItemToArrayStub extends AbstractItemToArrayStubBase
             [
                 'extraData' => self::buildGetterRequiredField(
                     'extraData',
-                    function (array $value): ToArrayStub {
+                    function(array $value): ToArrayStub {
                         return ToArrayStub::create(
                             $id = ToIntStub::fromInt((int) $value['id']),
                             ToStringStub::create($id, $value['description'])
