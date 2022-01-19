@@ -21,12 +21,7 @@ abstract class AbstractItem
 
     public function __construct(array $attributes = [])
     {
-        $properties = static::PROPERTIES;
-        foreach (class_parents($this) as $parentClass) {
-            $properties = array_merge($properties, $parentClass::PROPERTIES);
-        }
-
-        foreach ($properties as $field) {
+        foreach ($this->getAllProperties() as $field) {
             $this->attributes[$field] = null;
         }
 
@@ -135,8 +130,10 @@ abstract class AbstractItem
         };
     }
 
-    protected static function buildRequiredDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT): callable
-    {
+    protected static function buildRequiredDateTimeGetter(
+        string $fieldName,
+        string $dateFormat = self::DATE_FORMAT
+    ): callable {
         return self::buildGetterRequiredField(
             $fieldName,
             function($value) use ($dateFormat): DateTime {
@@ -204,6 +201,16 @@ abstract class AbstractItem
         $this->checkAttribute($name);
 
         return $this->attributes[$name];
+    }
+
+    protected function getAllProperties(): array
+    {
+        $properties = static::PROPERTIES;
+        foreach (class_parents($this) as $parentClass) {
+            $properties = array_merge($properties, $parentClass::PROPERTIES);
+        }
+
+        return $properties;
     }
 
     private function checkAttribute(string $name): void

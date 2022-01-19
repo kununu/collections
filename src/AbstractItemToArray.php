@@ -12,7 +12,7 @@ abstract class AbstractItemToArray extends AbstractItem implements ToArray
     public function toArray(): array
     {
         $result = [];
-        foreach (static::PROPERTIES as $property) {
+        foreach ($this->getAllProperties() as $property) {
             $element = $this->getAttribute($property);
             switch (true) {
                 case $element instanceof ToArray:
