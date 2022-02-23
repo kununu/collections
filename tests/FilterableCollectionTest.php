@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Kununu\Collection\Tests;
 
@@ -7,15 +8,15 @@ use Kununu\Collection\Filter\CompositeFilter;
 use Kununu\Collection\Filter\FilterItem;
 use Kununu\Collection\Filter\FilterOperatorAnd;
 use Kununu\Collection\Filter\FilterOperatorOr;
-use Kununu\Collection\Tests\Stub\FilterableCollectionTraitStub;
+use Kununu\Collection\Tests\Stub\FilterableCollectionStub;
 use Kununu\Collection\Tests\Stub\FilterItemStub;
 use PHPUnit\Framework\TestCase;
 
-final class FilterableCollectionTraitTest extends TestCase
+final class FilterableCollectionTest extends TestCase
 {
     public function testFilter(): void
     {
-        $collection = (new FilterableCollectionTraitStub())
+        $collection = (new FilterableCollectionStub())
             ->add(1)
             ->add(new FilterItemStub('a'))
             ->add(new FilterItemStub('b'))
@@ -44,7 +45,7 @@ final class FilterableCollectionTraitTest extends TestCase
         $this->assertEquals('a', $filteredCollection[0]->groupByKey());
         $this->assertEquals('c', $filteredCollection[1]->groupByKey());
 
-        $collection = (new FilterableCollectionTraitStub())
+        $collection = (new FilterableCollectionStub())
             ->add(1)
             ->add(new FilterItemStub('b'))
             ->add(new FilterItemStub('d'))
@@ -108,7 +109,7 @@ final class FilterableCollectionTraitTest extends TestCase
             }
         };
 
-        $collection = (new FilterableCollectionTraitStub())
+        $collection = (new FilterableCollectionStub())
             ->add(1)
             ->add(new FilterItemStub('ab'))
             ->add(new FilterItemStub('b'))

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.readthedocs.io/en/8.5/ -->
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
         bootstrap="vendor/autoload.php"
         colors="true"
         beStrictAboutChangesToGlobalState="true">
     <testsuites>
         <testsuite name="Collections Test Suite">
-            <directory>tests/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">src/</directory>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory>./src</directory>
         </whitelist>
     </filter>
 

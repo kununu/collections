@@ -1,7 +1,6 @@
 # Collections
 
-The goal of this library is to provide some boilerplate code to assist you in creating more friendly collections when
-using `ArrayIterator`.
+The goal of this library is to provide some boilerplate code to assist you in creating more friendly collections when using `ArrayIterator`.
 
 ## Install
 
@@ -50,18 +49,17 @@ composer test
 
 ## Usage
 
-The library provide two traits that you can add to your custom class extending `ArrayIterator`.
+The library provide three traits that you can add to your custom class extending `ArrayIterator`.
 
 It defines interfaces to convert collection items to `array`, `string` and `int` and to compare items.
 
-It also provides some interfaces to filter and group data on your collections and base classes with default
-implementations.
+It also provides some interfaces to filter and group data on your collections and base classes with default implementations.
 
 More details:
 
 - [Collection Trait](docs/collection-trait.md)
 - [Filterable Collection Trait](docs/filterable-collection-trait.md)
+- [Auto Sortable OffsetSet Trait](docs/autosortable-offsetset-trait.md)
 - [Convertible](docs/convertible.md)
 - [Abstract Collections](docs/abstract-collections.md)
 - [Abstract Item](docs/abstract-item.md)
-

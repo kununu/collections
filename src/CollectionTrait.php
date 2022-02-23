@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Kununu\Collection;
 
 use Kununu\Collection\Convertible\ToArray;
 use Kununu\Collection\Convertible\ToInt;
 use Kununu\Collection\Convertible\ToString;
+use Throwable;
 
 trait CollectionTrait
 {
@@ -43,13 +45,17 @@ trait CollectionTrait
 
     public function diff(self $other): self
     {
-        return static::fromIterable(array_values(array_map(
-            'unserialize',
-            array_diff(
-                array_map('serialize', $this->toArray()),
-                array_map('serialize', $other->toArray())
+        return static::fromIterable(
+            array_values(
+                array_map(
+                    'unserialize',
+                    array_diff(
+                        array_map('serialize', $this->toArray()),
+                        array_map('serialize', $other->toArray())
+                    )
+                )
             )
-        )));
+        );
     }
 
     public function each(callable $function, bool $rewind = true): self
@@ -58,6 +64,8 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $function($element, $this->key());
             }
+        } catch (Throwable $e) {
+            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
@@ -74,6 +82,8 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $map[] = $function($element, $this->key());
             }
+        } catch (Throwable $e) {
+            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
@@ -89,6 +99,8 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $initial = $function($initial, $element, $this->key());
             }
+        } catch (Throwable $e) {
+            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
