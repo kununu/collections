@@ -84,7 +84,7 @@ Getter: `$value = $item->myField()`
 
 ### Initialization
 
-By default the abstract class can receive an array that will be used to populate the properties. If we want we can override the constructor and pass some of the default values to the parent.
+By default, the abstract class can receive an array that will be used to populate the properties. If we want we can override the constructor and pass some of the default values to the parent.
 
 ### Code hints
 
@@ -114,7 +114,7 @@ class MyItem extends AbstractItem
 
 ### Builders
 
-As said above the class can help you building your instances from data stored in arrays. Every subclass will have the method `build`.
+As said above the class can help you to build your instances from data stored in arrays. Every subclass will have the method `build`.
 
 
 ```php

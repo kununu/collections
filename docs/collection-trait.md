@@ -1,6 +1,6 @@
 # CollectionTrait
 
-This is the most basic trait and it provides the following methods to your class:
+This is the most basic trait, and it provides the following methods to your class:
 
 ## fromIterable
 ```php

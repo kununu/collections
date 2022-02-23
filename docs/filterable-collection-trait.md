@@ -101,7 +101,7 @@ The `initialValue` is the value to use if you want to perform several operations
 
 The `exitConditionValue` is the value to use if you want to exit the calculation when performing several calculations (like a short circuit evaluation).
 
-By default the library provides two implementations of this interface: `FilterOperatorAnd` and `FilterOperatorOr`.
+By default, the library provides two implementations of this interface: `FilterOperatorAnd` and `FilterOperatorOr`.
 
 A quick example:
 ```php

@@ -24,5 +24,10 @@
   },
   "scripts-descriptions": {
     "test": "Run all tests"
+  },
+  "config": {
+    "allow-plugins": {
+      "kununu/scripts": true
+    }
   }
 }
