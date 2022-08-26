@@ -14,12 +14,14 @@ use Kununu\Collection\AbstractItem;
  * @method string|null      getSimpleName()
  * @method bool             getVerified()
  * @method int|null         getIndustryId()
+ * @method float|null       getSalary()
  * @method AbstractItemStub setId(?int $id)
  * @method AbstractItemStub setName(?string $name)
  * @method AbstractItemStub setCreatedAt(?DateTime $createdAt)
  * @method AbstractItemStub setSimpleName(?string $simpleName)
  * @method AbstractItemStub setVerified(?bool $verified)
  * @method AbstractItemStub setIndustryId(?int $industryId)
+ * @method AbstractItemStub setSalary(?float $salary)
  */
 final class AbstractItemStub extends AbstractItem
 {
@@ -31,6 +33,7 @@ final class AbstractItemStub extends AbstractItem
         'simpleName',
         'verified',
         'industryId',
+        'salary',
     ];
 
     protected static function getBuilders(): array
@@ -42,6 +45,7 @@ final class AbstractItemStub extends AbstractItem
             'simpleName' => self::buildStringGetter('simpleName'),
             'verified'   => self::buildBoolGetter('verified', false),
             'industryId' => self::buildIntGetter('industryId'),
+            'salary'     => self::buildFloatGetter('salary', 1000.0),
         ];
     }
 }

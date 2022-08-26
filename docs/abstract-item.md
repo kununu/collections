@@ -187,6 +187,22 @@ protected static function buildRequiredIntGetter(string $fieldName): callable;
 
 Returns an integer from the `$fieldName` in the data or throws an exception if no data is found.
 
+##### buildFloatGetter
+
+```php
+protected static function buildFloatGetter(string $fieldName, ?float $default = null): callable;
+```
+
+Returns a float or `$default` value from the `$fieldName` in the data
+
+##### buildRequiredFloatGetter
+
+```php
+protected static function buildRequiredFloatGetter(string $fieldName): callable;
+```
+
+Returns a float from the `$fieldName` in the data or throws an exception if no data is found.
+
 ##### buildDateTimeGetter
 
 ```php
@@ -200,7 +216,7 @@ The `$dateFormat` by default is `'Y-m-d H:i:s'`.
 ##### buildRequiredDateTimeGetter
 
 ```php
-protected static function buildRequiredIntGetter(string $fieldName): callable;
+protected static function buildRequiredDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT): callable;
 ```
 
 Returns a DateTime from the `$fieldName` in the data or throws an exception if no data is found.
@@ -216,6 +232,60 @@ protected static function buildGetterRequiredField(string $fieldName, callable $
 Returns a value from the `$fieldName` in the data or throws an exception if no data is found.
 
 The `$converter` callable should implement the logic assuming that the `$fieldName` exists in the data and it will receive the `$value` on that field.
+
+##### buildCollectionGetter
+
+```php
+protected static function buildCollectionGetter(string $fieldName, string $collectionClass, ?AbstractCollection $default = null): callable;
+```
+
+Try to create an `AbstractCollection` concrete implementation instance which class is `$collectionClass` from the `$fieldName` in the data.
+
+The `$fieldName` in the data must be an `iterable` suited to be passed to the static `fromIterable` method of your `$collectionClass`.
+
+- If `$collectionClass` is not a concrete subclass of `AbstractCollection` it will return `null`.
+- If `$fieldName` is not set in the data array it will return the `$default` instance (which by default is `null`).
+
+##### buildConditionalGetter
+
+```php
+protected static function buildConditionalGetter(string $sourceField, array $sources): callable;
+```
+
+Builds a field based on the `$sourceField` value (the condition). The `$sourceField` should have the key used to select the `callable` mapped on the `$sources` array.
+
+The `$sources` array has the format `['sourceName1' => callableForSource1(), ..., 'sourceNameN' => callableForSourceN()]` 
+
+Example:
+```php
+
+final class MyItem extends AbstractItem
+{
+    protected const PROPERTIES = [
+        'value',
+    ];
+
+    protected static function getBuilders(): array
+    {
+        return [
+            'value' => self::buildConditionalGetter(
+                'source',
+                [
+                    'one' => self::buildRequiredStringGetter('field_1'),
+                    'two' => self::buildRequiredIntGetter('field_2'),
+                ]
+            ),
+        ];
+    }
+}
+
+// Output: 'Value from source 1'
+var_export(MyItem::build(['source' => 'one', 'field_1' => 'Value from source 1', 'field_2' => 500])->value());
+
+// Output: 500
+var_export(MyItem::build(['source' => 'two', 'field_1' => 'Value from source 1', 'field_2' => 500])->value());
+
+```
 
 ## AbstractItemToArray
 

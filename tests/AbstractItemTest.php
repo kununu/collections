@@ -7,7 +7,10 @@ use BadMethodCallException;
 use DateTime;
 use InvalidArgumentException;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
+use Kununu\Collection\Tests\Stub\AbstractItemWithCollectionsStub;
+use Kununu\Collection\Tests\Stub\AbstractItemWithConditionalBuilderStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithRequiredFieldsStub;
+use Kununu\Collection\Tests\Stub\DTOCollectionStub;
 use Kununu\Collection\Tests\Stub\DTOStub;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
@@ -24,21 +27,25 @@ final class AbstractItemTest extends TestCase
         $this->assertNull($item->getSimpleName());
         $this->assertNull($item->getVerified());
         $this->assertNull($item->getIndustryId());
+        $this->assertNull($item->getSalary());
 
         $item->setId(100);
-        $this->assertEquals(100, $item->getId());
+        $this->assertSame(100, $item->getId());
 
         $item->setCreatedAt($createdAt = new DateTime());
-        $this->assertEquals($createdAt, $item->getCreatedAt());
+        $this->assertSame($createdAt, $item->getCreatedAt());
 
         $item->setSimpleName('Simple name');
-        $this->assertEquals('Simple name', $item->getSimpleName());
+        $this->assertSame('Simple name', $item->getSimpleName());
 
         $item->setVerified(true);
         $this->assertTrue($item->getVerified());
 
         $item->setIndustryId(15);
-        $this->assertEquals(15, $item->getIndustryId());
+        $this->assertSame(15, $item->getIndustryId());
+
+        $item->setSalary(1500.29);
+        $this->assertSame(1500.29, $item->getSalary());
     }
 
     /**
@@ -59,7 +66,8 @@ final class AbstractItemTest extends TestCase
         ?DateTime $expectedCreatedAt,
         ?string $expectedSimpleName,
         ?bool $expectedVerified,
-        ?int $expectedIndustryId
+        ?int $expectedIndustryId,
+        ?float $expectedSalary
     ): void {
         $item = AbstractItemStub::build($data);
 
@@ -72,6 +80,7 @@ final class AbstractItemTest extends TestCase
         $this->assertSame($expectedVerified, $item->getVerified());
         $this->assertNotNull($item->getVerified());
         $this->assertSame($expectedIndustryId, $item->getIndustryId());
+        $this->assertSame($expectedSalary, $item->getSalary());
     }
 
     public function itemBuildDataProvider(): array
@@ -88,6 +97,7 @@ final class AbstractItemTest extends TestCase
                 null,
                 false,
                 null,
+                1000.0,
             ],
             'some_fields_1'   => [
                 [
@@ -100,6 +110,7 @@ final class AbstractItemTest extends TestCase
                 null,
                 false,
                 null,
+                1000.0,
             ],
             'some_fields_2'   => [
                 [
@@ -113,12 +124,14 @@ final class AbstractItemTest extends TestCase
                 null,
                 false,
                 1,
+                1000.0,
             ],
             'some_fields_3'   => [
                 [
                     'id'         => 10,
                     'name'       => 'My Name',
                     'simpleName' => 'Simple name',
+                    'salary'     => 500.90,
                 ],
                 10,
                 'My Name',
@@ -126,6 +139,7 @@ final class AbstractItemTest extends TestCase
                 'Simple name',
                 false,
                 null,
+                500.90,
             ],
             'all_fields'      => [
                 [
@@ -136,6 +150,7 @@ final class AbstractItemTest extends TestCase
                     'simpleName'               => 'Simple name',
                     'verified'                 => true,
                     'industryId'               => 10,
+                    'salary'                   => 1250.82,
                 ],
                 10,
                 'My Name',
@@ -143,6 +158,7 @@ final class AbstractItemTest extends TestCase
                 'Simple name',
                 true,
                 10,
+                1250.82,
             ],
         ];
     }
@@ -171,6 +187,7 @@ final class AbstractItemTest extends TestCase
             $this->assertIsBool($item->giveMeTheVerified());
             $this->assertIsBool($item->giveMeTheVerified());
             $this->assertInstanceOf(DTOStub::class, $item->giveMeTheCustom());
+            $this->assertIsFloat($item->giveMeTheScore());
         }
     }
 
@@ -217,7 +234,7 @@ final class AbstractItemTest extends TestCase
                 ],
                 'Missing "custom" field',
             ],
-            'all_fields'         => [
+            'missing_score'      => [
                 [
                     'id'        => 1,
                     'name'      => 'The name',
@@ -225,8 +242,80 @@ final class AbstractItemTest extends TestCase
                     'verified'  => true,
                     'custom'    => 50.25,
                 ],
+                'Missing "score" field',
+            ],
+            'all_fields'         => [
+                [
+                    'id'        => 1,
+                    'name'      => 'The name',
+                    'createdAt' => '2021-12-13 12:00:00',
+                    'verified'  => true,
+                    'custom'    => 50.25,
+                    'score'     => 4.9,
+                ],
                 null,
             ],
+        ];
+    }
+
+    public function testItemBuildCollection(): void
+    {
+        $item = AbstractItemWithCollectionsStub::build([
+            'collection' => [
+                ['field' => 'field 1', 'value' => 100],
+                ['field' => 'field 2', 'value' => 'A string'],
+                ['field' => 'field 3', 'value' => 49.2],
+            ],
+        ]);
+
+        $this->assertInstanceOf(DTOCollectionStub::class, $item->collection());
+        $this->assertCount(3, $item->collection());
+        $this->assertSame(
+            [
+                'field 1' => [
+                    'field' => 'field 1',
+                    'value' => 100,
+                ],
+                'field 2' => [
+                    'field' => 'field 2',
+                    'value' => 'A string',
+                ],
+                'field 3' => [
+                    'field' => 'field 3',
+                    'value' => 49.2,
+                ],
+            ],
+            $item->collection()->toArray()
+        );
+        $this->assertNull($item->notCollection());
+        $this->assertInstanceOf(DTOCollectionStub::class, $item->defaultCollection());
+        $this->assertEmpty($item->defaultCollection());
+    }
+
+    /**
+     * @dataProvider itemBuildConditionalDataProvider
+     *
+     * @param int|float|string|null $expected
+     *
+     * @return void
+     */
+    public function testItemBuildConditional($expected): void
+    {
+        $item = AbstractItemWithConditionalBuilderStub::build([
+            'source' => $this->dataName(),
+            'value'  => 12.5,
+        ]);
+
+        $this->assertSame($expected, $item->value());
+    }
+
+    public function itemBuildConditionalDataProvider(): array
+    {
+        return [
+            'int'     => [12],
+            'float'   => [12.5],
+            'string'  => ['12.5'],
+            'unknown' => [null],
         ];
     }
 
@@ -235,7 +324,9 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectExceptionMessage(BadMethodCallException::class);
-        $this->expectExceptionMessage('Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "thisMethodReallyDoesNotExists" called');
+        $this->expectExceptionMessage(
+            'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "thisMethodReallyDoesNotExists" called'
+        );
         $item->thisMethodReallyDoesNotExists();
     }
 
@@ -244,7 +335,9 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage('Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"');
+        $this->expectExceptionMessage(
+            'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
+        );
         $item->setInvalidProperty(true);
     }
 
@@ -253,7 +346,9 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage('Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"');
+        $this->expectExceptionMessage(
+            'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
+        );
         $item->getInvalidProperty(true);
     }
 
@@ -262,7 +357,9 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage('Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "withInvalidProperty" called');
+        $this->expectExceptionMessage(
+            'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "withInvalidProperty" called'
+        );
         $item->withInvalidProperty(false);
     }
 }
