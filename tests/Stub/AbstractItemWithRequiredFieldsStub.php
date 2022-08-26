@@ -12,6 +12,7 @@ use Kununu\Collection\AbstractItem;
  * @method DateTime giveMeTheCreatedAt()
  * @method bool     giveMeTheVerified()
  * @method DTOStub  giveMeTheCustom()
+ * @method float    giveMeTheScore()
  */
 final class AbstractItemWithRequiredFieldsStub extends AbstractItem
 {
@@ -23,6 +24,7 @@ final class AbstractItemWithRequiredFieldsStub extends AbstractItem
         'createdAt',
         'verified',
         'custom',
+        'score',
     ];
 
     protected static function getBuilders(): array
@@ -38,6 +40,7 @@ final class AbstractItemWithRequiredFieldsStub extends AbstractItem
                     return new DTOStub('my_dto', $value);
                 }
             ),
+            'score'     => self::buildRequiredFloatGetter('score'),
         ];
     }
 }

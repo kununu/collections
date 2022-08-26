@@ -116,6 +116,23 @@ abstract class AbstractItem
         );
     }
 
+    protected static function buildFloatGetter(string $fieldName, ?float $default = null): callable
+    {
+        return function(array $data) use ($fieldName, $default): ?float {
+            return isset($data[$fieldName]) ? (float) $data[$fieldName] : $default;
+        };
+    }
+
+    protected static function buildRequiredFloatGetter(string $fieldName): callable
+    {
+        return self::buildGetterRequiredField(
+            $fieldName,
+            function($value): float {
+                return (float) $value;
+            }
+        );
+    }
+
     protected static function buildDateTimeGetter(
         string $fieldName,
         string $dateFormat = self::DATE_FORMAT,
@@ -150,6 +167,35 @@ abstract class AbstractItem
             }
 
             return $converter($data[$fieldName]);
+        };
+    }
+
+    protected static function buildCollectionGetter(
+        string $fieldName,
+        string $collectionClass,
+        ?AbstractCollection $default = null
+    ): callable {
+        return function(array $data) use ($fieldName, $collectionClass, $default): ?AbstractCollection {
+            if (!is_a($collectionClass, AbstractCollection::class, true)) {
+                return null;
+            }
+
+            return isset($data[$fieldName])
+                ? call_user_func_array([$collectionClass, 'fromIterable'], [$data[$fieldName]])
+                : $default;
+        };
+    }
+
+    protected static function buildConditionalGetter(string $sourceField, array $sources): callable
+    {
+        return function(array $data) use ($sourceField, $sources) {
+            foreach ($sources as $source => $getter) {
+                if ($source === ($data[$sourceField] ?? null)) {
+                    return is_callable($getter) ? $getter($data) : null;
+                }
+            }
+
+            return null;
         };
     }
 
