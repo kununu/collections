@@ -1,6 +1,17 @@
 # Convertible
 
-The following interfaces are defined to easy the process of recursively your collection data to basic PHP items:
+The following interfaces are defined to easy the process of creating/converting collections/collection items to basic  PHP types.
+
+## fromArray
+
+This interface defines how to create a collection item from an array:
+
+```php
+interface FromArray
+{
+    public static function fromArray(array $data): self;
+}
+```
 
 ## toArray
 
@@ -13,6 +24,17 @@ interface ToArray
 }
 ```
 
+## fromInt
+
+This interface defines how to create a collection item from an integer:
+
+```php
+interface FromInt
+{
+    public static function fromInt(int $value): self;
+}
+```
+
 ## toInt
 
 This interface defines how to convert a collection item to an integer:
@@ -21,6 +43,17 @@ This interface defines how to convert a collection item to an integer:
 interface ToInt
 {
     public function toInt(): int;
+}
+```
+
+## fromString
+
+This interface defines how to create a collection item from a string:
+
+```php
+interface FromString
+{
+    public static function fromString(string $value): self;
 }
 ```
 
