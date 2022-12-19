@@ -1,33 +1,35 @@
 {
-  "name": "kununu/collections",
-  "license": "proprietary",
-  "minimum-stability": "stable",
-  "require": {
-    "php": ">=7.2"
-  },
-  "require-dev": {
-    "kununu/scripts": "*",
-    "phpunit/phpunit": "^8.5"
-  },
-  "autoload": {
-    "psr-4": {
-      "Kununu\\Collection\\": "src/"
+    "name": "kununu/collections",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "kununu/scripts": "*",
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kununu\\Collection\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kununu\\Collection\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --no-coverage tests",
+        "test-coverage": "phpunit --coverage-clover tests/.results/coverage.xml --coverage-html tests/.results/html/ tests"
+    },
+    "scripts-descriptions": {
+        "test": "Run all tests",
+        "test-coverage": "Run all tests with coverage report"
+    },
+    "config": {
+        "allow-plugins": {
+            "kununu/scripts": true
+        }
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Kununu\\Collection\\Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "test": "phpunit --coverage-clover tests/.results/coverage.xml --coverage-html tests/.results/html/"
-  },
-  "scripts-descriptions": {
-    "test": "Run all tests"
-  },
-  "config": {
-    "allow-plugins": {
-      "kununu/scripts": true
-    }
-  }
 }

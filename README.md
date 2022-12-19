@@ -63,3 +63,4 @@ More details:
 - [Convertible](docs/convertible.md)
 - [Abstract Collections](docs/abstract-collections.md)
 - [Abstract Item](docs/abstract-item.md)
+- [Mapper](docs/mapper.md)

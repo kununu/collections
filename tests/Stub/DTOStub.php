@@ -26,6 +26,11 @@ final class DTOStub implements ToArray
         return $this->field;
     }
 
+    public function value()
+    {
+        return $this->value;
+    }
+
     public function toArray(): array
     {
         return [
