@@ -1,12 +1,22 @@
 {
     "name": "kununu/collections",
-    "license": "proprietary",
+    "description": "To reduce boilerplate associated with collections",
+    "license": "MIT",
     "minimum-stability": "stable",
+    "keywords": [
+        "collections"
+    ],
+    "authors": [
+        {
+            "name": "Hugo Gonçalves",
+            "email": "hugo.goncalves@kununu.com"
+        }
+    ],
     "require": {
         "php": ">=7.2"
     },
     "require-dev": {
-        "kununu/scripts": "*",
+        "kununu/scripts": ">=3.0.1",
         "phpunit/phpunit": "^8.5"
     },
     "autoload": {
@@ -28,6 +38,7 @@
         "test-coverage": "Run all tests with coverage report"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "kununu/scripts": true
         }
