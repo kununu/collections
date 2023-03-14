@@ -7,7 +7,7 @@ This is an abstract base class that you can use for your collections. It extends
 ```php
 use Kununu\Collection\AbstractCollection;
 
-class MyCollection extends AbstractCollection 
+final class MyCollection extends AbstractCollection 
 {
 }
 
@@ -21,7 +21,7 @@ Using the same concept as `AbstractCollection` this class extends `ArrayIterator
 ```php
 use Kununu\Collection\AbstractFilterableCollection;
 
-class MyCollection extends AbstractFilterableCollection
+final class MyCollection extends AbstractFilterableCollection
 {
 }
 
