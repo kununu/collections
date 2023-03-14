@@ -13,7 +13,7 @@ When appending to an instance of this collection it will automatically sort it (
 use Kununu\Collection\AbstractCollection;
 use Kununu\Collection\AutoSortableOffsetSetTrait;
 
-class MyCollection extends AbstractCollection
+final class MyCollection extends AbstractCollection
 {
     use AutoSortableOffsetSetTrait;
 

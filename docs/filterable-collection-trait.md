@@ -7,7 +7,7 @@ It provides the following methods to your collection:
 ## filter
 
 ```php
-public function filter(CollectionFilter $filter): self
+public function filter(CollectionFilter $filter): self|static
 ```
 
 This will accept a `CollectionFilter` instance (with the definitions of the filter being applied to the collection), and returns a new collection with only the elements that have met the criteria defined in `$filter`.
