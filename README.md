@@ -4,27 +4,6 @@ The goal of this library is to provide some boilerplate code to assist you in cr
 
 ## Install
 
-#### Add custom private repositories to composer.json
-
-```json
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/kununu/collections.git",
-      "no-api": true
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kununu/kununu-scripts.git",
-      "no-api": true
-    }
-  ]
-}
-```
-
-#### Require package
-
 You can use this library by issuing the following command:
 
 ```bash
@@ -64,3 +43,14 @@ More details:
 - [Abstract Collections](docs/abstract-collections.md)
 - [Abstract Item](docs/abstract-item.md)
 - [Mapper](docs/mapper.md)
+
+## Contribute
+
+If you are interested in contributing read our [contributing guidelines](/CONTRIBUTING.md).
+
+
+------------------------------
+
+![Continuous Integration](https://github.com/kununu/collections/actions/workflows/continuous-integration.yml/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kununu_collections&metric=alert_status)](https://sonarcloud.io/dashboard?id=kununu_collections)
+
