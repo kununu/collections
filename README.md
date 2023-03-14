@@ -47,3 +47,10 @@ More details:
 ## Contribute
 
 If you are interested in contributing read our [contributing guidelines](/CONTRIBUTING.md).
+
+
+------------------------------
+
+![Continuous Integration](https://github.com/kununu/collections/actions/workflows/continuous-integration.yml/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kununu_collections&metric=alert_status)](https://sonarcloud.io/dashboard?id=kununu_collections)
+
