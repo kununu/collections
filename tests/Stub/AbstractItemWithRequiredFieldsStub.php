@@ -34,12 +34,7 @@ final class AbstractItemWithRequiredFieldsStub extends AbstractItem
             'name'      => self::buildRequiredStringGetter('name'),
             'createdAt' => self::buildRequiredDateTimeGetter('createdAt'),
             'verified'  => self::buildRequiredBoolGetter('verified'),
-            'custom'    => self::buildGetterRequiredField(
-                'custom',
-                function($value) {
-                    return new DTOStub('my_dto', $value);
-                }
-            ),
+            'custom'    => self::buildGetterRequiredField('custom', fn($value) => new DTOStub('my_dto', $value)),
             'score'     => self::buildRequiredFloatGetter('score'),
         ];
     }

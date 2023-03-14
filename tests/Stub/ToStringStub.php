@@ -7,38 +7,17 @@ use Kununu\Collection\Convertible\ToString;
 
 final class ToStringStub implements ToString
 {
-    /** @var ToIntStub */
-    private $id;
-    /** @var string */
-    private $value;
-
-    private function __construct()
+    private function __construct(private ToIntStub $id, private string $value)
     {
     }
 
     public static function create(ToIntStub $id, string $value): self
     {
-        return (new self())
-            ->setId($id)
-            ->setValue($value);
+        return new self($id, $value);
     }
 
     public function toString(): string
     {
         return sprintf('%d: %s', $this->id->toInt(), $this->value);
-    }
-
-    private function setId(ToIntStub $id): ToStringStub
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function setValue(string $value): ToStringStub
-    {
-        $this->value = $value;
-
-        return $this;
     }
 }

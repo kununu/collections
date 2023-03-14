@@ -14,20 +14,12 @@ abstract class AbstractItemToArray extends AbstractItem implements ToArray
         $result = [];
         foreach ($this->getAllProperties() as $property) {
             $element = $this->getAttribute($property);
-            switch (true) {
-                case $element instanceof ToArray:
-                    $value = $element->toArray();
-                    break;
-                case $element instanceof ToString:
-                    $value = $element->toString();
-                    break;
-                case $element instanceof ToInt:
-                    $value = $element->toInt();
-                    break;
-                default:
-                    $value = $element;
-            }
-            $result[$property] = $value;
+            $result[$property] = match (true) {
+                $element instanceof ToArray  => $element->toArray(),
+                $element instanceof ToString => $element->toString(),
+                $element instanceof ToInt    => $element->toInt(),
+                default                      => $element,
+            };
         }
 
         return $result;

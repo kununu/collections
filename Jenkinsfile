@@ -1,4 +1,4 @@
-@Library("kununu") _
+@Library("kununu@php-microservice-on-80") _
 
 withEnv([
     "SERVICE_NAME=trace-id-provider",

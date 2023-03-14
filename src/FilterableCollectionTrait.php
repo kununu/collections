@@ -10,7 +10,7 @@ trait FilterableCollectionTrait
 {
     use CollectionTrait;
 
-    public function filter(CollectionFilter $filter): self
+    public function filter(CollectionFilter $filter): self|static
     {
         $filteredResult = new static();
         foreach ($this as $item) {
@@ -25,11 +25,6 @@ trait FilterableCollectionTrait
     /**
      * Groups items in the collection by a series of filters
      * Items in the collection must implement the FilterItem to be considered for grouping
-     *
-     * @param bool             $removeEmptyGroups
-     * @param CollectionFilter ...$filters
-     *
-     * @return array
      *
      *  [
      *      'filter_1_key' => [

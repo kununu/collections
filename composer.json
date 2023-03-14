@@ -3,11 +3,11 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "require": {
-        "php": ">=7.2"
+        "php": ">=8.0"
     },
     "require-dev": {
-        "kununu/scripts": "*",
-        "phpunit/phpunit": "^8.5"
+        "kununu/scripts": ">=4.0",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {

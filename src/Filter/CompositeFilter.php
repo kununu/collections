@@ -8,13 +8,12 @@ namespace Kununu\Collection\Filter;
  */
 final class CompositeFilter extends BaseFilter
 {
-    private $filterOperator;
-    private $filters;
+    /** @var CollectionFilter[] */
+    private array $filters;
 
-    public function __construct(string $key, FilterOperator $filterOperator, CollectionFilter ...$filters)
+    public function __construct(string $key, private FilterOperator $filterOperator, CollectionFilter ...$filters)
     {
         parent::__construct($key);
-        $this->filterOperator = $filterOperator;
         $this->filters = $filters;
     }
 

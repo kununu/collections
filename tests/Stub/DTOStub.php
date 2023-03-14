@@ -7,13 +7,8 @@ use Kununu\Collection\Convertible\ToArray;
 
 final class DTOStub implements ToArray
 {
-    private $field;
-    private $value;
-
-    public function __construct(string $field, $value)
+    public function __construct(private string $field, private mixed $value)
     {
-        $this->field = $field;
-        $this->value = $value;
     }
 
     public static function fromArray(array $data): self
@@ -26,7 +21,7 @@ final class DTOStub implements ToArray
         return $this->field;
     }
 
-    public function value()
+    public function value(): mixed
     {
         return $this->value;
     }
