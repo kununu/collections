@@ -10,7 +10,7 @@ Since many of the times we are building those objects based on data collected fr
 The basic structure of a class extending this is the following:
 
 ```php
-class MyItem extends AbstractItem
+final class MyItem extends AbstractItem
 {
     protected const PROPERTIES = [
         'id',
@@ -26,27 +26,20 @@ class MyItem extends AbstractItem
     protected static function getBuilders(): array
     {
         return [
-            'id'        => function(array $data) {
-                return $data['id'] ?? null;
-            },
-            'name'      => function(array $data) {
-                return $data['name'] ?? null;
-            },
-            'createdAt' => function(array $data) {
-                return $data['createdAt'] ?? null;
-            },
+            'id'        => fn(array $data) => $data['id'] ?? null,
+            'name'      => fn(array $data) => $data['name'] ?? null,
+            'createdAt' => fn(array $data) => $data['createdAt'] ?? null,
             'simpleName' => self::buildStringGetter('simpleName'),
             'verified'   => self::buildBoolGetter('verified'),
             'industryId' => self::buildIntGetter('industryId'),
         ];
     }
 }
-
 ```
 
 ### Defining the properties
 
-Looking at the snippet above one must define which properties our class will hold. So override the constanc `PROPERTIES` and these will be the properties available.
+Looking at the snippet above one must define which properties our class will hold. So override the constant `PROPERTIES` and these will be the properties available.
 
 #### Naming conventions for setters and getters
 
@@ -63,7 +56,7 @@ If you want to use different prefixes for setters/getters you can! Just override
 Example:
 
 ```php
-class MyItem extends AbstractItem
+final class MyItem extends AbstractItem
 {
     protected const PROPERTIES = [
         'id',
@@ -116,7 +109,6 @@ class MyItem extends AbstractItem
 
 As said above the class can help you to build your instances from data stored in arrays. Every subclass will have the method `build`.
 
-
 ```php
     /**
      * @param array $data
@@ -126,14 +118,13 @@ As said above the class can help you to build your instances from data stored in
     public static function build(array $data): self;
 ```
 
-
 But in order for it to work your subclass must override the `getBuilders` static method.
 
 This method will basically return a map of property => callable to get data for the property:
 
 ```php
 [
-    'itemProperty' => function(array $data) { return $valueForTheProperty; }
+    'itemProperty' => fn(array $data) => $valueForTheProperty,
 ]
 ```
 
@@ -145,7 +136,7 @@ This method will basically return a map of property => callable to get data for 
 protected static function buildStringGetter(string $fieldName, ?string $default = null): callable;
 ```
 
-Returns a string or `$default` value from the `$fieldName` in the data
+Returns a `string` or `$default` value from the `$fieldName` in the data
 
 ##### buildRequiredStringGetter
 
@@ -153,7 +144,7 @@ Returns a string or `$default` value from the `$fieldName` in the data
 protected static function buildRequiredStringGetter(string $fieldName): callable;
 ```
 
-Returns a string from the `$fieldName` in the data or throws an exception if no data is found.
+Returns a `string` from the `$fieldName` in the data or throws an exception if no data is found.
 
 ##### buildBoolGetter
 
@@ -161,7 +152,7 @@ Returns a string from the `$fieldName` in the data or throws an exception if no 
 protected static function buildBoolGetter(string $fieldName, ?bool $default = null): callable;
 ```
 
-Returns a boolean or `$default` value from the `$fieldName` in the data
+Returns a `bool` or `$default` value from the `$fieldName` in the data
 
 ##### buildRequiredBoolGetter
 
@@ -169,7 +160,7 @@ Returns a boolean or `$default` value from the `$fieldName` in the data
 protected static function buildRequiredBoolGetter(string $fieldName): callable;
 ```
 
-Returns a boolean from the `$fieldName` in the data or throws an exception if no data is found.
+Returns a `bool` from the `$fieldName` in the data or throws an exception if no data is found.
 
 ##### buildIntGetter
 
@@ -177,7 +168,7 @@ Returns a boolean from the `$fieldName` in the data or throws an exception if no
 protected static function buildIntGetter(string $fieldName, ?int $default = null): callable;
 ```
 
-Returns an integer or `$default` value from the `$fieldName` in the data
+Returns an `int` or `$default` value from the `$fieldName` in the data
 
 ##### buildRequiredIntGetter
 
@@ -185,7 +176,7 @@ Returns an integer or `$default` value from the `$fieldName` in the data
 protected static function buildRequiredIntGetter(string $fieldName): callable;
 ```
 
-Returns an integer from the `$fieldName` in the data or throws an exception if no data is found.
+Returns an `int` from the `$fieldName` in the data or throws an exception if no data is found.
 
 ##### buildFloatGetter
 
@@ -193,7 +184,7 @@ Returns an integer from the `$fieldName` in the data or throws an exception if n
 protected static function buildFloatGetter(string $fieldName, ?float $default = null): callable;
 ```
 
-Returns a float or `$default` value from the `$fieldName` in the data
+Returns a `float` or `$default` value from the `$fieldName` in the data
 
 ##### buildRequiredFloatGetter
 
@@ -201,15 +192,15 @@ Returns a float or `$default` value from the `$fieldName` in the data
 protected static function buildRequiredFloatGetter(string $fieldName): callable;
 ```
 
-Returns a float from the `$fieldName` in the data or throws an exception if no data is found.
+Returns a `float` from the `$fieldName` in the data or throws an exception if no data is found.
 
 ##### buildDateTimeGetter
 
 ```php
-protected static function buildDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT, ?DateTime $default = null): callable
+protected static function buildDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT, ?DateTimeInterface $default = null): callable
 ```
 
-Returns a DateTime or `$default` value from the `$fieldName` in the data.
+Returns a `DateTimeInterface` or `$default` value from the `$fieldName` in the data.
 
 The `$dateFormat` by default is `'Y-m-d H:i:s'`.
 
@@ -219,7 +210,7 @@ The `$dateFormat` by default is `'Y-m-d H:i:s'`.
 protected static function buildRequiredDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT): callable;
 ```
 
-Returns a DateTime from the `$fieldName` in the data or throws an exception if no data is found.
+Returns a `DateTimeInterface` from the `$fieldName` in the data or throws an exception if no data is found.
 
 The `$dateFormat` by default is `'Y-m-d H:i:s'`.
 

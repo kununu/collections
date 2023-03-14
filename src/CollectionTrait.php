@@ -26,24 +26,24 @@ trait CollectionTrait
         return 0 === $this->count();
     }
 
-    public function add($value): self
+    public function add($value): self|static
     {
         $this->append($value);
 
         return $this;
     }
 
-    public function unique(): self
+    public function unique(): self|static
     {
         return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
     }
 
-    public function reverse(): self
+    public function reverse(): self|static
     {
         return static::fromIterable(array_reverse($this->toArray()));
     }
 
-    public function diff(self $other): self
+    public function diff(self $other): self|static
     {
         return static::fromIterable(
             array_values(
@@ -58,7 +58,7 @@ trait CollectionTrait
         );
     }
 
-    public function each(callable $function, bool $rewind = true): self
+    public function each(callable $function, bool $rewind = true): self|static
     {
         try {
             foreach ($this as $element) {
@@ -93,7 +93,7 @@ trait CollectionTrait
         return $map;
     }
 
-    public function reduce(callable $function, $initial = null, bool $rewind = true)
+    public function reduce(callable $function, mixed $initial = null, bool $rewind = true): mixed
     {
         try {
             foreach ($this as $element) {

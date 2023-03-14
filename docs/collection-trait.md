@@ -4,7 +4,7 @@ This is the most basic trait, and it provides the following methods to your clas
 
 ## fromIterable
 ```php
-public static function fromIterable(iterable $data): self;
+public static function fromIterable(iterable $data): self|static;
 ```
 
 This method tries to create an instance of your collection class with data from a source that is an `iterable` (e.g. an array).
@@ -18,12 +18,12 @@ With a concrete implementation on your class of the `append` method you can defi
 public function empty(): bool;
 ```
 
-Just a shortcut to see if you collection has a count of elements greater than zero.
+Just a shortcut to see if your collection has a count of elements greater than zero.
 
 ## add
 
 ```php
-public function add($value): self;
+public function add($value): self|static;
 ```
 
 A fluent version of `append`. To do stuff like:
@@ -35,7 +35,7 @@ $collection->add($item1)->add($item2);
 ## unique
 
 ```php
-public function unique(): self;
+public function unique(): self|static;
 ```
 
 This method will produce a collection with distinct elements of your collection.
@@ -43,7 +43,7 @@ This method will produce a collection with distinct elements of your collection.
 ## reverse
 
 ```php
-public function reverse(): self;
+public function reverse(): self|static;
 ```
 
 This method will produce a collection with elements of your collection in the reverse order.
@@ -51,7 +51,7 @@ This method will produce a collection with elements of your collection in the re
 ## diff
 
 ```php
-public function diff(self $other): self;
+public function diff(self $other): self|static;
 ```
 
 This method will produce a collection with the difference between your collection and another instance.
@@ -59,7 +59,7 @@ This method will produce a collection with the difference between your collectio
 ## each
 
 ```php
-public function each(callable $function, bool $rewind = true): self;
+public function each(callable $function, bool $rewind = true): self|static;
 ```
 
 This method will iterate through each item of a collection, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item.
@@ -87,7 +87,7 @@ function(mixed $element, string|float|int|bool|null $elementKey): mixed;
 ## reduce
 
 ```php
-public function reduce(callable $function, $initial = null, bool $rewind = true);
+public function reduce(callable $function, mixed $initial = null, bool $rewind = true): mixed;
 ```
 
 This method will reduce your collection to a single value, optionally rewind it at the end of the iteration, calling an anonymous function where you can do whatever you need with each item.
@@ -114,17 +114,17 @@ This applies also to collections that are defined inside a class that is an item
 Example:
 
 ```php
-class MyTopCollection implements ToArray
+final class MyTopCollection implements ToArray
 {
     use CollectionTrait;    
 }
 
-class MySubCollection implements ToArray
+final class MySubCollection implements ToArray
 {
     use CollectionTrait;
 }
 
-class MyTopItem implements ToArray
+final class MyTopItem implements ToArray
 {
     public $name;
     public $subCollection;

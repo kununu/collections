@@ -28,19 +28,19 @@ The constructor should receive the full qualified name of your collection classe
 
 The `getCallers` method should be implemented. It will create a `MapperCallers` instance or null if the collection class is unknown in the context of your mapper.
 
-The `MapperCallers` should receive two callables on the constructor.
+The `MapperCallers` should receive two closures on the constructor.
 
 When calling the mapper constructor make sure your `getCallers` returns for the collection classes you pass to the constructor, otherwise it will throw an exception.
 
 Also, when calling the `map` method also make sure your collection instance is of one the classes you register in the constructor, otherwise it will throw an exception.
 
 ```php
-public function __construct(callable $fnGetId, callable $fnGetValue);
+public function __construct(private Closure $fnGetId, private Closure $fnGetValue);
 ```
 
-The `$fnGetId` callable should receive an instance of your collection item and return the identifier to use in the map result.
+The `$fnGetId` closure should receive an instance of your collection item and return the identifier to use in the map result.
 
-The `$fnGetValue` callable should receive an instance of your collection item and return the value to use in the map result.
+The `$fnGetValue` closure should receive an instance of your collection item and return the value to use in the map result.
 
 ### Example
 
@@ -49,7 +49,7 @@ use Kununu\Collection\AbstractCollection;
 use Kununu\Collection\Mapper\DefaultMapper;
 use Kununu\Collection\Mapper\MapperCallers;
 
-public class MyCollectionItem
+final class MyCollectionItem
 {
     public $key;
     public $value;
@@ -61,22 +61,18 @@ public class MyCollectionItem
     }
 }
 
-public class MyCollection extends AbstractCollection
+final class MyCollection extends AbstractCollection
 {
 }
 
-public class MyMapper extends DefaultMapper
+final class MyMapper extends DefaultMapper
 {
     protected function getCallers(string $collectionClass): ?MapperCallers
     {
         if (MyCollection::class === $collectionClass) {
             return new MapperCallers(
-                function(MyCollectionItem $item): int {
-                    return $item->key;
-                },
-                function(MyCollectionItem $item): string {
-                    return $item->value();
-                }
+                fn(MyCollectionItem $item): int => $item->key, 
+                fn(MyCollectionItem $item): string => $item->value()
             );
         }
 
