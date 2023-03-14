@@ -28,9 +28,9 @@ abstract class DefaultMapper implements Mapper
             throw new InvalidArgumentException('Invalid collection');
         }
 
-        $callers = $this->callers[$collectionClass];
+        $collectionCallers = $this->callers[$collectionClass];
 
-        return $this->mapCollection($collection, $callers->fnGetId(), $callers->fnGetValue());
+        return $this->mapCollection($collection, $collectionCallers->fnGetId(), $collectionCallers->fnGetValue());
     }
 
     abstract protected function getCallers(string $collectionClass): ?MapperCallers;
