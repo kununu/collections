@@ -5,12 +5,10 @@ namespace Kununu\Collection\Filter;
 
 abstract class BaseFilter implements CollectionFilter
 {
-    private $key;
-    private $customGroupByData;
+    private ?array $customGroupByData = null;
 
-    public function __construct(string $key)
+    public function __construct(private string $key)
     {
-        $this->key = $key;
     }
 
     public function key(): string

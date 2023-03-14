@@ -48,17 +48,7 @@ final class AbstractItemTest extends TestCase
         $this->assertSame(1500.29, $item->getSalary());
     }
 
-    /**
-     * @dataProvider itemBuildDataProvider
-     *
-     * @param array         $data
-     * @param int|null      $expectedId
-     * @param string|null   $expectedName
-     * @param DateTime|null $expectedCreatedAt
-     * @param string|null   $expectedSimpleName
-     * @param bool|null     $expectedVerified
-     * @param int|null      $expectedIndustryId
-     */
+    /** @dataProvider itemBuildDataProvider */
     public function testItemBuild(
         array $data,
         ?int $expectedId,
@@ -83,7 +73,7 @@ final class AbstractItemTest extends TestCase
         $this->assertSame($expectedSalary, $item->getSalary());
     }
 
-    public function itemBuildDataProvider(): array
+    public static function itemBuildDataProvider(): array
     {
         $createdAt = '2021-12-13 12:00:00';
         $createdAtDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $createdAt);
@@ -163,14 +153,7 @@ final class AbstractItemTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider itemBuildRequiredDataProvider
-     *
-     * @param array       $data
-     * @param string|null $expectedExceptionMessage
-     *
-     * @return void
-     */
+    /** @dataProvider itemBuildRequiredDataProvider */
     public function testItemBuildRequired(array $data, ?string $expectedExceptionMessage): void
     {
         if (null !== $expectedExceptionMessage) {
@@ -191,7 +174,7 @@ final class AbstractItemTest extends TestCase
         }
     }
 
-    public function itemBuildRequiredDataProvider(): array
+    public static function itemBuildRequiredDataProvider(): array
     {
         return [
             'missing_all_fields' => [
@@ -292,14 +275,8 @@ final class AbstractItemTest extends TestCase
         $this->assertEmpty($item->defaultCollection());
     }
 
-    /**
-     * @dataProvider itemBuildConditionalDataProvider
-     *
-     * @param int|float|string|null $expected
-     *
-     * @return void
-     */
-    public function testItemBuildConditional($expected): void
+    /** @dataProvider itemBuildConditionalDataProvider */
+    public function testItemBuildConditional(mixed $expected): void
     {
         $item = AbstractItemWithConditionalBuilderStub::build([
             'source' => $this->dataName(),
@@ -309,7 +286,7 @@ final class AbstractItemTest extends TestCase
         $this->assertSame($expected, $item->value());
     }
 
-    public function itemBuildConditionalDataProvider(): array
+    public static function itemBuildConditionalDataProvider(): array
     {
         return [
             'int'     => [12],

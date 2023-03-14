@@ -3,23 +3,20 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\Mapper;
 
+use Closure;
+
 final class MapperCallers
 {
-    private $fnGetId;
-    private $fnGetValue;
-
-    public function __construct(callable $fnGetId, callable $fnGetValue)
+    public function __construct(private Closure $fnGetId, private Closure $fnGetValue)
     {
-        $this->fnGetId = $fnGetId;
-        $this->fnGetValue = $fnGetValue;
     }
 
-    public function fnGetId(): callable
+    public function fnGetId(): Closure
     {
         return $this->fnGetId;
     }
 
-    public function fnGetValue(): callable
+    public function fnGetValue(): Closure
     {
         return $this->fnGetValue;
     }

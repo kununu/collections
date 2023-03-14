@@ -10,7 +10,7 @@ use Throwable;
 
 trait CollectionTrait
 {
-    public static function fromIterable(iterable $data): self
+    public static function fromIterable(iterable $data): self|static
     {
         $result = new static();
 
@@ -118,22 +118,11 @@ trait CollectionTrait
     protected function mapToArray(bool $withKeys = true): array
     {
         return array_map(
-            function($element) {
-                switch (true) {
-                    case $element instanceof ToArray:
-                        $value = $element->toArray();
-                        break;
-                    case $element instanceof ToString:
-                        $value = $element->toString();
-                        break;
-                    case $element instanceof ToInt:
-                        $value = $element->toInt();
-                        break;
-                    default:
-                        $value = $element;
-                }
-
-                return $value;
+            fn($element) => match (true) {
+                $element instanceof ToArray  => $element->toArray(),
+                $element instanceof ToString => $element->toString(),
+                $element instanceof ToInt    => $element->toInt(),
+                default                      => $element,
             },
             $withKeys ? $this->getArrayCopy() : array_values($this->getArrayCopy())
         );
