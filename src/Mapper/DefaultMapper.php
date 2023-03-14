@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\Mapper;
 
+use Closure;
 use InvalidArgumentException;
 use Kununu\Collection\AbstractCollection;
 
 abstract class DefaultMapper implements Mapper
 {
-    private $callers = [];
+    /** @var MapperCallers[] */
+    private array $callers = [];
 
     public function __construct(string ...$collectionClasses)
     {
@@ -26,7 +28,6 @@ abstract class DefaultMapper implements Mapper
             throw new InvalidArgumentException('Invalid collection');
         }
 
-        /** @var MapperCallers $callers */
         $callers = $this->callers[$collectionClass];
 
         return $this->mapCollection($collection, $callers->fnGetId(), $callers->fnGetValue());
@@ -34,7 +35,7 @@ abstract class DefaultMapper implements Mapper
 
     abstract protected function getCallers(string $collectionClass): ?MapperCallers;
 
-    private function mapCollection(AbstractCollection $collection, callable $fnGetId, callable $fnGetValue): array
+    private function mapCollection(AbstractCollection $collection, Closure $fnGetId, Closure $fnGetValue): array
     {
         $result = [];
         foreach ($collection as $item) {

@@ -16,18 +16,13 @@ use Throwable;
 
 final class CollectionTest extends TestCase
 {
-    /**
-     * @dataProvider fromIterableDataProvider
-     *
-     * @param iterable $data
-     * @param array    $expected
-     */
+    /** @dataProvider fromIterableDataProvider */
     public function testFromIterable(iterable $data, array $expected): void
     {
         $this->assertEquals($expected, CollectionStub::fromIterable($data)->toArray());
     }
 
-    public function fromIterableDataProvider(): array
+    public static function fromIterableDataProvider(): array
     {
         return [
             [
@@ -39,19 +34,19 @@ final class CollectionTest extends TestCase
                 [5, 6, 7, 8, 9, 10],
             ],
             [
-                $this->getGenerator(5, 9, 14),
+                self::getGenerator(5, 9, 14),
                 [5, 9, 14],
             ],
             [
-                $this->getArrayIterator(10, 20, 30, 40),
+                self::getArrayIterator(10, 20, 30, 40),
                 [10, 20, 30, 40],
             ],
             [
-                $this->getArrayIterator(),
+                self::getArrayIterator(),
                 [],
             ],
             [
-                $this->getGenerator(
+                self::getGenerator(
                     ToArrayStub::create(ToIntStub::fromInt(1), ToStringStub::create(ToIntStub::fromInt(7), 'PHP')),
                     ToArrayStub::create(ToIntStub::fromInt(2), ToStringStub::create(ToIntStub::fromInt(13), 'Java')),
                     ToArrayStub::create(ToIntStub::fromInt(3), ToStringStub::create(ToIntStub::fromInt(7), 'C#'))
@@ -84,7 +79,7 @@ final class CollectionTest extends TestCase
                 ],
             ],
             [
-                $this->getGenerator(
+                self::getGenerator(
                     ToStringStub::create(ToIntStub::fromInt(1), 'ABC'),
                     ToStringStub::create(ToIntStub::fromInt(2), 'DEF'),
                     ToStringStub::create(ToIntStub::fromInt(3), 'GHI'),
@@ -137,13 +132,7 @@ final class CollectionTest extends TestCase
         $this->assertEquals([6, 7], $collection2->diff($collection1)->toArray());
     }
 
-    /**
-     * @dataProvider eachDataProvider
-     *
-     * @param bool     $rewind
-     * @param int|null $expectedCurrent
-     * @param bool     $expectException
-     */
+    /** @dataProvider eachDataProvider */
     public function testEach(bool $rewind, ?int $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -171,7 +160,7 @@ final class CollectionTest extends TestCase
         $this->assertEquals($expectedCurrent, $collection->current());
     }
 
-    public function eachDataProvider(): array
+    public static function eachDataProvider(): array
     {
         return [
             'rewind'              => [
@@ -197,13 +186,7 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider mapDataProvider
-     *
-     * @param bool       $rewind
-     * @param array|null $expectedCurrent
-     * @param bool       $expectException
-     */
+    /** @dataProvider mapDataProvider */
     public function testMap(bool $rewind, ?array $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -233,7 +216,7 @@ final class CollectionTest extends TestCase
         $this->assertEquals($expectedCurrent, $collection->current());
     }
 
-    public function mapDataProvider(): array
+    public static function mapDataProvider(): array
     {
         return [
             'rewind'              => [
@@ -259,13 +242,7 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider reduceDataProvider
-     *
-     * @param bool     $rewind
-     * @param int|null $expectedCurrent
-     * @param bool     $expectException
-     */
+    /** @dataProvider reduceDataProvider */
     public function testReduce(bool $rewind, ?int $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -296,7 +273,7 @@ final class CollectionTest extends TestCase
         $this->assertEquals($expectedCurrent, $collection->current());
     }
 
-    public function reduceDataProvider(): array
+    public static function reduceDataProvider(): array
     {
         return [
             'rewind'              => [
@@ -322,24 +299,17 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider autoSortedCollectionDataProvider
-     *
-     * @param iterable $data
-     * @param array    $expected
-     *
-     * @return void
-     */
+    /** @dataProvider autoSortedCollectionDataProvider */
     public function testAutoSortedCollection(iterable $data, array $expected): void
     {
         $this->assertEquals($expected, AutoSortedCollectionStub::fromIterable($data)->toArray());
     }
 
-    public function autoSortedCollectionDataProvider(): array
+    public static function autoSortedCollectionDataProvider(): array
     {
         return [
             [
-                $this->getGenerator(1, 2, 3, 4, 1, 2, 2, 3, 3, 4, 2, 1, 2, 1, 1, 2),
+                self::getGenerator(1, 2, 3, 4, 1, 2, 2, 3, 3, 4, 2, 1, 2, 1, 1, 2),
                 [1, 2, 3, 4],
             ],
             [
@@ -347,32 +317,32 @@ final class CollectionTest extends TestCase
                 [5, 6, 7, 8, 9, 10],
             ],
             [
-                $this->getGenerator(9, 14, 5),
+                self::getGenerator(9, 14, 5),
                 [5, 9, 14],
             ],
             [
-                $this->getArrayIterator(10, 20, 30, 40),
+                self::getArrayIterator(10, 20, 30, 40),
                 [10, 20, 30, 40],
             ],
             [
-                $this->getArrayIterator(),
+                self::getArrayIterator(),
                 [],
             ],
             [
-                $this->getGenerator('x', 'm', 'd', 'h', 'f'),
+                self::getGenerator('x', 'm', 'd', 'h', 'f'),
                 ['d', 'f', 'h', 'm', 'x'],
             ],
         ];
     }
 
-    private function getGenerator(...$items): Generator
+    private static function getGenerator(...$items): Generator
     {
         foreach ($items as $item) {
             yield $item;
         }
     }
 
-    private function getArrayIterator(...$items): ArrayIterator
+    private static function getArrayIterator(...$items): ArrayIterator
     {
         $arrayIterator = new ArrayIterator();
 

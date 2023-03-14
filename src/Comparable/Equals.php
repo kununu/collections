@@ -5,5 +5,5 @@ namespace Kununu\Collection\Comparable;
 
 interface Equals
 {
-    public function equals($other): bool;
+    public function equals(mixed $other): bool;
 }

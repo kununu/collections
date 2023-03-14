@@ -7,20 +7,13 @@ use Kununu\Collection\Convertible\ToArray;
 
 final class ToArrayStub implements ToArray
 {
-    /** @var ToIntStub */
-    public $id;
-    /** @var ToStringStub */
-    public $data;
-
-    private function __construct()
+    private function __construct(private ToIntStub $id, private ToStringStub $data)
     {
     }
 
     public static function create(ToIntStub $id, ToStringStub $data): self
     {
-        return (new self())
-            ->setId($id)
-            ->setData($data);
+        return new self($id, $data);
     }
 
     public function toArray(): array
@@ -29,19 +22,5 @@ final class ToArrayStub implements ToArray
             'id'   => $this->id->toInt(),
             'data' => $this->data->toString(),
         ];
-    }
-
-    private function setId(ToIntStub $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    private function setData(ToStringStub $data): self
-    {
-        $this->data = $data;
-
-        return $this;
     }
 }

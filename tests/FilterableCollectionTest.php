@@ -90,7 +90,7 @@ final class FilterableCollectionTest extends TestCase
 
             public function isSatisfiedBy(FilterItem $item): bool
             {
-                return $item instanceof FilterItemStub && $item->groupByKey() === 'c';
+                return $item->groupByKey() === 'c';
             }
         };
 

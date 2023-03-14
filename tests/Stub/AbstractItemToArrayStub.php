@@ -19,12 +19,10 @@ final class AbstractItemToArrayStub extends AbstractItemToArrayStubBase
             [
                 'extraData' => self::buildGetterRequiredField(
                     'extraData',
-                    function(array $value): ToArrayStub {
-                        return ToArrayStub::create(
-                            $id = ToIntStub::fromInt((int) $value['id']),
-                            ToStringStub::create($id, $value['description'])
-                        );
-                    }
+                    fn(array $value): ToArrayStub => ToArrayStub::create(
+                        $id = ToIntStub::fromInt((int) $value['id']),
+                        ToStringStub::create($id, $value['description'])
+                    )
                 ),
             ]
         );

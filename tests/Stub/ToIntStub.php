@@ -7,26 +7,17 @@ use Kununu\Collection\Convertible\ToInt;
 
 final class ToIntStub implements ToInt
 {
-    private $value;
-
-    private function __construct()
+    private function __construct(private int $value)
     {
     }
 
     public static function fromInt(int $value): self
     {
-        return (new self())->setValue($value);
+        return new self($value);
     }
 
     public function toInt(): int
     {
         return $this->value;
-    }
-
-    private function setValue(int $value): self
-    {
-        $this->value = $value;
-
-        return $this;
     }
 }

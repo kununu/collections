@@ -7,14 +7,14 @@ use InvalidArgumentException;
 use Kununu\Collection\AbstractCollection;
 
 /**
- * @method static self fromIterable(iterable $data)
- * @method self   add($value)
- * @method self   unique()
- * @method self   reverse()
- * @method self   diff(self $other)
- * @method self   each(callable $function, bool $rewind = true)
- * @method array  map(callable $function, bool $rewind = true)
- * @method mixed  reduce(callable $function, mixed $initial = null, bool $rewind = true)
+ * @method static self  fromIterable(iterable $data)
+ * @method        self  add($value)
+ * @method        self  unique()
+ * @method        self  reverse()
+ * @method        self  diff(self $other)
+ * @method        self  each(callable $function, bool $rewind = true)
+ * @method        array map(callable $function, bool $rewind = true)
+ * @method        mixed reduce(callable $function, mixed $initial = null, bool $rewind = true)
  */
 final class DTOCollectionStub extends AbstractCollection
 {
@@ -38,15 +38,10 @@ final class DTOCollectionStub extends AbstractCollection
 
     public function append($value): void
     {
-        switch (true) {
-            case is_array($value):
-                $this->append(DTOStub::fromArray($value));
-                break;
-            case $value instanceof DTOStub:
-                $this->offsetSet($value->field(), $value);
-                break;
-            default:
-                throw new InvalidArgumentException(sprintf(self::INVALID, DTOStub::class));
-        }
+        match (true) {
+            is_array($value)          => $this->append(DTOStub::fromArray($value)),
+            $value instanceof DTOStub => $this->offsetSet($value->field(), $value),
+            default                   => throw new InvalidArgumentException(sprintf(self::INVALID, DTOStub::class))
+        };
     }
 }
