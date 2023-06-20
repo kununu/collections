@@ -5,5 +5,5 @@ namespace Kununu\Collection\Convertible;
 
 interface FromInt
 {
-    public static function fromInt(int $value): self;
+    public static function fromInt(int $value): self|static;
 }

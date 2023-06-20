@@ -3,9 +3,9 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd" bootstrap="vendor/autoload.php"
          colors="true" beStrictAboutChangesToGlobalState="true">
-    <coverage processUncoveredFiles="true">
+    <coverage includeUncoveredFiles="true">
         <include>
-            <directory>./src</directory>
+            <directory>src/</directory>
         </include>
         <report>
             <clover outputFile="tests/.results/tests-clover.xml"/>
@@ -14,7 +14,7 @@
     </coverage>
     <testsuites>
         <testsuite name="Collections Test Suite">
-            <directory>./tests/</directory>
+            <directory>tests/</directory>
         </testsuite>
     </testsuites>
     <logging>
