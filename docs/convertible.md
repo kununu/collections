@@ -9,7 +9,7 @@ This interface defines how to create a collection item from an array:
 ```php
 interface FromArray
 {
-    public static function fromArray(array $data): self;
+    public static function fromArray(array $data): self|static;
 }
 ```
 
@@ -31,7 +31,7 @@ This interface defines how to create a collection item from an integer:
 ```php
 interface FromInt
 {
-    public static function fromInt(int $value): self;
+    public static function fromInt(int $value): self|static;
 }
 ```
 
@@ -53,7 +53,7 @@ This interface defines how to create a collection item from a string:
 ```php
 interface FromString
 {
-    public static function fromString(string $value): self;
+    public static function fromString(string $value): self|static;
 }
 ```
 

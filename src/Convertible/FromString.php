@@ -5,5 +5,5 @@ namespace Kununu\Collection\Convertible;
 
 interface FromString
 {
-    public static function fromString(string $value): self;
+    public static function fromString(string $value): self|static;
 }
