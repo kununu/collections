@@ -87,10 +87,10 @@ Example:
 
 ```php
 /**
- * @method null|int getId()
- * @method null|string getName()
- * @method null|DateTime getCreatedAt()
- * @method null|string getExtraFieldNotUsedInBuild()
+ * @method int|null getId()
+ * @method string|null getName()
+ * @method DateTime|null getCreatedAt()
+ * @method string|null getExtraFieldNotUsedInBuild()
  * @method MyItem setId(?int $id)
  * @method MyItem setName(?string $name)
  * @method MyItem setCreatedAt(?DateTime $createdAt)
@@ -120,7 +120,7 @@ As said above the class can help you to build your instances from data stored in
 
 But in order for it to work your subclass must override the `getBuilders` static method.
 
-This method will basically return a map of property => callable to get data for the property:
+This method will basically return a map of `'property'` => `callable` to get data for the property:
 
 ```php
 [
@@ -133,86 +133,142 @@ This method will basically return a map of property => callable to get data for 
 ##### buildStringGetter
 
 ```php
-protected static function buildStringGetter(string $fieldName, ?string $default = null): callable;
+protected static function buildStringGetter(string $fieldName, ?string $default = null, bool $useSnakeCase = false): callable;
 ```
 
-Returns a `string` or `$default` value from the `$fieldName` in the data
+Returns a `string` or `$default` value from the `$fieldName` in the data.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array. 
 
 ##### buildRequiredStringGetter
 
 ```php
-protected static function buildRequiredStringGetter(string $fieldName): callable;
+protected static function buildRequiredStringGetter(string $fieldName, bool $useSnakeCase = false): callable;
 ```
 
 Returns a `string` from the `$fieldName` in the data or throws an exception if no data is found.
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildBoolGetter
 
 ```php
-protected static function buildBoolGetter(string $fieldName, ?bool $default = null): callable;
+protected static function buildBoolGetter(string $fieldName, ?bool $default = null,bool $useSnakeCase = false): callable;
 ```
 
 Returns a `bool` or `$default` value from the `$fieldName` in the data
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildRequiredBoolGetter
 
 ```php
-protected static function buildRequiredBoolGetter(string $fieldName): callable;
+protected static function buildRequiredBoolGetter(string $fieldName, bool $useSnakeCase = false): callable;
 ```
 
 Returns a `bool` from the `$fieldName` in the data or throws an exception if no data is found.
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildIntGetter
 
 ```php
-protected static function buildIntGetter(string $fieldName, ?int $default = null): callable;
+protected static function buildIntGetter(string $fieldName, ?int $default = null, bool $useSnakeCase = false): callable;
 ```
 
 Returns an `int` or `$default` value from the `$fieldName` in the data
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildRequiredIntGetter
 
 ```php
-protected static function buildRequiredIntGetter(string $fieldName): callable;
+protected static function buildRequiredIntGetter(string $fieldName, bool $useSnakeCase = false): callable;
 ```
 
 Returns an `int` from the `$fieldName` in the data or throws an exception if no data is found.
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildFloatGetter
 
 ```php
-protected static function buildFloatGetter(string $fieldName, ?float $default = null): callable;
+protected static function buildFloatGetter(string $fieldName, ?float $default = null, bool $useSnakeCase = false): callable;
 ```
 
 Returns a `float` or `$default` value from the `$fieldName` in the data
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildRequiredFloatGetter
 
 ```php
-protected static function buildRequiredFloatGetter(string $fieldName): callable;
+protected static function buildRequiredFloatGetter(string $fieldName, bool $useSnakeCase = false): callable;
 ```
 
 Returns a `float` from the `$fieldName` in the data or throws an exception if no data is found.
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildDateTimeGetter
 
 ```php
-protected static function buildDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT, ?DateTimeInterface $default = null): callable
+protected static function buildDateTimeGetter(string $fieldName, string $dateFormat = AbstractItem::DATE_FORMAT, ?DateTimeInterface $default = null, bool $useSnakeCase = false): callable;
 ```
 
-Returns a `DateTimeInterface` or `$default` value from the `$fieldName` in the data.
+Returns a `DateTime` or `$default` value from the `$fieldName` in the data.
 
 The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
 
 ##### buildRequiredDateTimeGetter
 
 ```php
-protected static function buildRequiredDateTimeGetter(string $fieldName, string $dateFormat = self::DATE_FORMAT): callable;
+protected static function buildRequiredDateTimeGetter(string $fieldName, string $dateFormat = AbstractItem::DATE_FORMAT, bool $useSnakeCase = false): callable;
 ```
 
-Returns a `DateTimeInterface` from the `$fieldName` in the data or throws an exception if no data is found.
+Returns a `DateTime` from the `$fieldName` in the data or throws an exception if no data is found.
 
 The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildDateTimeImmutableGetter
+
+```php
+protected static function buildDateTimeImmutableGetter(string $fieldName, string $dateFormat = AbstractItem::DATE_FORMAT, ?DateTimeInterface $default = null, bool $useSnakeCase = false): callable;
+```
+
+Returns a `DateTimeImmutable` or `$default` value from the `$fieldName` in the data.
+
+The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildRequiredDateTimeImmutableGetter
+
+```php
+protected static function buildRequiredDateTimeImmutableGetter(string $fieldName, string $dateFormat = AbstractItem::DATE_FORMAT, bool $useSnakeCase = false): callable;
+```
+
+Returns a `DateTimeImmutable` from the `$fieldName` in the data or throws an exception if no data is found.
+
+The `$dateFormat` by default is `'Y-m-d H:i:s'`.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildGetterOptionalField
+
+```php
+protected static function buildGetterOptionalField(string $fieldName, callable $converter, mixed $default = null, bool $useSnakeCase = false): callable;
+```
+
+Returns a value or `$default` value from the `$fieldName` in the data.
+
+The `$converter` callable should implement the logic assuming that the `$fieldName` exists in the data, and it will receive the `$value` on that field.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
 
 ##### buildGetterRequiredField
 
@@ -222,12 +278,29 @@ protected static function buildGetterRequiredField(string $fieldName, callable $
 
 Returns a value from the `$fieldName` in the data or throws an exception if no data is found.
 
-The `$converter` callable should implement the logic assuming that the `$fieldName` exists in the data and it will receive the `$value` on that field.
+The `$converter` callable should implement the logic assuming that the `$fieldName` exists in the data, and it will receive the `$value` on that field.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildFromArrayGetter
+
+```php
+protected static function buildFromArrayGetter(string $fieldName, string $fromArrayClass, ?FromArray $default = null, bool $useSnakeCase = false): callable; 
+```
+
+Try to create an `FromArray` concrete implementation instance which class is `$fromArrayClass` from the `$fieldName` in the data.
+
+The `$fieldName` in the data must be an `array` suited to be passed to the static `fromArray` method of your `$collectionClass`.
+
+- If `$fromArrayClass` is not a concrete subclass of `FromArray` it will return `null`.
+- If `$fieldName` is not set in the data array it will return the `$default` instance (which by default is `null`).
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
 
 ##### buildCollectionGetter
 
 ```php
-protected static function buildCollectionGetter(string $fieldName, string $collectionClass, ?AbstractCollection $default = null): callable;
+protected static function buildCollectionGetter(string $fieldName, string $collectionClass, ?AbstractCollection $default = null, bool $useSnakeCase = false): callable;
 ```
 
 Try to create an `AbstractCollection` concrete implementation instance which class is `$collectionClass` from the `$fieldName` in the data.
@@ -237,15 +310,19 @@ The `$fieldName` in the data must be an `iterable` suited to be passed to the st
 - If `$collectionClass` is not a concrete subclass of `AbstractCollection` it will return `null`.
 - If `$fieldName` is not set in the data array it will return the `$default` instance (which by default is `null`).
 
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
 ##### buildConditionalGetter
 
 ```php
-protected static function buildConditionalGetter(string $sourceField, array $sources): callable;
+protected static function buildConditionalGetter(string $sourceField, array $sources, bool $useSnakeCase = false): callable;
 ```
 
 Builds a field based on the `$sourceField` value (the condition). The `$sourceField` should have the key used to select the `callable` mapped on the `$sources` array.
 
 The `$sources` array has the format `['sourceName1' => callableForSource1(), ..., 'sourceNameN' => callableForSourceN()]` 
+
+If `$useSnakeCase` is `true` the `$sourceField` will be converted to snake case and that value should be the key of the field in the data array.
 
 Example:
 ```php

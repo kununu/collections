@@ -4,99 +4,191 @@ declare(strict_types=1);
 namespace Kununu\Collection;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
+use Kununu\Collection\Convertible\FromArray;
 
 trait AbstractItemBuildersTrait
 {
-    protected static function buildStringGetter(string $fieldName, ?string $default = null): callable
-    {
-        return fn(array $data): ?string => isset($data[$fieldName]) ? (string) $data[$fieldName] : $default;
+    protected static function buildStringGetter(
+        string $fieldName,
+        ?string $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField(
+            $fieldName,
+            fn($value): string => (string) $value,
+            $default,
+            $useSnakeCase
+        );
     }
 
-    protected static function buildRequiredStringGetter(string $fieldName): callable
+    protected static function buildRequiredStringGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): string => (string) $value);
+        return self::buildGetterRequiredField($fieldName, fn($value): string => (string) $value, $useSnakeCase);
     }
 
-    protected static function buildBoolGetter(string $fieldName, ?bool $default = null): callable
-    {
-        return fn(array $data): ?bool => isset($data[$fieldName]) ? (bool) $data[$fieldName] : $default;
+    protected static function buildBoolGetter(
+        string $fieldName,
+        ?bool $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField($fieldName, fn($value): bool => (bool) $value, $default, $useSnakeCase);
     }
 
-    protected static function buildRequiredBoolGetter(string $fieldName): callable
+    protected static function buildRequiredBoolGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): bool => (bool) $value);
+        return self::buildGetterRequiredField($fieldName, fn($value): bool => (bool) $value, $useSnakeCase);
     }
 
-    protected static function buildIntGetter(string $fieldName, ?int $default = null): callable
-    {
-        return fn(array $data): ?int => isset($data[$fieldName]) ? (int) $data[$fieldName] : $default;
+    protected static function buildIntGetter(
+        string $fieldName,
+        ?int $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField($fieldName, fn($value): int => (int) $value, $default, $useSnakeCase);
     }
 
-    protected static function buildRequiredIntGetter(string $fieldName): callable
+    protected static function buildRequiredIntGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): int => (int) $value);
+        return self::buildGetterRequiredField($fieldName, fn($value): int => (int) $value, $useSnakeCase);
     }
 
-    protected static function buildFloatGetter(string $fieldName, ?float $default = null): callable
-    {
-        return fn(array $data): ?float => isset($data[$fieldName]) ? (float) $data[$fieldName] : $default;
+    protected static function buildFloatGetter(
+        string $fieldName,
+        ?float $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField($fieldName, fn($value): float => (float) $value, $default, $useSnakeCase);
     }
 
-    protected static function buildRequiredFloatGetter(string $fieldName): callable
+    protected static function buildRequiredFloatGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): float => (float) $value);
+        return self::buildGetterRequiredField($fieldName, fn($value): float => (float) $value, $useSnakeCase);
     }
 
     protected static function buildDateTimeGetter(
         string $fieldName,
         string $dateFormat = AbstractItem::DATE_FORMAT,
-        ?DateTimeInterface $default = null
-    ): callable
-    {
-        return fn(array $data): ?DateTimeInterface => isset($data[$fieldName])
-            ? (DateTime::createFromFormat($dateFormat, $data[$fieldName]) ?: $default)
-            : null;
+        ?DateTimeInterface $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField(
+            $fieldName,
+            fn($value): ?DateTimeInterface => DateTime::createFromFormat($dateFormat, $value) ?: $default,
+            $default ? DateTime::createFromInterface($default) : null,
+            $useSnakeCase
+        );
     }
 
     protected static function buildRequiredDateTimeGetter(
         string $fieldName,
-        string $dateFormat = AbstractItem::DATE_FORMAT
-    ): callable
-    {
+        string $dateFormat = AbstractItem::DATE_FORMAT,
+        bool $useSnakeCase = false
+    ): callable {
         return self::buildGetterRequiredField(
             $fieldName,
-            fn($value): DateTimeInterface => DateTime::createFromFormat($dateFormat, $value)
+            fn($value): DateTimeInterface => DateTime::createFromFormat($dateFormat, $value),
+            $useSnakeCase
         );
     }
 
-    protected static function buildGetterRequiredField(string $fieldName, callable $converter): callable
-    {
-        return fn(array $data) => match (true) {
-            isset($data[$fieldName]) => $converter($data[$fieldName]),
-            default                  => throw new InvalidArgumentException(sprintf('Missing "%s" field', $fieldName))
+    protected static function buildDateTimeImmutableGetter(
+        string $fieldName,
+        string $dateFormat = AbstractItem::DATE_FORMAT,
+        ?DateTimeInterface $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterOptionalField(
+            $fieldName,
+            fn($value): ?DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value) ?: $default,
+            $default ? DateTimeImmutable::createFromInterface($default) : null,
+            $useSnakeCase
+        );
+    }
+
+    protected static function buildRequiredDateTimeImmutableGetter(
+        string $fieldName,
+        string $dateFormat = AbstractItem::DATE_FORMAT,
+        bool $useSnakeCase = false
+    ): callable {
+        return self::buildGetterRequiredField(
+            $fieldName,
+            fn($value): DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value),
+            $useSnakeCase
+        );
+    }
+
+    protected static function buildGetterOptionalField(
+        string $fieldName,
+        callable $converter,
+        mixed $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
+
+        return fn(array $data): mixed => isset($data[$fieldName]) ? $converter($data[$fieldName]) : $default;
+    }
+
+    protected static function buildGetterRequiredField(
+        string $fieldName,
+        callable $converter,
+        bool $useSnakeCase = false
+    ): callable {
+        $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
+
+        return fn(array $data) => match (isset($data[$fieldName])) {
+            true    => $converter($data[$fieldName]),
+            default => throw new InvalidArgumentException(sprintf('Missing "%s" field', $fieldName))
+        };
+    }
+
+    protected static function buildFromArrayGetter(
+        string $fieldName,
+        string $fromArrayClass,
+        ?FromArray $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
+
+        return fn(array $data): ?FromArray => match (true) {
+            !is_a($fromArrayClass, FromArray::class, true) => null,
+            isset($data[$fieldName])                       => self::invoke(
+                $fromArrayClass,
+                'fromArray',
+                $data[$fieldName]
+            ),
+            default                                        => $default
         };
     }
 
     protected static function buildCollectionGetter(
         string $fieldName,
         string $collectionClass,
-        ?AbstractCollection $default = null
-    ): callable
-    {
+        ?AbstractCollection $default = null,
+        bool $useSnakeCase = false
+    ): callable {
+        $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
+
         return fn(array $data): ?AbstractCollection => match (true) {
             !is_a($collectionClass, AbstractCollection::class, true) => null,
-            isset($data[$fieldName])                                 => call_user_func_array(
-                [$collectionClass, 'fromIterable'],
-                [$data[$fieldName]]
+            isset($data[$fieldName])                                 => self::invoke(
+                $collectionClass,
+                'fromIterable',
+                $data[$fieldName]
             ),
-            default => $default
+            default                                                  => $default
         };
     }
 
-    protected static function buildConditionalGetter(string $sourceField, array $sources): callable
-    {
+    protected static function buildConditionalGetter(
+        string $sourceField,
+        array $sources,
+        bool $useSnakeCase = false
+    ): callable {
+        $sourceField = $useSnakeCase ? self::camelToSnake($sourceField) : $sourceField;
+
         return function(array $data) use ($sourceField, $sources) {
             foreach ($sources as $source => $getter) {
                 if ($source === ($data[$sourceField] ?? null)) {
@@ -106,5 +198,15 @@ trait AbstractItemBuildersTrait
 
             return null;
         };
+    }
+
+    private static function camelToSnake(string $string): string
+    {
+        return mb_strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
+    }
+
+    private static function invoke(string $class, string $method, mixed $value): mixed
+    {
+        return call_user_func_array([$class, $method], [$value]);
     }
 }
