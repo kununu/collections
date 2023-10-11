@@ -5,13 +5,17 @@ namespace Kununu\Collection\Tests;
 
 use BadMethodCallException;
 use DateTime;
+use DateTimeImmutable;
 use InvalidArgumentException;
+use Kununu\Collection\Tests\Stub\AbstractItemSnakeCaseStub;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithCollectionsStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithConditionalBuilderStub;
+use Kununu\Collection\Tests\Stub\AbstractItemWithFromArrayStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithRequiredFieldsStub;
 use Kununu\Collection\Tests\Stub\DTOCollectionStub;
 use Kununu\Collection\Tests\Stub\DTOStub;
+use Kununu\Collection\Tests\Stub\FromArrayStub;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
@@ -241,6 +245,21 @@ final class AbstractItemTest extends TestCase
         ];
     }
 
+    public function testItemBuildFromArray(): void
+    {
+        $item = AbstractItemWithFromArrayStub::build([
+            'fromArray' => ['id' => 1, 'name' => 'The Name'],
+        ]);
+
+        $this->assertInstanceOf(FromArrayStub::class, $item->fromArray());
+        $this->assertEquals(1, $item->fromArray()->id());
+        $this->assertEquals('The Name', $item->fromArray()->name());
+        $this->assertNull($item->notFromArray());
+        $this->assertInstanceOf(FromArrayStub::class, $item->defaultFromArray());
+        $this->assertEquals(0, $item->defaultFromArray()->id());
+        $this->assertEquals('', $item->defaultFromArray()->name());
+    }
+
     public function testItemBuildCollection(): void
     {
         $item = AbstractItemWithCollectionsStub::build([
@@ -338,5 +357,48 @@ final class AbstractItemTest extends TestCase
             'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "withInvalidProperty" called'
         );
         $item->withInvalidProperty(false);
+    }
+
+    public function testItemBuilderWithSnakeCase(): void
+    {
+        $item = AbstractItemSnakeCaseStub::build([
+            'string_field'                       => 'The string field',
+            'required_string_field'              => 'The required string field',
+            'bool_field'                         => true,
+            'required_bool_field'                => false,
+            'int_field'                          => 1,
+            'required_int_field'                 => 2,
+            'float_field'                        => 1.5,
+            'required_float_field'               => 2.6,
+            'date_time_field'                    => '2023-10-11 12:34:01',
+            'required_date_time_field'           => '2023-10-11 12:34:02',
+            'date_time_immutable_field'          => '2023-10-11 12:34:03',
+            'required_date_time_immutable_field' => '2023-10-11 12:34:04',
+        ]);
+
+        $this->assertEquals('The string field', $item->stringField());
+        $this->assertEquals('The required string field', $item->requiredStringField());
+        $this->assertTrue($item->boolField());
+        $this->assertFalse($item->requiredBoolField());
+        $this->assertEquals(1, $item->intField());
+        $this->assertEquals(2, $item->requiredIntField());
+        $this->assertEquals(1.5, $item->floatField());
+        $this->assertEquals(2.6, $item->requiredFloatField());
+        $this->assertEquals(
+            DateTime::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:01'),
+            $item->dateTimeField()
+        );
+        $this->assertEquals(
+            DateTime::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:02'),
+            $item->requiredDateTimeField()
+        );
+        $this->assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:03'),
+            $item->dateTimeImmutableField()
+        );
+        $this->assertEquals(
+            DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:04'),
+            $item->requiredDateTimeImmutableField()
+        );
     }
 }
