@@ -2,22 +2,22 @@
 <!-- https://phpunit.readthedocs.io/en/9.6/ -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd" bootstrap="vendor/autoload.php"
-         colors="true" beStrictAboutChangesToGlobalState="true">
-    <coverage includeUncoveredFiles="true">
-        <include>
-            <directory>src/</directory>
-        </include>
-        <report>
-            <clover outputFile="tests/.results/tests-clover.xml"/>
-            <html outputDirectory="tests/.results/html/"/>
-        </report>
-    </coverage>
-    <testsuites>
-        <testsuite name="Collections Test Suite">
-            <directory>tests/</directory>
-        </testsuite>
-    </testsuites>
-    <logging>
-        <junit outputFile="tests/.results/tests-junit.xml"/>
-    </logging>
+         colors="true" beStrictAboutChangesToGlobalState="true" testdox="true">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory>src</directory>
+    </include>
+    <report>
+      <clover outputFile="tests/.results/tests-clover.xml"/>
+      <html outputDirectory="tests/.results/html/"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="Collections Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <junit outputFile="tests/.results/tests-junit.xml"/>
+  </logging>
 </phpunit>

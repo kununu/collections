@@ -26,6 +26,13 @@ composer install
 composer test
 ```
 
+To run test and generate coverage information:
+
+```bash
+composer install
+composer test-coverage
+```
+
 ## Usage
 
 The library provide three traits that you can add to your custom class extending `ArrayIterator`.
@@ -47,7 +54,6 @@ More details:
 ## Contribute
 
 If you are interested in contributing read our [contributing guidelines](/CONTRIBUTING.md).
-
 
 ------------------------------
 
