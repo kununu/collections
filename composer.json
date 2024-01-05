@@ -1,46 +1,47 @@
 {
-    "name": "kununu/collections",
-    "description": "To reduce boilerplate associated with collections",
-    "license": "MIT",
-    "minimum-stability": "stable",
-    "keywords": [
-        "collections"
-    ],
-    "authors": [
-        {
-            "name": "Hugo Gonçalves",
-            "email": "hugo.goncalves@kununu.com"
-        }
-    ],
-    "require": {
-        "php": ">=8.0"
-    },
-    "require-dev": {
-        "kununu/scripts": ">=4.0",
-        "phpunit/phpunit": "^9.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "Kununu\\Collection\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Kununu\\Collection\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "phpunit --no-coverage tests",
-        "test-coverage": "phpunit --coverage-clover tests/.results/coverage.xml --coverage-html tests/.results/html/ tests"
-    },
-    "scripts-descriptions": {
-        "test": "Run all tests",
-        "test-coverage": "Run all tests with coverage report"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "kununu/scripts": true
-        }
+  "name": "kununu/collections",
+  "description": "To reduce boilerplate associated with collections",
+  "type": "library",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "keywords": [
+    "collections"
+  ],
+  "authors": [
+    {
+      "name": "Hugo Gonçalves",
+      "email": "hugo.goncalves@kununu.com"
     }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "kununu/scripts": ">=4.0",
+    "phpunit/phpunit": "^9.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kununu\\Collection\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kununu\\Collection\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --no-coverage tests",
+    "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-clover tests/.results/coverage.xml --coverage-html tests/.results/html/ tests"
+  },
+  "scripts-descriptions": {
+    "test": "Run all tests",
+    "test-coverage": "Run all tests with coverage report"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "kununu/scripts": true
+    }
+  }
 }
