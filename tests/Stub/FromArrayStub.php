@@ -7,22 +7,12 @@ use Kununu\Collection\Convertible\FromArray;
 
 final class FromArrayStub implements FromArray
 {
-    public function __construct(private int $id, private string $name)
+    public function __construct(public readonly int $id, public readonly string $name)
     {
     }
 
     public static function fromArray(array $data): self
     {
         return new self((int) $data['id'], (string) $data['name']);
-    }
-
-    public function id(): int
-    {
-        return $this->id;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
     }
 }

@@ -10,12 +10,18 @@ Since many of the times we are building those objects based on data collected fr
 The basic structure of a class extending this is the following:
 
 ```php
+<?php
+declare(strict_types=1);
+
 final class MyItem extends AbstractItem
 {
     protected const PROPERTIES = [
         'id',
         'name',
         'createdAt'
+        'simpleName',
+        'verified',
+        'industryId',
     ];
 
     public function __construct()
@@ -26,9 +32,9 @@ final class MyItem extends AbstractItem
     protected static function getBuilders(): array
     {
         return [
-            'id'        => fn(array $data) => $data['id'] ?? null,
-            'name'      => fn(array $data) => $data['name'] ?? null,
-            'createdAt' => fn(array $data) => $data['createdAt'] ?? null,
+            'id'        => static fn(array $data): ?int => $data['id'] ?? null,
+            'name'      => static fn(array $data): ?string => $data['name'] ?? null,
+            'createdAt' => static fn(array $data)? DateTime => $data['createdAt'] ?? null,
             'simpleName' => self::buildStringGetter('simpleName'),
             'verified'   => self::buildBoolGetter('verified'),
             'industryId' => self::buildIntGetter('industryId'),
@@ -56,6 +62,9 @@ If you want to use different prefixes for setters/getters you can! Just override
 Example:
 
 ```php
+<?php
+declare(strict_types=1);
+
 final class MyItem extends AbstractItem
 {
     protected const PROPERTIES = [
@@ -86,6 +95,9 @@ Since all the setters/getters are "magic" we might feel the need to have code hi
 Example:
 
 ```php
+<?php
+declare(strict_types=1);
+
 /**
  * @method int|null getId()
  * @method string|null getName()
@@ -95,7 +107,7 @@ Example:
  * @method MyItem setName(?string $name)
  * @method MyItem setCreatedAt(?DateTime $createdAt)
  */
-class MyItem extends AbstractItem
+final class MyItem extends AbstractItem
 {
     protected const PROPERTIES = [
         'id',
@@ -110,21 +122,24 @@ class MyItem extends AbstractItem
 As said above the class can help you to build your instances from data stored in arrays. Every subclass will have the method `build`.
 
 ```php
-    /**
-     * @param array $data
-     *
-     * @return static
-     */
-    public static function build(array $data): self;
+<?php
+declare(strict_types=1);
+
+/**
+ * @param array $data
+ *
+ * @return static
+ */
+public static function build(array $data): self;
 ```
 
-But in order for it to work your subclass must override the `getBuilders` static method.
+But in order for it to work your subclass must implement the `getBuilders` static method.
 
 This method will basically return a map of `'property'` => `callable` to get data for the property:
 
 ```php
 [
-    'itemProperty' => fn(array $data) => $valueForTheProperty,
+    'itemProperty' => static fn(array $data): mixed => $valueForTheProperty,
 ]
 ```
 
@@ -326,6 +341,8 @@ If `$useSnakeCase` is `true` the `$sourceField` will be converted to snake case 
 
 Example:
 ```php
+<?php
+declare(strict_types=1);
 
 final class MyItem extends AbstractItem
 {

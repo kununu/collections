@@ -7,7 +7,7 @@ use Kununu\Collection\Convertible\ToArray;
 
 final class ToArrayStub implements ToArray
 {
-    private function __construct(private ToIntStub $id, private ToStringStub $data)
+    private function __construct(private readonly ToIntStub $id, private readonly ToStringStub $data)
     {
     }
 

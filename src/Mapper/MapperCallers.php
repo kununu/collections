@@ -7,17 +7,7 @@ use Closure;
 
 final class MapperCallers
 {
-    public function __construct(private Closure $fnGetId, private Closure $fnGetValue)
+    public function __construct(public readonly Closure $fnGetId, public readonly Closure $fnGetValue)
     {
-    }
-
-    public function fnGetId(): Closure
-    {
-        return $this->fnGetId;
-    }
-
-    public function fnGetValue(): Closure
-    {
-        return $this->fnGetValue;
     }
 }

@@ -26,7 +26,11 @@ trait AbstractItemBuildersTrait
 
     protected static function buildRequiredStringGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): string => (string) $value, $useSnakeCase);
+        return self::buildGetterRequiredField(
+            $fieldName,
+            static fn(mixed $value): string => (string) $value,
+            $useSnakeCase
+        );
     }
 
     protected static function buildBoolGetter(
@@ -34,12 +38,21 @@ trait AbstractItemBuildersTrait
         ?bool $default = null,
         bool $useSnakeCase = false
     ): callable {
-        return self::buildGetterOptionalField($fieldName, fn($value): bool => (bool) $value, $default, $useSnakeCase);
+        return self::buildGetterOptionalField(
+            $fieldName,
+            static fn(mixed $value): bool => (bool) $value,
+            $default,
+            $useSnakeCase
+        );
     }
 
     protected static function buildRequiredBoolGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): bool => (bool) $value, $useSnakeCase);
+        return self::buildGetterRequiredField(
+            $fieldName,
+            static fn(mixed $value): bool => (bool) $value,
+            $useSnakeCase
+        );
     }
 
     protected static function buildIntGetter(
@@ -47,12 +60,21 @@ trait AbstractItemBuildersTrait
         ?int $default = null,
         bool $useSnakeCase = false
     ): callable {
-        return self::buildGetterOptionalField($fieldName, fn($value): int => (int) $value, $default, $useSnakeCase);
+        return self::buildGetterOptionalField(
+            $fieldName,
+            static fn(mixed $value): int => (int) $value,
+            $default,
+            $useSnakeCase
+        );
     }
 
     protected static function buildRequiredIntGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): int => (int) $value, $useSnakeCase);
+        return self::buildGetterRequiredField(
+            $fieldName,
+            static fn(mixed $value): int => (int) $value,
+            $useSnakeCase
+        );
     }
 
     protected static function buildFloatGetter(
@@ -60,12 +82,21 @@ trait AbstractItemBuildersTrait
         ?float $default = null,
         bool $useSnakeCase = false
     ): callable {
-        return self::buildGetterOptionalField($fieldName, fn($value): float => (float) $value, $default, $useSnakeCase);
+        return self::buildGetterOptionalField(
+            $fieldName,
+            static fn(mixed $value): float => (float) $value,
+            $default,
+            $useSnakeCase
+        );
     }
 
     protected static function buildRequiredFloatGetter(string $fieldName, bool $useSnakeCase = false): callable
     {
-        return self::buildGetterRequiredField($fieldName, fn($value): float => (float) $value, $useSnakeCase);
+        return self::buildGetterRequiredField(
+            $fieldName,
+            static fn(mixed $value): float => (float) $value,
+            $useSnakeCase
+        );
     }
 
     protected static function buildDateTimeGetter(
@@ -76,7 +107,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         return self::buildGetterOptionalField(
             $fieldName,
-            fn($value): ?DateTimeInterface => DateTime::createFromFormat($dateFormat, $value) ?: $default,
+            static fn(mixed $value): ?DateTimeInterface => DateTime::createFromFormat($dateFormat, $value) ?: $default,
             $default ? DateTime::createFromInterface($default) : null,
             $useSnakeCase
         );
@@ -89,7 +120,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         return self::buildGetterRequiredField(
             $fieldName,
-            fn($value): DateTimeInterface => DateTime::createFromFormat($dateFormat, $value),
+            static fn(mixed $value): DateTimeInterface => DateTime::createFromFormat($dateFormat, $value),
             $useSnakeCase
         );
     }
@@ -102,7 +133,8 @@ trait AbstractItemBuildersTrait
     ): callable {
         return self::buildGetterOptionalField(
             $fieldName,
-            fn($value): ?DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value) ?: $default,
+            static fn(mixed $value): ?DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value)
+                ?: $default,
             $default ? DateTimeImmutable::createFromInterface($default) : null,
             $useSnakeCase
         );
@@ -115,7 +147,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         return self::buildGetterRequiredField(
             $fieldName,
-            fn($value): DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value),
+            static fn(mixed $value): DateTimeInterface => DateTimeImmutable::createFromFormat($dateFormat, $value),
             $useSnakeCase
         );
     }
@@ -128,7 +160,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
 
-        return fn(array $data): mixed => isset($data[$fieldName]) ? $converter($data[$fieldName]) : $default;
+        return static fn(array $data): mixed => isset($data[$fieldName]) ? $converter($data[$fieldName]) : $default;
     }
 
     protected static function buildGetterRequiredField(
@@ -138,7 +170,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
 
-        return fn(array $data) => match (isset($data[$fieldName])) {
+        return static fn(array $data) => match (isset($data[$fieldName])) {
             true    => $converter($data[$fieldName]),
             default => throw new InvalidArgumentException(sprintf('Missing "%s" field', $fieldName))
         };
@@ -152,7 +184,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
 
-        return fn(array $data): ?FromArray => match (true) {
+        return static fn(array $data): ?FromArray => match (true) {
             !is_a($fromArrayClass, FromArray::class, true) => null,
             isset($data[$fieldName])                       => self::invoke(
                 $fromArrayClass,
@@ -171,7 +203,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
 
-        return fn(array $data): ?AbstractCollection => match (true) {
+        return static fn(array $data): ?AbstractCollection => match (true) {
             !is_a($collectionClass, AbstractCollection::class, true) => null,
             isset($data[$fieldName])                                 => self::invoke(
                 $collectionClass,
@@ -189,7 +221,7 @@ trait AbstractItemBuildersTrait
     ): callable {
         $sourceField = $useSnakeCase ? self::camelToSnake($sourceField) : $sourceField;
 
-        return function(array $data) use ($sourceField, $sources) {
+        return static function(array $data) use ($sourceField, $sources): mixed {
             foreach ($sources as $source => $getter) {
                 if ($source === ($data[$sourceField] ?? null)) {
                     return is_callable($getter) ? $getter($data) : null;

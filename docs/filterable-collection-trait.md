@@ -101,10 +101,13 @@ The `initialValue` is the value to use if you want to perform several operations
 
 The `exitConditionValue` is the value to use if you want to exit the calculation when performing several calculations (like a short circuit evaluation).
 
-By default, the library provides two implementations of this interface: `FilterOperatorAnd` and `FilterOperatorOr`.
+By default, the library provides three implementations of this interface: `FilterOperatorAnd`, `FilterOperatorOr` and `FilterOperatorXOr`.
 
 A quick example:
 ```php
+<?php
+declare(strict_types=1);
+
 $filter = CompositeFilter(
     new FilterOperatorAnd(),
     new MyFilter1(),
@@ -124,6 +127,9 @@ $myFilter1->isSatisfiedBy(...) && $myFilter2->isSatisfiedBy(...) && $myFilter3->
 So to wrap it up, on how to filter/group a collection:
 
 ```php
+<?php
+declare(strict_types=1);
+
 $filteredCollection = $collection->filter(
     // Filter1 AND Filter2 AND Filter3    
     new CompositeFilter(
@@ -145,12 +151,12 @@ $groupByResults = $collection->groupBy(
     ),
     // Second group
     new CompositeFilter(
-        // Filter1 AND Filter3 AND (Filter2 OR Filter4) 
+        // Filter1 AND Filter3 AND (Filter2 XOR Filter4) 
         new FilterOperatorAnd(),
         new MyFilter1(),
         new MyFilter3(),
         new CompositeFilter(
-            new FilterOperatorOr(),
+            new FilterOperatorXor(),
             new MyFilter2(),
             new MyFilter4()
         )

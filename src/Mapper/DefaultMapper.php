@@ -9,7 +9,7 @@ use Kununu\Collection\AbstractCollection;
 
 abstract class DefaultMapper implements Mapper
 {
-    /** @var MapperCallers[] */
+    /** @var array<string, MapperCallers> */
     private array $callers = [];
 
     public function __construct(string ...$collectionClasses)
@@ -24,13 +24,13 @@ abstract class DefaultMapper implements Mapper
 
     public function map(AbstractCollection $collection): array
     {
-        if (!array_key_exists($collectionClass = get_class($collection), $this->callers)) {
+        if (!array_key_exists($collectionClass = $collection::class, $this->callers)) {
             throw new InvalidArgumentException('Invalid collection');
         }
 
         $collectionCallers = $this->callers[$collectionClass];
 
-        return $this->mapCollection($collection, $collectionCallers->fnGetId(), $collectionCallers->fnGetValue());
+        return $this->mapCollection($collection, $collectionCallers->fnGetId, $collectionCallers->fnGetValue);
     }
 
     abstract protected function getCallers(string $collectionClass): ?MapperCallers;

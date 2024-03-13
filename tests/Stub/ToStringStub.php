@@ -7,7 +7,7 @@ use Kununu\Collection\Convertible\ToString;
 
 final class ToStringStub implements ToString
 {
-    private function __construct(private ToIntStub $id, private string $value)
+    private function __construct(private readonly ToIntStub $id, private readonly string $value)
     {
     }
 

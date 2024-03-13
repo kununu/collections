@@ -12,8 +12,8 @@ final class MapperStub extends DefaultMapper
     {
         if (DTOCollectionStub::class === $collectionClass) {
             return new MapperCallers(
-                fn(DTOStub $dto): string => $dto->field(),
-                fn(DTOStub $dto): int => $dto->value()
+                fn(DTOStub $dto): string => $dto->field,
+                fn(DTOStub $dto): int => $dto->value
             );
         }
 

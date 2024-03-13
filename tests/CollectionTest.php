@@ -11,12 +11,13 @@ use Kununu\Collection\Tests\Stub\CollectionStub;
 use Kununu\Collection\Tests\Stub\ToArrayStub;
 use Kununu\Collection\Tests\Stub\ToIntStub;
 use Kununu\Collection\Tests\Stub\ToStringStub;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
 final class CollectionTest extends TestCase
 {
-    /** @dataProvider fromIterableDataProvider */
+    #[DataProvider('fromIterableDataProvider')]
     public function testFromIterable(iterable $data, array $expected): void
     {
         $this->assertEquals($expected, CollectionStub::fromIterable($data)->toArray());
@@ -25,27 +26,27 @@ final class CollectionTest extends TestCase
     public static function fromIterableDataProvider(): array
     {
         return [
-            [
+            'simple_integers_array_case_1' => [
                 [1, 2, 3],
                 [1, 2, 3],
             ],
-            [
+            'simple_integers_array_case_2' => [
                 range(5, 10),
                 [5, 6, 7, 8, 9, 10],
             ],
-            [
+            'generator_of_integers'        => [
                 self::getGenerator(5, 9, 14),
                 [5, 9, 14],
             ],
-            [
+            'array_iterator_of_integers'   => [
                 self::getArrayIterator(10, 20, 30, 40),
                 [10, 20, 30, 40],
             ],
-            [
+            'empty_array_iterator'         => [
                 self::getArrayIterator(),
                 [],
             ],
-            [
+            'generator_of_complex_objects' => [
                 self::getGenerator(
                     ToArrayStub::create(ToIntStub::fromInt(1), ToStringStub::create(ToIntStub::fromInt(7), 'PHP')),
                     ToArrayStub::create(ToIntStub::fromInt(2), ToStringStub::create(ToIntStub::fromInt(13), 'Java')),
@@ -66,7 +67,7 @@ final class CollectionTest extends TestCase
                     ],
                 ],
             ],
-            [
+            'array_of_objects'             => [
                 [
                     ToIntStub::fromInt(1),
                     ToIntStub::fromInt(2),
@@ -78,7 +79,7 @@ final class CollectionTest extends TestCase
                     3,
                 ],
             ],
-            [
+            'generator_of_simple_objects'  => [
                 self::getGenerator(
                     ToStringStub::create(ToIntStub::fromInt(1), 'ABC'),
                     ToStringStub::create(ToIntStub::fromInt(2), 'DEF'),
@@ -132,7 +133,7 @@ final class CollectionTest extends TestCase
         $this->assertEquals([6, 7], $collection2->diff($collection1)->toArray());
     }
 
-    /** @dataProvider eachDataProvider */
+    #[DataProvider('eachDataProvider')]
     public function testEach(bool $rewind, ?int $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -186,7 +187,7 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /** @dataProvider mapDataProvider */
+    #[DataProvider('mapDataProvider')]
     public function testMap(bool $rewind, ?array $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -242,7 +243,7 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /** @dataProvider reduceDataProvider */
+    #[DataProvider('reduceDataProvider')]
     public function testReduce(bool $rewind, ?int $expectedCurrent, bool $expectException): void
     {
         $exceptionWasThrown = false;
@@ -299,7 +300,7 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    /** @dataProvider autoSortedCollectionDataProvider */
+    #[DataProvider('autoSortedCollectionDataProvider')]
     public function testAutoSortedCollection(iterable $data, array $expected): void
     {
         $this->assertEquals($expected, AutoSortedCollectionStub::fromIterable($data)->toArray());
@@ -308,41 +309,45 @@ final class CollectionTest extends TestCase
     public static function autoSortedCollectionDataProvider(): array
     {
         return [
-            [
+            'generator_of_integers_with_duplicated_items' => [
                 self::getGenerator(1, 2, 3, 4, 1, 2, 2, 3, 3, 4, 2, 1, 2, 1, 1, 2),
                 [1, 2, 3, 4],
             ],
-            [
+            'array_of_integers'                           => [
                 range(5, 10),
                 [5, 6, 7, 8, 9, 10],
             ],
-            [
+            'generator_of_unsorted_integers'              => [
                 self::getGenerator(9, 14, 5),
                 [5, 9, 14],
             ],
-            [
+            'array_iterator_of_integers'                  => [
                 self::getArrayIterator(10, 20, 30, 40),
                 [10, 20, 30, 40],
             ],
-            [
+            'empty_array_iterator'                        => [
                 self::getArrayIterator(),
                 [],
             ],
-            [
+            'empty_generator'                             => [
+                self::getGenerator(),
+                [],
+            ],
+            'generator_of_unsorted_strings'               => [
                 self::getGenerator('x', 'm', 'd', 'h', 'f'),
                 ['d', 'f', 'h', 'm', 'x'],
             ],
         ];
     }
 
-    private static function getGenerator(...$items): Generator
+    private static function getGenerator(mixed ...$items): Generator
     {
         foreach ($items as $item) {
             yield $item;
         }
     }
 
-    private static function getArrayIterator(...$items): ArrayIterator
+    private static function getArrayIterator(mixed ...$items): ArrayIterator
     {
         $arrayIterator = new ArrayIterator();
 

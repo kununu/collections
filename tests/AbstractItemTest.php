@@ -17,6 +17,7 @@ use Kununu\Collection\Tests\Stub\DTOCollectionStub;
 use Kununu\Collection\Tests\Stub\DTOStub;
 use Kununu\Collection\Tests\Stub\FromArrayStub;
 use OutOfBoundsException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class AbstractItemTest extends TestCase
@@ -52,7 +53,7 @@ final class AbstractItemTest extends TestCase
         $this->assertSame(1500.29, $item->getSalary());
     }
 
-    /** @dataProvider itemBuildDataProvider */
+    #[DataProvider('itemBuildDataProvider')]
     public function testItemBuild(
         array $data,
         ?int $expectedId,
@@ -157,7 +158,7 @@ final class AbstractItemTest extends TestCase
         ];
     }
 
-    /** @dataProvider itemBuildRequiredDataProvider */
+    #[DataProvider('itemBuildRequiredDataProvider')]
     public function testItemBuildRequired(array $data, ?string $expectedExceptionMessage): void
     {
         if (null !== $expectedExceptionMessage) {
@@ -252,12 +253,12 @@ final class AbstractItemTest extends TestCase
         ]);
 
         $this->assertInstanceOf(FromArrayStub::class, $item->fromArray());
-        $this->assertEquals(1, $item->fromArray()->id());
-        $this->assertEquals('The Name', $item->fromArray()->name());
+        $this->assertEquals(1, $item->fromArray()->id);
+        $this->assertEquals('The Name', $item->fromArray()->name);
         $this->assertNull($item->notFromArray());
         $this->assertInstanceOf(FromArrayStub::class, $item->defaultFromArray());
-        $this->assertEquals(0, $item->defaultFromArray()->id());
-        $this->assertEquals('', $item->defaultFromArray()->name());
+        $this->assertEquals(0, $item->defaultFromArray()->id);
+        $this->assertEquals('', $item->defaultFromArray()->name);
     }
 
     public function testItemBuildCollection(): void
@@ -294,7 +295,7 @@ final class AbstractItemTest extends TestCase
         $this->assertEmpty($item->defaultCollection());
     }
 
-    /** @dataProvider itemBuildConditionalDataProvider */
+    #[DataProvider('itemBuildConditionalDataProvider')]
     public function testItemBuildConditional(mixed $expected): void
     {
         $item = AbstractItemWithConditionalBuilderStub::build([

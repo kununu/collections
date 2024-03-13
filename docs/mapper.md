@@ -45,19 +45,17 @@ The `$fnGetValue` closure should receive an instance of your collection item and
 ### Example
 
 ```php
+<?php
+declare(strict_types=1);
+
 use Kununu\Collection\AbstractCollection;
 use Kununu\Collection\Mapper\DefaultMapper;
 use Kununu\Collection\Mapper\MapperCallers;
 
 final class MyCollectionItem
 {
-    public $key;
-    public $value;
-
-    public function __construct(int $key, string $value)
+    public function __construct(public readonly int $key, public readonly string $value)
     {
-        $this->key = $key;
-        $this->value = $value;
     }
 }
 
@@ -71,8 +69,8 @@ final class MyMapper extends DefaultMapper
     {
         if (MyCollection::class === $collectionClass) {
             return new MapperCallers(
-                fn(MyCollectionItem $item): int => $item->key, 
-                fn(MyCollectionItem $item): string => $item->value()
+                fn(MyCollectionItem $item): string => sprintf('ID %s', $item->key), 
+                fn(MyCollectionItem $item): string => $item->value
             );
         }
 
@@ -91,8 +89,8 @@ $map = $mapper->map(
 /*
 Value of $map:
 [
-    1 => 'Item 1',
-    2 => 'Item 2'
+    'ID 1' => 'Item 1',
+    'ID 2' => 'Item 2'
 ]
 */
 
