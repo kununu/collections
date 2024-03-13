@@ -9,6 +9,8 @@ By doing a proper implementation of the `append` method you can auto-sort your c
 When appending to an instance of this collection it will automatically sort it (and in this example also only allow one entry per key).
 
 ```php
+<?php
+declare(strict_types=1);
 
 use Kununu\Collection\AbstractCollection;
 use Kununu\Collection\AutoSortableOffsetSetTrait;
@@ -17,16 +19,12 @@ final class MyCollection extends AbstractCollection
 {
     use AutoSortableOffsetSetTrait;
 
-    public function append($value)
+    public function append($value): void
     {
-        switch (true) {
-            case is_string($value):
-            case is_int($value):
-                $this->offsetSet($value, $value);
-                break;
-            default:
-                parent::append($value);
-        }
+        match (true) {
+            is_int($value) => $this->offsetSet($value, $value),
+            default        => parent::append($value)
+        };
     }
 }
 

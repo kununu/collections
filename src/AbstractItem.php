@@ -41,38 +41,32 @@ abstract class AbstractItem
 
     public function __call(string $method, array $args)
     {
-        switch (true) {
-            case static::SETTER_PREFIX === substr($method, 0, $setterPrefixLen = strlen(static::SETTER_PREFIX)):
-                $set = true;
-                $attribute = lcfirst(substr($method, $setterPrefixLen));
-                $value = current($args);
-                break;
-            case static::GETTER_PREFIX === substr($method, 0, $getterPrefixLen = strlen(static::GETTER_PREFIX)):
-                $set = false;
-                $attribute = lcfirst(substr($method, $getterPrefixLen));
-                $value = null;
-                break;
-            default:
-                throw new BadMethodCallException(sprintf('%s: Invalid method "%s" called', static::class, $method));
-        }
+        [$set, $attribute, $value] = match (true) {
+            static::SETTER_PREFIX === substr($method, 0, $setterPrefixLen = strlen(static::SETTER_PREFIX)) => [
+                true,
+                lcfirst(substr($method, $setterPrefixLen)),
+                current($args),
+            ],
+            static::GETTER_PREFIX === substr($method, 0, $getterPrefixLen = strlen(static::GETTER_PREFIX)) => [
+                false,
+                lcfirst(substr($method, $getterPrefixLen)),
+                null,
+            ],
+            default                                                                                        => throw new BadMethodCallException(sprintf('%s: Invalid method "%s" called', static::class, $method))
+        };
 
         return $set ? $this->setAttribute($attribute, $value) : $this->getAttribute($attribute);
     }
 
     /**
-     * @codeCoverageIgnore
-     *
-     * Ready to be rewritten in your subclass!
+     * Must be implemented in your subclass!
      *
      * Array format:
      * [
      *  'itemProperty' => fn(array $data) => $valueForTheProperty
      * ]
      */
-    protected static function getBuilders(): array
-    {
-        return [];
-    }
+    abstract protected static function getBuilders(): array;
 
     protected function setAttributes(array $attributes): self|static
     {

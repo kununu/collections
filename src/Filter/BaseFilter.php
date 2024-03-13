@@ -7,7 +7,7 @@ abstract class BaseFilter implements CollectionFilter
 {
     private ?array $customGroupByData = null;
 
-    public function __construct(private string $key)
+    public function __construct(private readonly string $key)
     {
     }
 

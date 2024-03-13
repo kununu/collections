@@ -6,7 +6,6 @@ namespace Kununu\Collection;
 use Kununu\Collection\Convertible\ToArray;
 use Kununu\Collection\Convertible\ToInt;
 use Kununu\Collection\Convertible\ToString;
-use Throwable;
 
 trait CollectionTrait
 {
@@ -64,8 +63,6 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $function($element, $this->key());
             }
-        } catch (Throwable $e) {
-            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
@@ -82,8 +79,6 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $map[] = $function($element, $this->key());
             }
-        } catch (Throwable $e) {
-            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
@@ -99,8 +94,6 @@ trait CollectionTrait
             foreach ($this as $element) {
                 $initial = $function($initial, $element, $this->key());
             }
-        } catch (Throwable $e) {
-            throw $e;
         } finally {
             if ($rewind) {
                 $this->rewind();
@@ -118,7 +111,7 @@ trait CollectionTrait
     protected function mapToArray(bool $withKeys = true): array
     {
         return array_map(
-            fn($element) => match (true) {
+            static fn(mixed $element): mixed => match (true) {
                 $element instanceof ToArray  => $element->toArray(),
                 $element instanceof ToString => $element->toString(),
                 $element instanceof ToInt    => $element->toInt(),

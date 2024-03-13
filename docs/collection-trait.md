@@ -114,6 +114,9 @@ This applies also to collections that are defined inside a class that is an item
 Example:
 
 ```php
+<?php
+declare(strict_types=1);
+
 final class MyTopCollection implements ToArray
 {
     use CollectionTrait;    
@@ -126,8 +129,8 @@ final class MySubCollection implements ToArray
 
 final class MyTopItem implements ToArray
 {
-    public $name;
-    public $subCollection;
+    public string $name;
+    public MySubCollection $subCollection;
 
     public function toArray(): array
     {

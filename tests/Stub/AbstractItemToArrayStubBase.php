@@ -26,12 +26,12 @@ abstract class AbstractItemToArrayStubBase extends AbstractItemToArray
             'id'         => self::buildIntGetter('id'),
             'name'       => self::buildGetterRequiredField(
                 'name',
-                fn(string $value): ToStringStub => ToStringStub::create(ToIntStub::fromInt(1000), $value)
+                static fn(string $value): ToStringStub => ToStringStub::create(ToIntStub::fromInt(1000), $value)
             ),
             'verified'   => self::buildBoolGetter('verified'),
             'industryId' => self::buildGetterRequiredField(
                 'industryId',
-                fn(int $value): ToIntStub => ToIntStub::fromInt($value)
+                static fn(int $value): ToIntStub => ToIntStub::fromInt($value)
             ),
         ];
     }
