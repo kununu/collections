@@ -32,6 +32,14 @@ A fluent version of `append`. To do stuff like:
 $collection->add($item1)->add($item2);
 ```
 
+## has
+
+```php
+public function has($value, $strict): bool;
+```
+
+This method will tell you if your collection contains the given value. Please note that this method encapsulates the php [in_array()](https://www.php.net/manual/en/function.in-array.php) method and as such can produce unexpected results when using loose checking.
+
 ## unique
 
 ```php

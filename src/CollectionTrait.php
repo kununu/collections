@@ -32,6 +32,11 @@ trait CollectionTrait
         return $this;
     }
 
+    public function has(mixed $value, bool $strict = true): bool
+    {
+        return in_array($value, $this->toArray(), $strict);
+    }
+
     public function unique(): self|static
     {
         return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
