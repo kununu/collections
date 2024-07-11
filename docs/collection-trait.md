@@ -48,6 +48,14 @@ public function unique(): self|static;
 
 This method will produce a collection with distinct elements of your collection.
 
+## duplicates
+
+```php
+public function duplicates(): self|static;
+```
+
+This methods produces a collection which contains items which occur multiple times in the collection. Please note that this method encapsulates the php [in_array()](https://www.php.net/manual/en/function.in-array.php) method and as such can produce unexpected results when using loose checking.
+
 ## reverse
 
 ```php
