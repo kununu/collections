@@ -222,6 +222,148 @@ final class CollectionTest extends TestCase
         $this->assertEquals([1, 2, 3, 4], $uniqueCollection->toArray());
     }
 
+    public static function duplicatesDataProvider(): array
+    {
+        return [
+            'integers_no_duplicates_strict' => [
+                true,
+                [1, 2, 3],
+                []
+            ],
+            'integers_duplicates_strict' => [
+                true,
+                [1, 2, 3, 4, 1, 2, 4],
+                [1, 2, 4],
+            ],
+            'integers_duplicates_strict_mixed' => [
+                true,
+                [1, 2, 3, 4, 1, '2', 4],
+                [1, 4],
+            ],
+            'strings_no_duplicates_strict' => [
+                true,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                ],
+                [],
+            ],
+            'strings_duplicates_strict' => [
+                true,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                ],
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                ],
+            ],
+            'item_stubs_no_duplicates_strict' => [
+                true,
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                [],
+            ],
+            'item_stubs_duplicates_strict' => [
+                true,
+                [
+                    $one = new AbstractItemStub(['name' => 'one']),
+                    $one,
+                    $two = new AbstractItemStub(['name' => 'two']),
+                    $two,
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                [
+                    $one,
+                    $two,
+                ],
+            ],
+            'integers_no_duplicates_loose' => [
+                false,
+                [1, 2, 3],
+                []
+            ],
+            'integers_duplicates_loose' => [
+                false,
+                [1, 2, 3, 4, 1, '2', 4],
+                ['1', 2, '4'],
+            ],
+            'strings_no_duplicates_loose' => [
+                false,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                ],
+                [],
+            ],
+            'strings_duplicates_loose' => [
+                false,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                    '2',
+                    2
+                ],
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    2
+                ],
+            ],
+            'item_stubs_no_duplicates_loose' => [
+                false,
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                [],
+            ],
+            'item_stubs_duplicates_loose' => [
+                false,
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                ],
+            ],
+        ];
+    }
+
+    #[DataProvider('duplicatesDataProvider')]
+    public function testDuplicates(bool $strict, array $contents, array $expected): void
+    {
+        $collection = CollectionStub::fromIterable($contents);
+        $duplicateCollection = $collection->duplicates($strict);
+        $this->assertEquals($expected, $duplicateCollection->toArray());
+    }
+
     public function testReverse(): void
     {
         $this->assertEquals([5, 4, 3, 2, 1], CollectionStub::fromIterable([1, 2, 3, 4, 5])->reverse()->toArray());

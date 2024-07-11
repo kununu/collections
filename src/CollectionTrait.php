@@ -42,6 +42,22 @@ trait CollectionTrait
         return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
     }
 
+    public function duplicates(bool $strict = true): self|static
+    {
+        $elements = new static();
+        $duplicates = new static();
+
+        $this->each(function ($item) use (&$elements, &$duplicates, $strict): void {
+            if ($elements->has($item, $strict)) {
+                $duplicates->append($item);
+
+                return;
+            }
+            $elements->append($item);
+        });
+
+        return $duplicates;
+    }
     public function reverse(): self|static
     {
         return static::fromIterable(array_reverse($this->toArray()));
