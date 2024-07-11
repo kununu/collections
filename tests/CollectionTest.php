@@ -6,6 +6,7 @@ namespace Kununu\Collection\Tests;
 use ArrayIterator;
 use Exception;
 use Generator;
+use Kununu\Collection\Tests\Stub\AbstractItemStub;
 use Kununu\Collection\Tests\Stub\AutoSortedCollectionStub;
 use Kununu\Collection\Tests\Stub\CollectionStub;
 use Kununu\Collection\Tests\Stub\ToArrayStub;
@@ -92,6 +93,108 @@ final class CollectionTest extends TestCase
                     '3: GHI',
                     '4: JKL',
                 ],
+            ],
+        ];
+    }
+
+    #[DataProvider('hasDataProvider')]
+    public function testHas(iterable $collectionContents, mixed $hasValue, bool $hasStrict, bool $expectedHas): void
+    {
+        $collection = CollectionStub::fromIterable($collectionContents);
+
+        $this->assertEquals($expectedHas, $collection->has($hasValue, $hasStrict));
+    }
+
+    public static function hasDataProvider(): array
+    {
+        return [
+            'has_with_integers_strict' => [
+                [1, 2, 3],
+                1,
+                true,
+                true,
+            ],
+            'has_with_integers_loose' => [
+                [1, 2, 3],
+                '1',
+                false,
+                true,
+            ],
+            'missing_with_integers_strict' => [
+                [1, 2, 3],
+                4,
+                true,
+                false,
+            ],
+            'missing_with_integers_strict_string_to_int' => [
+                [1, 2, 3],
+                '1',
+                true,
+                false,
+            ],
+            'has_with_strings_strict' => [
+                ['one', 'two', 'three'],
+                'one',
+                true,
+                true,
+            ],
+            'missing_with_strings_strict' => [
+                ['one', 'two', 'three'],
+                'missing',
+                true,
+                false,
+            ],
+            'has_with_strings_loose' => [
+                ['one', 'two', 'three'],
+                'one',
+                false,
+                true,
+            ],
+            'missing_with_strings_loose' => [
+                ['one', 'two', 'three'],
+                'missing',
+                false,
+                false,
+            ],
+            'has_with_object_strict' => [
+                [
+                    $one = new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                $one,
+                true,
+                true,
+            ],
+            'missing_with_object_strict' => [
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                new AbstractItemStub(['name' => 'one']),
+                true,
+                false,
+            ],
+            'has_with_object_loose' => [
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                new AbstractItemStub(['name' => 'one']),
+                false,
+                true,
+            ],
+            'missing_with_object_loose' => [
+                [
+                    new AbstractItemStub(['name' => 'one']),
+                    new AbstractItemStub(['name' => 'two']),
+                    new AbstractItemStub(['name' => 'three']),
+                ],
+                new AbstractItemStub(['name' => 'vier']),
+                false,
+                false,
             ],
         ];
     }
