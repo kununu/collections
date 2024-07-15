@@ -16,7 +16,7 @@ final class DefaultMapperTest extends TestCase
     {
         $mapper = new MapperStub(DTOCollectionStub::class);
 
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'key 1' => 100,
                 'key 2' => 101,
@@ -42,6 +42,6 @@ final class DefaultMapperTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid collection class: Kununu\Collection\Tests\Stub\CollectionStub');
 
-        $this->assertNull(new MapperStub(CollectionStub::class));
+        self::assertNull(new MapperStub(CollectionStub::class));
     }
 }

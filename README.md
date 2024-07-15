@@ -35,14 +35,17 @@ composer test-coverage
 
 ## Usage
 
-The library provide three traits that you can add to your custom class extending `ArrayIterator`.
+The library defines interfaces to deal with collections and also boilerplate code with default implementations.
+
+You can either use the provided traits to your custom class extending `ArrayIterator` or simply expand the abstract collection classes using them.
+
+It has a default implementation for a "basic" collection and also one to filter and group data on your collections (a "filterable" collection).
 
 It defines interfaces to convert collection items to `array`, `string` and `int` and to compare items.
 
-It also provides some interfaces to filter and group data on your collections and base classes with default implementations.
-
 More details:
 
+- [Collection Interfaces](docs/collection-interfaces.md)
 - [Collection Trait](docs/collection-trait.md)
 - [Filterable Collection Trait](docs/filterable-collection-trait.md)
 - [Auto Sortable OffsetSet Trait](docs/autosortable-offsetset-trait.md)

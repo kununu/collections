@@ -21,7 +21,7 @@ final class AbstractItemToArrayTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'id'         => 50,
                 'name'       => '1000: My Name is?',

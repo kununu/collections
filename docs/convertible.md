@@ -1,6 +1,17 @@
 # Convertible
 
-The following interfaces are defined to easy the process of creating/converting collections/collection items to basic  PHP types.
+The following interfaces are defined to easy the process of creating/converting collections/collection items to basic PHP types.
+
+## fromIterable
+
+This interface defines how to create a collection item from an iterable:
+
+```php
+interface FromIterable
+{
+    public static function fromIterable(iterable $data): self|static;
+}
+```
 
 ## fromArray
 

@@ -4,19 +4,17 @@ declare(strict_types=1);
 namespace Kununu\Collection;
 
 use ArrayIterator;
-use Kununu\Collection\Convertible\ToArray;
 
 /**
- * @method static self  fromIterable(iterable $data)
- * @method        self  add($value)
- * @method        self  unique()
- * @method        self  reverse()
- * @method        self  diff(self $other)
- * @method        self  each(callable $function, bool $rewind = true)
- * @method        array map(callable $function, bool $rewind = true)
- * @method        mixed reduce(callable $function, mixed $initial = null, bool $rewind = true)
+ * @method static self fromIterable(iterable $data)
+ * @method        self add(mixed $value)
+ * @method        self diff(Collection $other)
+ * @method        self duplicates(bool $strict = true, bool $uniques = false)
+ * @method        self each(callable $function, bool $rewind = true)
+ * @method        self reverse()
+ * @method        self unique()
  */
-abstract class AbstractCollection extends ArrayIterator implements ToArray
+abstract class AbstractCollection extends ArrayIterator implements Collection
 {
     use CollectionTrait;
 }

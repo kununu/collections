@@ -26,31 +26,37 @@ final class AbstractItemTest extends TestCase
     {
         $item = new AbstractItemStub(['name' => 'My Name']);
 
-        $this->assertNull($item->getId());
-        $this->assertEquals('My Name', $item->getName());
-        $this->assertNull($item->getCreatedAt());
-        $this->assertNull($item->getSimpleName());
-        $this->assertNull($item->getVerified());
-        $this->assertNull($item->getIndustryId());
-        $this->assertNull($item->getSalary());
+        self::assertNull($item->getId());
+        self::assertEquals('My Name', $item->getName());
+        self::assertNull($item->getCreatedAt());
+        self::assertNull($item->getSimpleName());
+        self::assertNull($item->getVerified());
+        self::assertNull($item->getIndustryId());
+        self::assertNull($item->getSalary());
 
         $item->setId(100);
-        $this->assertSame(100, $item->getId());
+
+        self::assertSame(100, $item->getId());
 
         $item->setCreatedAt($createdAt = new DateTime());
-        $this->assertSame($createdAt, $item->getCreatedAt());
+
+        self::assertSame($createdAt, $item->getCreatedAt());
 
         $item->setSimpleName('Simple name');
-        $this->assertSame('Simple name', $item->getSimpleName());
+
+        self::assertSame('Simple name', $item->getSimpleName());
 
         $item->setVerified(true);
-        $this->assertTrue($item->getVerified());
+
+        self::assertTrue($item->getVerified());
 
         $item->setIndustryId(15);
-        $this->assertSame(15, $item->getIndustryId());
+
+        self::assertSame(15, $item->getIndustryId());
 
         $item->setSalary(1500.29);
-        $this->assertSame(1500.29, $item->getSalary());
+
+        self::assertSame(1500.29, $item->getSalary());
     }
 
     #[DataProvider('itemBuildDataProvider')]
@@ -66,16 +72,16 @@ final class AbstractItemTest extends TestCase
     ): void {
         $item = AbstractItemStub::build($data);
 
-        $this->assertSame($expectedId, $item->getId());
-        $this->assertNotNull($item->getId());
-        $this->assertSame($expectedName, $item->getName());
-        $this->assertEquals($expectedCreatedAt, $item->getCreatedAt());
-        $this->assertNull($item->getExtraFieldNotUsedInBuild());
-        $this->assertSame($expectedSimpleName, $item->getSimpleName());
-        $this->assertSame($expectedVerified, $item->getVerified());
-        $this->assertNotNull($item->getVerified());
-        $this->assertSame($expectedIndustryId, $item->getIndustryId());
-        $this->assertSame($expectedSalary, $item->getSalary());
+        self::assertSame($expectedId, $item->getId());
+        self::assertNotNull($item->getId());
+        self::assertSame($expectedName, $item->getName());
+        self::assertEquals($expectedCreatedAt, $item->getCreatedAt());
+        self::assertNull($item->getExtraFieldNotUsedInBuild());
+        self::assertSame($expectedSimpleName, $item->getSimpleName());
+        self::assertSame($expectedVerified, $item->getVerified());
+        self::assertNotNull($item->getVerified());
+        self::assertSame($expectedIndustryId, $item->getIndustryId());
+        self::assertSame($expectedSalary, $item->getSalary());
     }
 
     public static function itemBuildDataProvider(): array
@@ -169,13 +175,13 @@ final class AbstractItemTest extends TestCase
         $item = AbstractItemWithRequiredFieldsStub::build($data);
 
         if (null === $expectedExceptionMessage) {
-            $this->assertIsInt($item->giveMeTheId());
-            $this->assertIsString($item->giveMeTheName());
-            $this->assertInstanceOf(DateTime::class, $item->giveMeTheCreatedAt());
-            $this->assertIsBool($item->giveMeTheVerified());
-            $this->assertIsBool($item->giveMeTheVerified());
-            $this->assertInstanceOf(DTOStub::class, $item->giveMeTheCustom());
-            $this->assertIsFloat($item->giveMeTheScore());
+            self::assertIsInt($item->giveMeTheId());
+            self::assertIsString($item->giveMeTheName());
+            self::assertInstanceOf(DateTime::class, $item->giveMeTheCreatedAt());
+            self::assertIsBool($item->giveMeTheVerified());
+            self::assertIsBool($item->giveMeTheVerified());
+            self::assertInstanceOf(DTOStub::class, $item->giveMeTheCustom());
+            self::assertIsFloat($item->giveMeTheScore());
         }
     }
 
@@ -252,13 +258,13 @@ final class AbstractItemTest extends TestCase
             'fromArray' => ['id' => 1, 'name' => 'The Name'],
         ]);
 
-        $this->assertInstanceOf(FromArrayStub::class, $item->fromArray());
-        $this->assertEquals(1, $item->fromArray()->id);
-        $this->assertEquals('The Name', $item->fromArray()->name);
-        $this->assertNull($item->notFromArray());
-        $this->assertInstanceOf(FromArrayStub::class, $item->defaultFromArray());
-        $this->assertEquals(0, $item->defaultFromArray()->id);
-        $this->assertEquals('', $item->defaultFromArray()->name);
+        self::assertInstanceOf(FromArrayStub::class, $item->fromArray());
+        self::assertEquals(1, $item->fromArray()->id);
+        self::assertEquals('The Name', $item->fromArray()->name);
+        self::assertNull($item->notFromArray());
+        self::assertInstanceOf(FromArrayStub::class, $item->defaultFromArray());
+        self::assertEquals(0, $item->defaultFromArray()->id);
+        self::assertEquals('', $item->defaultFromArray()->name);
     }
 
     public function testItemBuildCollection(): void
@@ -271,9 +277,9 @@ final class AbstractItemTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(DTOCollectionStub::class, $item->collection());
-        $this->assertCount(3, $item->collection());
-        $this->assertSame(
+        self::assertInstanceOf(DTOCollectionStub::class, $item->collection());
+        self::assertCount(3, $item->collection());
+        self::assertSame(
             [
                 'field 1' => [
                     'field' => 'field 1',
@@ -290,9 +296,9 @@ final class AbstractItemTest extends TestCase
             ],
             $item->collection()->toArray()
         );
-        $this->assertNull($item->notCollection());
-        $this->assertInstanceOf(DTOCollectionStub::class, $item->defaultCollection());
-        $this->assertEmpty($item->defaultCollection());
+        self::assertNull($item->notCollection());
+        self::assertInstanceOf(DTOCollectionStub::class, $item->defaultCollection());
+        self::assertEmpty($item->defaultCollection());
     }
 
     #[DataProvider('itemBuildConditionalDataProvider')]
@@ -303,7 +309,7 @@ final class AbstractItemTest extends TestCase
             'value'  => 12.5,
         ]);
 
-        $this->assertSame($expected, $item->value());
+        self::assertSame($expected, $item->value());
     }
 
     public static function itemBuildConditionalDataProvider(): array
@@ -324,6 +330,7 @@ final class AbstractItemTest extends TestCase
         $this->expectExceptionMessage(
             'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "thisMethodReallyDoesNotExists" called'
         );
+
         $item->thisMethodReallyDoesNotExists();
     }
 
@@ -335,6 +342,7 @@ final class AbstractItemTest extends TestCase
         $this->expectExceptionMessage(
             'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
         );
+
         $item->setInvalidProperty(true);
     }
 
@@ -346,6 +354,7 @@ final class AbstractItemTest extends TestCase
         $this->expectExceptionMessage(
             'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
         );
+
         $item->getInvalidProperty(true);
     }
 
@@ -357,6 +366,7 @@ final class AbstractItemTest extends TestCase
         $this->expectExceptionMessage(
             'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "withInvalidProperty" called'
         );
+
         $item->withInvalidProperty(false);
     }
 
@@ -377,27 +387,27 @@ final class AbstractItemTest extends TestCase
             'required_date_time_immutable_field' => '2023-10-11 12:34:04',
         ]);
 
-        $this->assertEquals('The string field', $item->stringField());
-        $this->assertEquals('The required string field', $item->requiredStringField());
-        $this->assertTrue($item->boolField());
-        $this->assertFalse($item->requiredBoolField());
-        $this->assertEquals(1, $item->intField());
-        $this->assertEquals(2, $item->requiredIntField());
-        $this->assertEquals(1.5, $item->floatField());
-        $this->assertEquals(2.6, $item->requiredFloatField());
-        $this->assertEquals(
+        self::assertEquals('The string field', $item->stringField());
+        self::assertEquals('The required string field', $item->requiredStringField());
+        self::assertTrue($item->boolField());
+        self::assertFalse($item->requiredBoolField());
+        self::assertEquals(1, $item->intField());
+        self::assertEquals(2, $item->requiredIntField());
+        self::assertEquals(1.5, $item->floatField());
+        self::assertEquals(2.6, $item->requiredFloatField());
+        self::assertEquals(
             DateTime::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:01'),
             $item->dateTimeField()
         );
-        $this->assertEquals(
+        self::assertEquals(
             DateTime::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:02'),
             $item->requiredDateTimeField()
         );
-        $this->assertEquals(
+        self::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:03'),
             $item->dateTimeImmutableField()
         );
-        $this->assertEquals(
+        self::assertEquals(
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:04'),
             $item->requiredDateTimeImmutableField()
         );

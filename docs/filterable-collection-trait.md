@@ -1,42 +1,24 @@
 # FilterableCollectionTrait
 
-This trait (which internally also uses the `CollectionTrait`) adds filtering capabilities to your collection.
+This trait (which internally also uses the `CollectionTrait`) adds filtering capabilities to your collection, by implementing the `FilterableCollection` interface.
 
 It provides the following methods to your collection:
 
 ## filter
 
-```php
-public function filter(CollectionFilter $filter): self|static
-```
+Internally, this method will create a new empty collection and then iterate through your collection:
 
-This will accept a `CollectionFilter` instance (with the definitions of the filter being applied to the collection), and returns a new collection with only the elements that have met the criteria defined in `$filter`.
+If each element is an implementation of `FilterItem` and that item matches the criteria of the `CollectionFilter` (by calling the `isSatisfiedBy` method) the item will be added to the result collection.  
 
 ## groupBy
 
-```php
-public function groupBy(bool $removeEmptyGroups, CollectionFilter ...$filters): array
-```
+Internally, this method will create an array and initialize the groups, where each group will have as the key the value returned by the `key` of each filter passed.
 
-This method allows you to apply a series of filters to a collection and group the result by each filter. The `$removeEmptyGroups` flag means if we will remove or keep groups in the result without items.
-
-The result is returned as an array with the following structure:
-
-```php
-[
-    'filter_1_key' => [
-        'item_key_1' => item object 1
-        ...
-        'item_key_N' => item object X
-     ],
-     'filter_2_key' => [
-     'item_key_1' => item object 1
-     ...
-     'item_key_N' => item object Y
-     ],
-     ...
-]
-```
+- Then it will iterate through your collection, and for each element it will iterate the filters.
+- If each element is an implementation of `FilterItem` and that element matches the criteria of the current filter (by calling the `isSatisfiedBy` method)
+  - The element will be added to the result array on the group key
+  - On the group it will have a key that is calculated by calling the `groupByKey` of the element
+- Finally, it will return the group array, optionally removing empty groups if the `$removeEmptyGroups` is set to `true`
 
 ## How to filter collections
 
@@ -49,7 +31,7 @@ interface FilterItem
 }
 ```
 
-In order to the use the `FilterableCollectionTrait`, the items on your collection must implement the `FilteItem` interface.
+In order to the use the `FilterableCollectionTrait`, the items on your collection must implement the `FilterItem` interface.
 
 Each item needs to implement the `groupByKey` method that will be used to group items. This method return the key of the group and will receive additional extra data that might be necessary in order to group the items.
 
