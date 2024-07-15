@@ -5,9 +5,10 @@ namespace Kununu\Collection;
 
 trait AutoSortableOffsetSetTrait
 {
-    public function offsetSet($key, $value): void
+    public function offsetSet(mixed $key, mixed $value): void
     {
         parent::offsetSet($key, $value);
+
         $this->ksort();
     }
 }

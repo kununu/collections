@@ -12,11 +12,11 @@ final class FilterOperatorXOrTest extends TestCase
     {
         $operator = new FilterOperatorXor();
 
-        $this->assertFalse($operator->initialValue());
-        $this->assertTrue($operator->exitConditionValue());
-        $this->assertFalse($operator->calculate(false, false));
-        $this->assertFalse($operator->calculate(true, true));
-        $this->assertTrue($operator->calculate(true, false));
-        $this->assertTrue($operator->calculate(false, true));
+        self::assertFalse($operator->initialValue());
+        self::assertTrue($operator->exitConditionValue());
+        self::assertFalse($operator->calculate(false, false));
+        self::assertFalse($operator->calculate(true, true));
+        self::assertTrue($operator->calculate(true, false));
+        self::assertTrue($operator->calculate(false, true));
     }
 }

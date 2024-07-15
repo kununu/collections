@@ -12,11 +12,11 @@ final class FilterOperatorAndTest extends TestCase
     {
         $operator = new FilterOperatorAnd();
 
-        $this->assertTrue($operator->initialValue());
-        $this->assertFalse($operator->exitConditionValue());
-        $this->assertTrue($operator->calculate(true, true));
-        $this->assertFalse($operator->calculate(false, false));
-        $this->assertFalse($operator->calculate(true, false));
-        $this->assertFalse($operator->calculate(false, true));
+        self::assertTrue($operator->initialValue());
+        self::assertFalse($operator->exitConditionValue());
+        self::assertTrue($operator->calculate(true, true));
+        self::assertFalse($operator->calculate(false, false));
+        self::assertFalse($operator->calculate(true, false));
+        self::assertFalse($operator->calculate(false, true));
     }
 }

@@ -6,9 +6,15 @@ namespace Kununu\Collection\Tests;
 use ArrayIterator;
 use Exception;
 use Generator;
+use InvalidArgumentException;
+use Kununu\Collection\Collection;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
 use Kununu\Collection\Tests\Stub\AutoSortedCollectionStub;
 use Kununu\Collection\Tests\Stub\CollectionStub;
+use Kununu\Collection\Tests\Stub\DTOCollectionStub;
+use Kununu\Collection\Tests\Stub\DTOStub;
+use Kununu\Collection\Tests\Stub\FilterableCollectionStub;
+use Kununu\Collection\Tests\Stub\StringableStub;
 use Kununu\Collection\Tests\Stub\ToArrayStub;
 use Kununu\Collection\Tests\Stub\ToIntStub;
 use Kununu\Collection\Tests\Stub\ToStringStub;
@@ -21,7 +27,7 @@ final class CollectionTest extends TestCase
     #[DataProvider('fromIterableDataProvider')]
     public function testFromIterable(iterable $data, array $expected): void
     {
-        $this->assertEquals($expected, CollectionStub::fromIterable($data)->toArray());
+        self::assertEquals($expected, CollectionStub::fromIterable($data)->toArray());
     }
 
     public static function fromIterableDataProvider(): array
@@ -85,13 +91,15 @@ final class CollectionTest extends TestCase
                     ToStringStub::create(ToIntStub::fromInt(1), 'ABC'),
                     ToStringStub::create(ToIntStub::fromInt(2), 'DEF'),
                     ToStringStub::create(ToIntStub::fromInt(3), 'GHI'),
-                    ToStringStub::create(ToIntStub::fromInt(4), 'JKL')
+                    ToStringStub::create(ToIntStub::fromInt(4), 'JKL'),
+                    StringableStub::create(ToIntStub::fromInt(5), 'MNO')
                 ),
                 [
                     '1: ABC',
                     '2: DEF',
                     '3: GHI',
                     '4: JKL',
+                    '5: MNO',
                 ],
             ],
         ];
@@ -102,25 +110,25 @@ final class CollectionTest extends TestCase
     {
         $collection = CollectionStub::fromIterable($collectionContents);
 
-        $this->assertEquals($expectedHas, $collection->has($hasValue, $hasStrict));
+        self::assertEquals($expectedHas, $collection->has($hasValue, $hasStrict));
     }
 
     public static function hasDataProvider(): array
     {
         return [
-            'has_with_integers_strict' => [
+            'has_with_integers_strict'                   => [
                 [1, 2, 3],
                 1,
                 true,
                 true,
             ],
-            'has_with_integers_loose' => [
+            'has_with_integers_loose'                    => [
                 [1, 2, 3],
                 '1',
                 false,
                 true,
             ],
-            'missing_with_integers_strict' => [
+            'missing_with_integers_strict'               => [
                 [1, 2, 3],
                 4,
                 true,
@@ -132,31 +140,31 @@ final class CollectionTest extends TestCase
                 true,
                 false,
             ],
-            'has_with_strings_strict' => [
+            'has_with_strings_strict'                    => [
                 ['one', 'two', 'three'],
                 'one',
                 true,
                 true,
             ],
-            'missing_with_strings_strict' => [
+            'missing_with_strings_strict'                => [
                 ['one', 'two', 'three'],
                 'missing',
                 true,
                 false,
             ],
-            'has_with_strings_loose' => [
+            'has_with_strings_loose'                     => [
                 ['one', 'two', 'three'],
                 'one',
                 false,
                 true,
             ],
-            'missing_with_strings_loose' => [
+            'missing_with_strings_loose'                 => [
                 ['one', 'two', 'three'],
                 'missing',
                 false,
                 false,
             ],
-            'has_with_object_strict' => [
+            'has_with_object_strict'                     => [
                 [
                     $one = new AbstractItemStub(['name' => 'one']),
                     new AbstractItemStub(['name' => 'two']),
@@ -166,7 +174,7 @@ final class CollectionTest extends TestCase
                 true,
                 true,
             ],
-            'missing_with_object_strict' => [
+            'missing_with_object_strict'                 => [
                 [
                     new AbstractItemStub(['name' => 'one']),
                     new AbstractItemStub(['name' => 'two']),
@@ -176,7 +184,7 @@ final class CollectionTest extends TestCase
                 true,
                 false,
             ],
-            'has_with_object_loose' => [
+            'has_with_object_loose'                      => [
                 [
                     new AbstractItemStub(['name' => 'one']),
                     new AbstractItemStub(['name' => 'two']),
@@ -186,7 +194,7 @@ final class CollectionTest extends TestCase
                 false,
                 true,
             ],
-            'missing_with_object_loose' => [
+            'missing_with_object_loose'                  => [
                 [
                     new AbstractItemStub(['name' => 'one']),
                     new AbstractItemStub(['name' => 'two']),
@@ -203,10 +211,11 @@ final class CollectionTest extends TestCase
     {
         $collection = new CollectionStub();
 
-        $this->assertTrue($collection->empty());
+        self::assertTrue($collection->empty());
 
         $collection->add(1);
-        $this->assertFalse($collection->empty());
+
+        self::assertFalse($collection->empty());
     }
 
     public function testUnique(): void
@@ -217,31 +226,100 @@ final class CollectionTest extends TestCase
 
         $uniqueCollection = $collection->unique();
 
-        $this->assertEquals(16, $collection->count());
-        $this->assertEquals(4, $uniqueCollection->count());
-        $this->assertEquals([1, 2, 3, 4], $uniqueCollection->toArray());
+        self::assertEquals(16, $collection->count());
+        self::assertEquals(4, $uniqueCollection->count());
+        self::assertEquals([1, 2, 3, 4], $uniqueCollection->toArray());
+    }
+
+    #[DataProvider('keysDataProvider')]
+    public function testKeys(Collection $collection, array $expected): void
+    {
+        self::assertEquals($expected, $collection->keys());
+    }
+
+    public static function keysDataProvider(): array
+    {
+        return [
+            'collection_with_no_offset_set'          => [
+                CollectionStub::fromIterable(self::getGenerator(1, 2, 3, 4)),
+                [0, 1, 2, 3],
+            ],
+            'auto_sorted_collection_with_offset_set' => [
+                AutoSortedCollectionStub::fromIterable(self::getArrayIterator('the', 'quick', 'brown', 'fox')),
+                ['brown', 'fox', 'quick', 'the'],
+            ],
+            'dto_collection_with_offset_set'         => [
+                new DTOCollectionStub(
+                    new DTOStub('key 1', 100),
+                    new DTOStub('key 2', 101),
+                    new DTOStub('key 3', 102)
+                ),
+                ['key 1', 'key 2', 'key 3'],
+            ],
+        ];
+    }
+
+    #[DataProvider('valuesDataProvider')]
+    public function testValues(Collection $collection, array $expected): void
+    {
+        self::assertEquals($expected, $collection->values());
+    }
+
+    public static function valuesDataProvider(): array
+    {
+        return [
+            'integer_collection'     => [
+                CollectionStub::fromIterable(self::getGenerator(1, 2, 3, 4)),
+                [1, 2, 3, 4],
+            ],
+            'auto_sorted_collection' => [
+                AutoSortedCollectionStub::fromIterable(self::getArrayIterator('the', 'quick', 'brown', 'fox')),
+                ['brown', 'fox', 'quick', 'the'],
+            ],
+            'dto_collection'         => [
+                new DTOCollectionStub(
+                    $item3 = new DTOStub('key 3', 102),
+                    $item2 = new DTOStub('key 2', 101),
+                    $item1 = new DTOStub('key 1', 100)
+                ),
+                [$item3, $item2, $item1],
+            ],
+        ];
+    }
+
+    #[DataProvider('duplicatesDataProvider')]
+    public function testDuplicates(bool $strict, bool $uniques, array $contents, array $expected): void
+    {
+        $collection = CollectionStub::fromIterable($contents);
+        $duplicateCollection = $collection->duplicates($strict, $uniques);
+
+        self::assertEquals($expected, $duplicateCollection->toArray());
     }
 
     public static function duplicatesDataProvider(): array
     {
         return [
-            'integers_no_duplicates_strict' => [
+            'integers_no_duplicates_strict'        => [
                 true,
+                false,
                 [1, 2, 3],
-                []
+                [],
             ],
-            'integers_duplicates_strict' => [
+            'integers_duplicates_strict'           => [
                 true,
+                false,
                 [1, 2, 3, 4, 1, 2, 4],
                 [1, 2, 4],
             ],
-            'integers_duplicates_strict_mixed' => [
+            'integers_duplicates_strict_mixed'     => [
                 true,
+                false,
                 [1, 2, 3, 4, 1, '2', 4],
                 [1, 4],
             ],
-            'strings_no_duplicates_strict' => [
+            'strings_no_duplicates_strict'         => [
                 true,
+                false,
                 [
                     '7178e84e-472d-4766-8e45-a571871ff988',
                     'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
@@ -250,8 +328,9 @@ final class CollectionTest extends TestCase
                 ],
                 [],
             ],
-            'strings_duplicates_strict' => [
+            'strings_duplicates_strict_no_uniques' => [
                 true,
+                false,
                 [
                     '7178e84e-472d-4766-8e45-a571871ff988',
                     '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
@@ -267,8 +346,26 @@ final class CollectionTest extends TestCase
                     'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
                 ],
             ],
-            'item_stubs_no_duplicates_strict' => [
+            'strings_duplicates_strict_uniques'    => [
                 true,
+                true,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                ],
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1 and dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                ],
+            ],
+            'item_stubs_no_duplicates_strict'      => [
+                true,
+                false,
                 [
                     new AbstractItemStub(['name' => 'one']),
                     new AbstractItemStub(['name' => 'two']),
@@ -276,8 +373,9 @@ final class CollectionTest extends TestCase
                 ],
                 [],
             ],
-            'item_stubs_duplicates_strict' => [
+            'item_stubs_duplicates_strict'         => [
                 true,
+                false,
                 [
                     $one = new AbstractItemStub(['name' => 'one']),
                     $one,
@@ -290,17 +388,20 @@ final class CollectionTest extends TestCase
                     $two,
                 ],
             ],
-            'integers_no_duplicates_loose' => [
+            'integers_no_duplicates_loose'         => [
+                false,
                 false,
                 [1, 2, 3],
-                []
+                [],
             ],
-            'integers_duplicates_loose' => [
+            'integers_duplicates_loose'            => [
+                false,
                 false,
                 [1, 2, 3, 4, 1, '2', 4],
                 ['1', 2, '4'],
             ],
-            'strings_no_duplicates_loose' => [
+            'strings_no_duplicates_loose'          => [
+                false,
                 false,
                 [
                     '7178e84e-472d-4766-8e45-a571871ff988',
@@ -310,7 +411,8 @@ final class CollectionTest extends TestCase
                 ],
                 [],
             ],
-            'strings_duplicates_loose' => [
+            'strings_duplicates_loose_no_uniques'  => [
+                false,
                 false,
                 [
                     '7178e84e-472d-4766-8e45-a571871ff988',
@@ -321,16 +423,37 @@ final class CollectionTest extends TestCase
                     '909a8214-86b1-4d78-94f2-6a8e22a24020',
                     'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
                     '2',
-                    2
+                    2,
                 ],
                 [
                     '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
                     '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
                     'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
-                    2
+                    2,
                 ],
             ],
-            'item_stubs_no_duplicates_loose' => [
+            'strings_duplicates_loose_uniques'     => [
+                false,
+                true,
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988',
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d',
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    '909a8214-86b1-4d78-94f2-6a8e22a24020',
+                    'baaeace4-1aeb-4b47-ac2c-4b90ebd12342',
+                    '2',
+                    2,
+                ],
+                [
+                    '7178e84e-472d-4766-8e45-a571871ff988', // dup 1-1 and dup 1-2
+                    'ca583de8-e6ba-4098-a0bf-10c981ff3d8d', // dup 2-1
+                    2,
+                ],
+            ],
+            'item_stubs_no_duplicates_loose'       => [
+                false,
                 false,
                 [
                     new AbstractItemStub(['name' => 'one']),
@@ -339,7 +462,8 @@ final class CollectionTest extends TestCase
                 ],
                 [],
             ],
-            'item_stubs_duplicates_loose' => [
+            'item_stubs_duplicates_loose'          => [
+                false,
                 false,
                 [
                     new AbstractItemStub(['name' => 'one']),
@@ -356,17 +480,9 @@ final class CollectionTest extends TestCase
         ];
     }
 
-    #[DataProvider('duplicatesDataProvider')]
-    public function testDuplicates(bool $strict, array $contents, array $expected): void
-    {
-        $collection = CollectionStub::fromIterable($contents);
-        $duplicateCollection = $collection->duplicates($strict);
-        $this->assertEquals($expected, $duplicateCollection->toArray());
-    }
-
     public function testReverse(): void
     {
-        $this->assertEquals([5, 4, 3, 2, 1], CollectionStub::fromIterable([1, 2, 3, 4, 5])->reverse()->toArray());
+        self::assertEquals([5, 4, 3, 2, 1], CollectionStub::fromIterable([1, 2, 3, 4, 5])->reverse()->toArray());
     }
 
     public function testDiff(): void
@@ -374,8 +490,13 @@ final class CollectionTest extends TestCase
         $collection1 = CollectionStub::fromIterable([1, 2, 3, 4, 5]);
         $collection2 = CollectionStub::fromIterable([1, 2, 3, 6, 7]);
 
-        $this->assertEquals([4, 5], $collection1->diff($collection2)->toArray());
-        $this->assertEquals([6, 7], $collection2->diff($collection1)->toArray());
+        self::assertEquals([4, 5], $collection1->diff($collection2)->toArray());
+        self::assertEquals([6, 7], $collection2->diff($collection1)->toArray());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Other collection must be of the same type');
+
+        $collection1->diff(new FilterableCollectionStub());
     }
 
     #[DataProvider('eachDataProvider')]
@@ -398,12 +519,12 @@ final class CollectionTest extends TestCase
             );
         } catch (Throwable $e) {
             $exceptionWasThrown = true;
-            $this->assertEquals($e, $exception);
+            self::assertEquals($e, $exception);
         }
 
-        $this->assertEquals($exceptionWasThrown, $expectException);
-        $this->assertEquals($expectException ? [2, 4] : [2, 4, 6, 8, 10], $collectedValues);
-        $this->assertEquals($expectedCurrent, $collection->current());
+        self::assertEquals($exceptionWasThrown, $expectException);
+        self::assertEquals($expectException ? [2, 4] : [2, 4, 6, 8, 10], $collectedValues);
+        self::assertEquals($expectedCurrent, $collection->current());
     }
 
     public static function eachDataProvider(): array
@@ -454,12 +575,12 @@ final class CollectionTest extends TestCase
             );
         } catch (Throwable $e) {
             $exceptionWasThrown = true;
-            $this->assertEquals($e, $exception);
+            self::assertEquals($e, $exception);
         }
 
-        $this->assertEquals($exceptionWasThrown, $expectException);
-        $this->assertEquals($expectException ? null : [1, 2, 3], $mapResult);
-        $this->assertEquals($expectedCurrent, $collection->current());
+        self::assertEquals($exceptionWasThrown, $expectException);
+        self::assertEquals($expectException ? null : [1, 2, 3], $mapResult);
+        self::assertEquals($expectedCurrent, $collection->current());
     }
 
     public static function mapDataProvider(): array
@@ -511,12 +632,12 @@ final class CollectionTest extends TestCase
             );
         } catch (Throwable $e) {
             $exceptionWasThrown = true;
-            $this->assertEquals($e, $exception);
+            self::assertEquals($e, $exception);
         }
 
-        $this->assertEquals($exceptionWasThrown, $expectException);
-        $this->assertEquals($expectException ? null : 1015, $value);
-        $this->assertEquals($expectedCurrent, $collection->current());
+        self::assertEquals($exceptionWasThrown, $expectException);
+        self::assertEquals($expectException ? null : 1015, $value);
+        self::assertEquals($expectedCurrent, $collection->current());
     }
 
     public static function reduceDataProvider(): array
@@ -548,7 +669,7 @@ final class CollectionTest extends TestCase
     #[DataProvider('autoSortedCollectionDataProvider')]
     public function testAutoSortedCollection(iterable $data, array $expected): void
     {
-        $this->assertEquals($expected, AutoSortedCollectionStub::fromIterable($data)->toArray());
+        self::assertEquals($expected, AutoSortedCollectionStub::fromIterable($data)->toArray());
     }
 
     public static function autoSortedCollectionDataProvider(): array

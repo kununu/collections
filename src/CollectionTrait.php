@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Kununu\Collection;
 
+use InvalidArgumentException;
 use Kununu\Collection\Convertible\ToArray;
 use Kununu\Collection\Convertible\ToInt;
 use Kununu\Collection\Convertible\ToString;
+use Stringable;
 
 trait CollectionTrait
 {
@@ -20,9 +22,9 @@ trait CollectionTrait
         return $result;
     }
 
-    public function empty(): bool
+    public function toArray(): array
     {
-        return 0 === $this->count();
+        return $this->mapToArray();
     }
 
     public function add($value): self|static
@@ -32,39 +34,12 @@ trait CollectionTrait
         return $this;
     }
 
-    public function has(mixed $value, bool $strict = true): bool
+    public function diff(Collection $other): self|static
     {
-        return in_array($value, $this->toArray(), $strict);
-    }
+        if (!$other instanceof static) {
+            throw new InvalidArgumentException('Other collection must be of the same type');
+        }
 
-    public function unique(): self|static
-    {
-        return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
-    }
-
-    public function duplicates(bool $strict = true): self|static
-    {
-        $elements = new static();
-        $duplicates = new static();
-
-        $this->each(function ($item) use (&$elements, &$duplicates, $strict): void {
-            if ($elements->has($item, $strict)) {
-                $duplicates->append($item);
-
-                return;
-            }
-            $elements->append($item);
-        });
-
-        return $duplicates;
-    }
-    public function reverse(): self|static
-    {
-        return static::fromIterable(array_reverse($this->toArray()));
-    }
-
-    public function diff(self $other): self|static
-    {
         return static::fromIterable(
             array_values(
                 array_map(
@@ -76,6 +51,22 @@ trait CollectionTrait
                 )
             )
         );
+    }
+
+    public function duplicates(bool $strict = true, bool $uniques = false): self|static
+    {
+        $elements = new static();
+        $duplicates = new static();
+
+        foreach ($this as $element) {
+            match ($elements->has($element, $strict)) {
+                true  => $duplicates->add($element),
+                false => $elements->add($element)
+            };
+        }
+        $this->rewind();
+
+        return $uniques ? $duplicates->unique() : $duplicates;
     }
 
     public function each(callable $function, bool $rewind = true): self|static
@@ -91,6 +82,21 @@ trait CollectionTrait
         }
 
         return $this;
+    }
+
+    public function empty(): bool
+    {
+        return 0 === $this->count();
+    }
+
+    public function has(mixed $value, bool $strict = true): bool
+    {
+        return in_array($value, $this->toArray(), $strict);
+    }
+
+    public function keys(): array
+    {
+        return array_keys($this->getArrayCopy());
     }
 
     public function map(callable $function, bool $rewind = true): array
@@ -124,21 +130,32 @@ trait CollectionTrait
         return $initial;
     }
 
-    public function toArray(): array
+    public function reverse(): self|static
     {
-        return $this->mapToArray();
+        return static::fromIterable(array_reverse($this->toArray()));
+    }
+
+    public function unique(): self|static
+    {
+        return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
+    }
+
+    public function values(): array
+    {
+        return array_values($this->getArrayCopy());
     }
 
     protected function mapToArray(bool $withKeys = true): array
     {
         return array_map(
             static fn(mixed $element): mixed => match (true) {
-                $element instanceof ToArray  => $element->toArray(),
-                $element instanceof ToString => $element->toString(),
-                $element instanceof ToInt    => $element->toInt(),
-                default                      => $element,
+                $element instanceof ToArray    => $element->toArray(),
+                $element instanceof ToString   => $element->toString(),
+                $element instanceof ToInt      => $element->toInt(),
+                $element instanceof Stringable => (string) $element,
+                default                        => $element,
             },
-            $withKeys ? $this->getArrayCopy() : array_values($this->getArrayCopy())
+            $withKeys ? $this->getArrayCopy() : $this->values()
         );
     }
 }

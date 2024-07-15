@@ -38,12 +38,12 @@ final class FilterableCollectionTest extends TestCase
 
         $filteredCollection = $collection->filter($filter);
 
-        $this->assertCount(2, $filteredCollection);
+        self::assertCount(2, $filteredCollection);
         foreach ($filteredCollection as $item) {
-            $this->assertInstanceOf(FilterItemStub::class, $item);
+            self::assertInstanceOf(FilterItemStub::class, $item);
         }
-        $this->assertEquals('a', $filteredCollection[0]->groupByKey());
-        $this->assertEquals('c', $filteredCollection[1]->groupByKey());
+        self::assertEquals('a', $filteredCollection[0]->groupByKey());
+        self::assertEquals('c', $filteredCollection[1]->groupByKey());
 
         $collection = (new FilterableCollectionStub())
             ->add(1)
@@ -51,7 +51,7 @@ final class FilterableCollectionTest extends TestCase
             ->add(new FilterItemStub('d'))
             ->add('a string');
 
-        $this->assertEmpty($collection->filter($filter));
+        self::assertEmpty($collection->filter($filter));
     }
 
     public function testGroupBy(): void
@@ -119,19 +119,20 @@ final class FilterableCollectionTest extends TestCase
 
         $groups = $collection->groupBy(false, $filter1, $filter2, $filter3, $filter4, $filter5, $filter6);
 
-        $this->assertCount(6, $groups);
-        $this->assertCount(1, $groups['Filter 1']);
-        $this->assertCount(1, $groups['Filter 2']);
-        $this->assertCount(1, $groups['Filter 3']);
-        $this->assertEmpty($groups['Filter 4']);
-        $this->assertCount(2, $groups['Filter 5']);
-        $this->assertEmpty($groups['Filter 6']);
+        self::assertCount(6, $groups);
+        self::assertCount(1, $groups['Filter 1']);
+        self::assertCount(1, $groups['Filter 2']);
+        self::assertCount(1, $groups['Filter 3']);
+        self::assertEmpty($groups['Filter 4']);
+        self::assertCount(2, $groups['Filter 5']);
+        self::assertEmpty($groups['Filter 6']);
 
         $groups = $collection->groupBy(true, $filter1, $filter2, $filter3, $filter4, $filter5, $filter6);
-        $this->assertCount(4, $groups);
-        $this->assertCount(1, $groups['Filter 1']);
-        $this->assertCount(1, $groups['Filter 2']);
-        $this->assertCount(1, $groups['Filter 3']);
-        $this->assertCount(2, $groups['Filter 5']);
+
+        self::assertCount(4, $groups);
+        self::assertCount(1, $groups['Filter 1']);
+        self::assertCount(1, $groups['Filter 2']);
+        self::assertCount(1, $groups['Filter 3']);
+        self::assertCount(2, $groups['Filter 5']);
     }
 }
