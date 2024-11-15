@@ -33,6 +33,12 @@ composer install
 composer test-coverage
 ```
 
+To run tests in a docker container (without coverage):
+
+```bash
+docker run -it --rm --workdir /app --volume .:/app php:8.1 php vendor/bin/phpunit tests/                                                     1 ↵
+```
+
 ## Usage
 
 The library defines interfaces to deal with collections and also boilerplate code with default implementations.

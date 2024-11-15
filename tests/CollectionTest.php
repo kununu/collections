@@ -485,6 +485,55 @@ final class CollectionTest extends TestCase
         self::assertEquals([5, 4, 3, 2, 1], CollectionStub::fromIterable([1, 2, 3, 4, 5])->reverse()->toArray());
     }
 
+    #[DataProvider('chunkDataProvider')]
+    public function testChunk(Collection $collectionToChunk, int $chunkSize, array $expectedChunks): void
+    {
+        self::assertEquals(
+            $expectedChunks,
+            $collectionToChunk->chunk($chunkSize)
+        );
+    }
+
+    public static function chunkDataProvider(): array
+    {
+        return [
+            'chunk_size_0' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                0,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+            'chunk_size_2' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                2,
+                [
+                    CollectionStub::fromIterable([1, 2]),
+                    CollectionStub::fromIterable([3, 4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_size_1' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                1,
+                [
+                    CollectionStub::fromIterable([1]),
+                    CollectionStub::fromIterable([2]),
+                    CollectionStub::fromIterable([3]),
+                    CollectionStub::fromIterable([4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_size_5' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                5,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+        ];
+    }
+
     public function testDiff(): void
     {
         $collection1 = CollectionStub::fromIterable([1, 2, 3, 4, 5]);

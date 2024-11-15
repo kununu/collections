@@ -10,11 +10,16 @@ interface Collection extends FromIterable, ToArray
 {
     public function add(mixed $value): self|static;
 
+    /** @return self[]|static[] */
+    public function chunk(int $size): array;
+
     public function diff(self $other): self|static;
 
     public function duplicates(bool $strict = true, bool $uniques = false): self|static;
 
     public function each(callable $function, bool $rewind = true): self|static;
+
+    public function eachChunk(int $size, callable $function): self|static;
 
     public function empty(): bool;
 

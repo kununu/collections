@@ -34,6 +34,21 @@ trait CollectionTrait
         return $this;
     }
 
+    /** @return self[] */
+    public function chunk(int $size): array
+    {
+        if ($size < 1) {
+            return [$this];
+        }
+
+        return array_map(
+            static function(array $uuids) {
+                return self::fromIterable($uuids);
+            },
+            array_chunk($this->toArray(), $size)
+        );
+    }
+
     public function diff(Collection $other): self|static
     {
         if (!$other instanceof static) {
@@ -79,6 +94,15 @@ trait CollectionTrait
             if ($rewind) {
                 $this->rewind();
             }
+        }
+
+        return $this;
+    }
+
+    public function eachChunk(int $size, callable $function): self|static
+    {
+        foreach ($this->chunk($size) as $chunk) {
+            $function($chunk);
         }
 
         return $this;
