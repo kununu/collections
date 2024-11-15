@@ -615,9 +615,6 @@ final class CollectionTest extends TestCase
 
     public static function chunkEachDataProvider(): array
     {
-        $expectedFunction = static function(CollectionStub $stub): void {
-        };
-
         return [
             'chunk_each_size_0' => [
                 CollectionStub::fromIterable([1, 2, 3, 4, 5]),
