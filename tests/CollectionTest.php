@@ -602,6 +602,60 @@ final class CollectionTest extends TestCase
         ];
     }
 
+    #[DataProvider('chunkEachDataProvider')]
+    public function testChunkEach(Collection $collectionToChunk, int $chunkSize, array $expectedChunks): void
+    {
+        $expectedLambda = function(CollectionStub $collection) use ($expectedChunks): void {
+            static $i = 0;
+            self::assertEquals($collection, $expectedChunks[$i++]);
+        };
+
+        $collectionToChunk->eachChunk($chunkSize, $expectedLambda);
+    }
+
+    public static function chunkEachDataProvider(): array
+    {
+        $expectedFunction = static function(CollectionStub $stub): void {
+        };
+
+        return [
+            'chunk_each_size_0' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                0,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+            'chunk_each_size_2' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                2,
+                [
+                    CollectionStub::fromIterable([1, 2]),
+                    CollectionStub::fromIterable([3, 4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_each_size_1' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                1,
+                [
+                    CollectionStub::fromIterable([1]),
+                    CollectionStub::fromIterable([2]),
+                    CollectionStub::fromIterable([3]),
+                    CollectionStub::fromIterable([4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_each_size_5' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                5,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+        ];
+    }
+
     #[DataProvider('mapDataProvider')]
     public function testMap(bool $rewind, ?array $expectedCurrent, bool $expectException): void
     {

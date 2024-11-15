@@ -44,6 +44,15 @@ This method is defined to be a fluent version of `ArrayIterator::append`. To do 
 $collection->add($item1)->add($item2);
 ```
 
+### chunk
+
+```php
+    /** @return self[]|static[] */
+    public function chunk(int $size): array
+```
+
+This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current Collection based on the chunk size provided.
+
 ### diff
 
 ```php
@@ -76,6 +85,14 @@ Callable signature:
 ```php
 function(mixed $element, string|float|int|bool|null $elementKey): void;
 ```
+
+### eachChunk
+
+```php
+public function eachChunk(int $size, callable $function): self|static
+```
+
+This method chunks the collection and executes the given anonymous function with each chunk.
 
 ### empty
 
