@@ -105,10 +105,7 @@ final class CollectionTest extends TestCase
      */
     public function testChunk(CollectionStub $collection, int $chunkSize, array $expectedChunks): void
     {
-        $this->assertEquals(
-            $expectedChunks,
-            $collection->chunk($chunkSize)
-        );
+        $this->assertEquals($expectedChunks, $collection->chunk($chunkSize));
     }
 
     public static function chunkDataProvider(): array
@@ -167,8 +164,6 @@ final class CollectionTest extends TestCase
 
     public static function chunkEachDataProvider(): array
     {
-        $expectedFunction = static function(CollectionStub $stub): void {
-        };
         return [
             'chunk_each_size_0' => [
                 CollectionStub::fromIterable([1, 2, 3, 4, 5]),
