@@ -485,6 +485,52 @@ final class CollectionTest extends TestCase
         self::assertEquals([5, 4, 3, 2, 1], CollectionStub::fromIterable([1, 2, 3, 4, 5])->reverse()->toArray());
     }
 
+    #[DataProvider('chunkDataProvider')]
+    public function testChunk(Collection $collection, int $chunkSize, array $expectedChunks): void
+    {
+        self::assertEquals($expectedChunks, $collection->chunk($chunkSize));
+    }
+
+    public static function chunkDataProvider(): array
+    {
+        return [
+            'chunk_size_0' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                0,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+            'chunk_size_2' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                2,
+                [
+                    CollectionStub::fromIterable([1, 2]),
+                    CollectionStub::fromIterable([3, 4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_size_1' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                1,
+                [
+                    CollectionStub::fromIterable([1]),
+                    CollectionStub::fromIterable([2]),
+                    CollectionStub::fromIterable([3]),
+                    CollectionStub::fromIterable([4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_size_5' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                5,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+        ];
+    }
+
     public function testDiff(): void
     {
         $collection1 = CollectionStub::fromIterable([1, 2, 3, 4, 5]);
@@ -549,6 +595,59 @@ final class CollectionTest extends TestCase
                 false,
                 3,
                 true,
+            ],
+        ];
+    }
+
+    #[DataProvider('chunkEachDataProvider')]
+    public function testChunkEach(Collection $collection, int $chunkSize, array $expectedChunks): void
+    {
+        $i = 0;
+
+        $collection->eachChunk(
+            $chunkSize,
+            function(CollectionStub $collection) use (&$i, $expectedChunks): void {
+                self::assertEquals($collection, $expectedChunks[$i++]);
+            }
+        );
+    }
+
+    public static function chunkEachDataProvider(): array
+    {
+        return [
+            'chunk_each_size_0' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                0,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
+            ],
+            'chunk_each_size_2' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                2,
+                [
+                    CollectionStub::fromIterable([1, 2]),
+                    CollectionStub::fromIterable([3, 4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_each_size_1' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                1,
+                [
+                    CollectionStub::fromIterable([1]),
+                    CollectionStub::fromIterable([2]),
+                    CollectionStub::fromIterable([3]),
+                    CollectionStub::fromIterable([4]),
+                    CollectionStub::fromIterable([5]),
+                ],
+            ],
+            'chunk_each_size_5' => [
+                CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                5,
+                [
+                    CollectionStub::fromIterable([1, 2, 3, 4, 5]),
+                ],
             ],
         ];
     }

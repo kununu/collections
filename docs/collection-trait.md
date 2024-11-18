@@ -95,6 +95,10 @@ $collection->toArray();
 
 Internally it is call the `ArrayIterator::append` and returning the instance to allow fluent calls.
 
+## chunk
+
+Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
+
 ## diff
 
 To check the difference between two collections first it checks that the other collection is of the same type as the current one.
@@ -116,6 +120,10 @@ Finally, it will return the duplicated collection, optionally calling the `uniqu
 ## each
 
 Internally, this method will iterate through each item of a collection, optionally rewind it at the end of the iteration, calling the anonymous function for each element.
+
+## eachChunk
+
+Internally, this method calls the [chunk](#chunk) method and then executes the passed anonymous function with each chunk.
 
 ## empty
 
