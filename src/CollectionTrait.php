@@ -42,9 +42,7 @@ trait CollectionTrait
         }
 
         return array_map(
-            static function(array $chunk) {
-                return self::fromIterable($chunk);
-            },
+            static fn(array $chunk) => self::fromIterable($chunk),
             array_chunk($this->toArray(), $size)
         );
     }
