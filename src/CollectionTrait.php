@@ -42,8 +42,8 @@ trait CollectionTrait
         }
 
         return array_map(
-            static function(array $uuids) {
-                return self::fromIterable($uuids);
+            static function(array $chunk) {
+                return self::fromIterable($chunk);
             },
             array_chunk($this->toArray(), $size)
         );
