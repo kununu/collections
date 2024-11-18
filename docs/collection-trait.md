@@ -32,6 +32,17 @@ A fluent version of `append`. To do stuff like:
 $collection->add($item1)->add($item2);
 ```
 
+## chunk
+
+```php
+/** @return self[] */
+public function chunk(int $size): array
+```
+
+This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
+
+Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
+
 ## unique
 
 ```php
@@ -68,6 +79,20 @@ Callable signature:
 
 ```php
 function(mixed $element, string|float|int|bool|null $elementKey): void;
+```
+
+## eachChunk
+
+```php
+public function eachChunk(int $size, callable $function): self
+```
+
+Internally, this method calls the [chunk](#chunk) method and then executes the passed anonymous function with each chunk.
+
+Callable signature:
+
+```php
+function(CollectionInterface $collection): void;
 ```
 
 ## map
