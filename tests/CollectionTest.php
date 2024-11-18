@@ -486,11 +486,11 @@ final class CollectionTest extends TestCase
     }
 
     #[DataProvider('chunkDataProvider')]
-    public function testChunk(Collection $collectionToChunk, int $chunkSize, array $expectedChunks): void
+    public function testChunk(Collection $collection, int $chunkSize, array $expectedChunks): void
     {
         self::assertEquals(
             $expectedChunks,
-            $collectionToChunk->chunk($chunkSize)
+            $collection->chunk($chunkSize)
         );
     }
 
@@ -603,14 +603,16 @@ final class CollectionTest extends TestCase
     }
 
     #[DataProvider('chunkEachDataProvider')]
-    public function testChunkEach(Collection $collectionToChunk, int $chunkSize, array $expectedChunks): void
+    public function testChunkEach(Collection $collection, int $chunkSize, array $expectedChunks): void
     {
-        $expectedLambda = function(CollectionStub $collection) use ($expectedChunks): void {
-            static $i = 0;
-            self::assertEquals($collection, $expectedChunks[$i++]);
-        };
+        $i = 0;
 
-        $collectionToChunk->eachChunk($chunkSize, $expectedLambda);
+        $collection->eachChunk(
+            $chunkSize,
+            function(CollectionStub $collection) use (&$i, $expectedChunks): void {
+                self::assertEquals($collection, $expectedChunks[$i++]);
+            }
+        );
     }
 
     public static function chunkEachDataProvider(): array

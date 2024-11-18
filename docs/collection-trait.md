@@ -97,7 +97,7 @@ Internally it is call the `ArrayIterator::append` and returning the instance to 
 
 ## chunk
 
-This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current Collection based on the chunk size provided.
+Internally this method chunks [a copy](https://www.php.net/manual/arrayobject.getarraycopy.php) of the collection with the [`array_chunk` php function](https://www.php.net/manual/function.array-chunk.php), returning a zero indexed array of collections of the same type as the initial one.
 
 ## diff
 
@@ -123,7 +123,7 @@ Internally, this method will iterate through each item of a collection, optional
 
 ## eachChunk
 
-This method chunks the collection and executes the given anonymous function with each chunk.
+Internally, this method calls the [chunk](#chunk) function and then executes the passed anonymous function with each chunk.
 
 ## empty
 

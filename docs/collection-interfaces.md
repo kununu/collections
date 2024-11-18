@@ -51,7 +51,7 @@ $collection->add($item1)->add($item2);
 public function chunk(int $size): array
 ```
 
-This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current Collection based on the chunk size provided.
+This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
 
 ### diff
 
