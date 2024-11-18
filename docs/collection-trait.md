@@ -39,7 +39,9 @@ $collection->add($item1)->add($item2);
 public function chunk(int $size): array
 ```
 
-Internally this method chunks [a copy](https://www.php.net/manual/arrayobject.getarraycopy.php) of the collection with the [`array_chunk` php function](https://www.php.net/manual/function.array-chunk.php), returning a zero indexed array of collections of the same type as the initial one.
+This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
+
+Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
 
 ## unique
 
@@ -86,6 +88,12 @@ public function eachChunk(int $size, callable $function): self
 ```
 
 Internally, this method calls the [chunk](#chunk) method and then executes the passed anonymous function with each chunk.
+
+Callable signature:
+
+```php
+function(CollectionInterface $collection): void;
+```
 
 ## map
 
