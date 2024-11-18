@@ -97,7 +97,7 @@ Internally it is call the `ArrayIterator::append` and returning the instance to 
 
 ## chunk
 
-Internally this method chunks [a copy](https://www.php.net/manual/arrayobject.getarraycopy.php) of the collection with the [`array_chunk` php function](https://www.php.net/manual/function.array-chunk.php), returning a zero indexed array of collections of the same type as the initial one.
+Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
 
 ## diff
 

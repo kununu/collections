@@ -488,10 +488,7 @@ final class CollectionTest extends TestCase
     #[DataProvider('chunkDataProvider')]
     public function testChunk(Collection $collection, int $chunkSize, array $expectedChunks): void
     {
-        self::assertEquals(
-            $expectedChunks,
-            $collection->chunk($chunkSize)
-        );
+        self::assertEquals($expectedChunks, $collection->chunk($chunkSize));
     }
 
     public static function chunkDataProvider(): array
