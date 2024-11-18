@@ -92,7 +92,13 @@ function(mixed $element, string|float|int|bool|null $elementKey): void;
 public function eachChunk(int $size, callable $function): self|static
 ```
 
-This method chunks the collection and executes the given anonymous function with each chunk.
+This method chunks the collection using the passed `$size` and executes the given anonymous function with each chunk.
+
+Callable signature:
+
+```php
+function(CollectionInterface $collection): void;
+```
 
 ### empty
 
