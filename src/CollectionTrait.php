@@ -33,6 +33,21 @@ trait CollectionTrait
         return $this;
     }
 
+    /** @return self[] */
+    public function chunk(int $size): array
+    {
+        if ($size < 1) {
+            return [$this];
+        }
+
+        return array_map(
+            static function(array $chunk) {
+                return self::fromIterable($chunk);
+            },
+            array_chunk($this->getArrayCopy(), $size)
+        );
+    }
+
     public function unique(): self
     {
         return static::fromIterable(array_unique($this->toArray(), SORT_REGULAR));
@@ -70,6 +85,15 @@ trait CollectionTrait
             if ($rewind) {
                 $this->rewind();
             }
+        }
+
+        return $this;
+    }
+
+    public function eachChunk(int $size, callable $function): self
+    {
+        foreach ($this->chunk($size) as $chunk) {
+            $function($chunk);
         }
 
         return $this;
