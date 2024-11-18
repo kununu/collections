@@ -123,7 +123,7 @@ Internally, this method will iterate through each item of a collection, optional
 
 ## eachChunk
 
-Internally, this method calls the [chunk](#chunk) function and then executes the passed anonymous function with each chunk.
+Internally, this method calls the [chunk](#chunk) method and then executes the passed anonymous function with each chunk.
 
 ## empty
 
