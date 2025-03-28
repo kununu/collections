@@ -5,6 +5,8 @@ namespace Kununu\Collection\AbstractItemBuilderTraits;
 
 trait ConverterBuildersTrait
 {
+    use GenericBuildersTrait;
+
     protected static function buildConverterGetter(
         string $fieldName,
         callable $converter,

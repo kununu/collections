@@ -10,6 +10,8 @@ use Kununu\Collection\AbstractItem;
 
 trait DateTimeBuildersTrait
 {
+    use GenericBuildersTrait;
+
     protected static function buildDateTimeGetter(
         string $fieldName,
         string $dateFormat = AbstractItem::DATE_FORMAT,
