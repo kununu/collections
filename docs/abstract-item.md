@@ -372,6 +372,41 @@ var_export(MyItem::build(['source' => 'two', 'field_1' => 'Value from source 1',
 
 ```
 
+##### buildConverterGetter
+
+```php
+protected static function buildConverterGetter(string $fieldName, callable $converter, bool $useSnakeCase = false): callable
+```
+
+Calls `$converter` with the value from the `$fieldName` in the data if found, or return null if not found.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildConverterDefaultGetter
+
+```php
+protected static function buildConverterDefaultGetter(string $fieldName, callable $converter, mixed $default = null, bool $useSnakeCase = false): callable
+```
+
+Calls `$converter` with the value from the `$fieldName` in the data if found or with `$default` if not found.
+
+If `$useSnakeCase` is `true` the `$fieldName` will be converted to snake case and that value should be the key of the field in the data array.
+
+##### buildConverterMultiFieldsGetter
+
+```php
+protected static function buildConverterMultiFieldsGetter(array $fields, bool $all, callable $converter, bool $useSnakeCase = false): callable
+```
+
+Checks if:
+
+- If `$all` parameter is **true**, then **ALL** the fields **must exist** in the data
+- If `$all` parameter is **false**, then **AT LEAST ONE** of the fields **must exist in the data**
+
+If one of the previous conditions applies it calls `$converter` with the data.
+
+If `$useSnakeCase` is `true` each field in `$fields` will be converted to snake case and that value should be the key of the field in the data array.
+
 ## AbstractItemToArray
 
 This class provide an abstract "item" that implements the `ToArray` interface.

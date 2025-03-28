@@ -14,7 +14,7 @@ final class CompositeFilter extends BaseFilter
     public function __construct(
         string $key,
         private readonly FilterOperator $filterOperator,
-        CollectionFilter ...$filters
+        CollectionFilter ...$filters,
     ) {
         parent::__construct($key);
         $this->filters = $filters;

@@ -33,7 +33,7 @@ abstract class AbstractBasicItem
             $this->matches($method, static::GETTER_PREFIX) => $this->getAttribute(
                 $this->getAttributeFromMethod($method, static::GETTER_PREFIX)
             ),
-            default                                        => $this->throwBadMethodCallException($method)
+            default                                        => $this->throwBadMethodCallException($method),
         };
     }
 
