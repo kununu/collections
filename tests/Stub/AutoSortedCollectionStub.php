@@ -15,7 +15,7 @@ final class AutoSortedCollectionStub extends AbstractCollection
         match (true) {
             is_string($value),
             is_int($value) => $this->offsetSet($value, $value),
-            default        => parent::append($value)
+            default        => parent::append($value),
         };
     }
 

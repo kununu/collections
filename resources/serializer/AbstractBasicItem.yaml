@@ -1,0 +1,4 @@
+Kununu\Collection\AbstractBasicItem:
+  properties:
+    attributes:
+      exclude: true

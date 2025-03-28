@@ -24,7 +24,7 @@ final class FilterableCollectionTest extends TestCase
             ->add(new FilterItemStub('d'))
             ->add('a string');
 
-        $filter = new class() extends BaseFilter {
+        $filter = new class extends BaseFilter {
             public function __construct()
             {
                 parent::__construct('My Filter');
@@ -56,7 +56,7 @@ final class FilterableCollectionTest extends TestCase
 
     public function testGroupBy(): void
     {
-        $filter1 = new class() extends BaseFilter {
+        $filter1 = new class extends BaseFilter {
             public function __construct()
             {
                 parent::__construct('Filter 1');
@@ -70,7 +70,7 @@ final class FilterableCollectionTest extends TestCase
 
         $filter1->setCustomGroupByData(['reverseKey' => true]);
 
-        $filter2 = new class() extends BaseFilter {
+        $filter2 = new class extends BaseFilter {
             public function __construct()
             {
                 parent::__construct('Filter 2');
@@ -82,7 +82,7 @@ final class FilterableCollectionTest extends TestCase
             }
         };
 
-        $filter3 = new class() extends BaseFilter {
+        $filter3 = new class extends BaseFilter {
             public function __construct()
             {
                 parent::__construct('Filter 3');
@@ -97,7 +97,7 @@ final class FilterableCollectionTest extends TestCase
         $filter4 = new CompositeFilter('Filter 4', new FilterOperatorAnd(), $filter1, $filter3);
         $filter5 = new CompositeFilter('Filter 5', new FilterOperatorOr(), $filter1, $filter3);
 
-        $filter6 = new class() extends BaseFilter {
+        $filter6 = new class extends BaseFilter {
             public function __construct()
             {
                 parent::__construct('Filter 6');

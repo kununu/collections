@@ -74,7 +74,7 @@ trait CollectionTrait
         foreach ($this as $element) {
             match ($elements->has($element, $strict)) {
                 true  => $duplicates->add($element),
-                false => $elements->add($element)
+                false => $elements->add($element),
             };
         }
         $this->rewind();

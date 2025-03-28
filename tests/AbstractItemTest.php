@@ -11,6 +11,7 @@ use Kununu\Collection\Tests\Stub\AbstractItemSnakeCaseStub;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithCollectionsStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithConditionalBuilderStub;
+use Kununu\Collection\Tests\Stub\AbstractItemWithConverterBuilderStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithFromArrayStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithRequiredFieldsStub;
 use Kununu\Collection\Tests\Stub\DTOCollectionStub;
@@ -68,7 +69,7 @@ final class AbstractItemTest extends TestCase
         ?string $expectedSimpleName,
         ?bool $expectedVerified,
         ?int $expectedIndustryId,
-        ?float $expectedSalary
+        ?float $expectedSalary,
     ): void {
         $item = AbstractItemStub::build($data);
 
@@ -319,6 +320,73 @@ final class AbstractItemTest extends TestCase
             'float'   => [12.5],
             'string'  => ['12.5'],
             'unknown' => [null],
+        ];
+    }
+
+    #[DataProvider('itemBuildConverterDataProvider')]
+    public function testItemBuildConverter(
+        array $data,
+        ?string $expectedName,
+        string $expectedSurName,
+        ?string $expectedCompleteName,
+        string $expectedAddress,
+    ): void {
+        $item = AbstractItemWithConverterBuilderStub::build($data);
+
+        self::assertEquals($expectedName, $item->name());
+        self::assertEquals($expectedSurName, $item->surName());
+        self::assertEquals($expectedCompleteName, $item->completeName());
+        self::assertEquals($expectedAddress, $item->address());
+    }
+
+    public static function itemBuildConverterDataProvider(): array
+    {
+        return [
+            'no_name'    => [
+                'data'                 => [
+                    'surName' => 'Doe',
+                    'address' => '21st Jump Street',
+                    'country' => 'USA',
+                ],
+                'expectedName'         => null,
+                'expectedSurName'      => 'von Doe',
+                'expectedCompleteName' => null,
+                'expectedAddress'      => '21st Jump Street USA',
+            ],
+            'no_surname' => [
+                'data'                 => [
+                    'name'    => 'John',
+                    'address' => '21st Jump Street',
+                    'country' => 'USA',
+                ],
+                'expectedName'         => 'Mr John',
+                'expectedSurName'      => 'von UNKNOWN',
+                'expectedCompleteName' => null,
+                'expectedAddress'      => '21st Jump Street USA',
+            ],
+            'no_country' => [
+                'data'                 => [
+                    'name'    => 'John',
+                    'surName' => 'Doe',
+                    'address' => '21st Jump Street',
+                ],
+                'expectedName'         => 'Mr John',
+                'expectedSurName'      => 'von Doe',
+                'expectedCompleteName' => 'John Doe',
+                'expectedAddress'      => '21st Jump Street WORLD',
+            ],
+            'all_fields' => [
+                'data'                 => [
+                    'name'    => 'John',
+                    'surName' => 'Doe',
+                    'address' => '21st Jump Street',
+                    'country' => 'USA',
+                ],
+                'expectedName'         => 'Mr John',
+                'expectedSurName'      => 'von Doe',
+                'expectedCompleteName' => 'John Doe',
+                'expectedAddress'      => '21st Jump Street USA',
+            ],
         ];
     }
 

@@ -31,7 +31,7 @@ final class DTOCollectionStub extends AbstractCollection
         match (true) {
             is_array($value)          => $this->append(DTOStub::fromArray($value)),
             $value instanceof DTOStub => $this->offsetSet($value->field, $value),
-            default                   => throw new InvalidArgumentException(sprintf(self::INVALID, DTOStub::class))
+            default                   => throw new InvalidArgumentException(sprintf(self::INVALID, DTOStub::class)),
         };
     }
 }
