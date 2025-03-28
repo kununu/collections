@@ -34,10 +34,14 @@ trait ConverterBuildersTrait
         callable $converter,
         bool $useSnakeCase = false,
     ): callable {
-        return static function(array $data) use ($fields, $all, $converter, $useSnakeCase) {
+        $fields = array_map(
+            static fn(string $fieldName): string => $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName,
+            $fields
+        );
+
+        return static function(array $data) use ($fields, $all, $converter) {
             $found = $all;
             foreach ($fields as $fieldName) {
-                $fieldName = $useSnakeCase ? self::camelToSnake($fieldName) : $fieldName;
                 $isset = isset($data[$fieldName]);
                 $found = $all ? ($found && $isset) : ($found || $isset);
                 if ($found && !$all) {
