@@ -93,7 +93,11 @@ $collection->toArray();
 
 ## add
 
-Internally it is call the `ArrayIterator::append` and returning the instance to allow fluent calls.
+Internally it is calling the `ArrayIterator::append` and returning the instance to allow fluent calls.
+
+## clear
+
+Internally it is the `keys` method and for each key it is call the `ArrayIterator::offsetUnset`  and returning the instance to allow fluent calls.
 
 ## chunk
 

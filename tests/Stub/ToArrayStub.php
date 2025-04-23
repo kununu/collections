@@ -5,9 +5,9 @@ namespace Kununu\Collection\Tests\Stub;
 
 use Kununu\Collection\Convertible\ToArray;
 
-final class ToArrayStub implements ToArray
+final readonly class ToArrayStub implements ToArray
 {
-    private function __construct(private readonly ToIntStub $id, private readonly ToStringStub $data)
+    private function __construct(private ToIntStub $id, private ToStringStub $data)
     {
     }
 

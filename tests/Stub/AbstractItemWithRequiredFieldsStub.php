@@ -16,9 +16,9 @@ use Kununu\Collection\AbstractItem;
  */
 final class AbstractItemWithRequiredFieldsStub extends AbstractItem
 {
-    protected const GETTER_PREFIX = 'giveMeThe';
+    protected const string GETTER_PREFIX = 'giveMeThe';
 
-    protected const PROPERTIES = [
+    protected const array PROPERTIES = [
         'id',
         'name',
         'createdAt',

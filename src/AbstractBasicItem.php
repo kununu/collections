@@ -8,9 +8,9 @@ use OutOfBoundsException;
 
 abstract class AbstractBasicItem
 {
-    protected const SETTER_PREFIX = 'set';
-    protected const GETTER_PREFIX = 'get';
-    protected const PROPERTIES = [];
+    protected const string SETTER_PREFIX = 'set';
+    protected const string GETTER_PREFIX = 'get';
+    protected const array PROPERTIES = [];
 
     private array $attributes = [];
 

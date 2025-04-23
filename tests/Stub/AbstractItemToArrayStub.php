@@ -8,7 +8,7 @@ namespace Kununu\Collection\Tests\Stub;
  */
 final class AbstractItemToArrayStub extends AbstractItemToArrayStubBase
 {
-    protected const PROPERTIES = [
+    protected const array PROPERTIES = [
         'extraData',
     ];
 

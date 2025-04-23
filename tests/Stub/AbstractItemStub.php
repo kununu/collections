@@ -25,7 +25,7 @@ use Kununu\Collection\AbstractItem;
  */
 final class AbstractItemStub extends AbstractItem
 {
-    protected const PROPERTIES = [
+    protected const array PROPERTIES = [
         'id',
         'name',
         'createdAt',

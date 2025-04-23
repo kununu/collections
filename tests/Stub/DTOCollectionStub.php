@@ -8,7 +8,7 @@ use Kununu\Collection\AbstractCollection;
 
 final class DTOCollectionStub extends AbstractCollection
 {
-    private const INVALID = 'Can only append array or %s';
+    private const string INVALID = 'Can only append array or %s';
 
     public function __construct(DTOStub ...$dtoStubs)
     {

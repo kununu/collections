@@ -5,9 +5,9 @@ namespace Kununu\Collection\Tests\Stub;
 
 use Kununu\Collection\Convertible\ToInt;
 
-final class ToIntStub implements ToInt
+final readonly class ToIntStub implements ToInt
 {
-    private function __construct(private readonly int $value)
+    private function __construct(private int $value)
     {
     }
 

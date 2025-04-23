@@ -23,9 +23,9 @@ use Kununu\Collection\AbstractItem;
  */
 final class AbstractItemSnakeCaseStub extends AbstractItem
 {
-    protected const GETTER_PREFIX = '';
+    protected const string GETTER_PREFIX = '';
 
-    protected const PROPERTIES = [
+    protected const array PROPERTIES = [
         'stringField',
         'requiredStringField',
         'boolField',

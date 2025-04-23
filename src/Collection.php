@@ -13,6 +13,8 @@ interface Collection extends FromIterable, ToArray
     /** @return self[]|static[] */
     public function chunk(int $size): array;
 
+    public function clear(): self|static;
+
     public function diff(self $other): self|static;
 
     public function duplicates(bool $strict = true, bool $uniques = false): self|static;
