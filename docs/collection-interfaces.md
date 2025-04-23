@@ -53,6 +53,10 @@ public function chunk(int $size): array
 
 This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
 
+## clear
+
+This method should remove all the items of the collection and since is fluent it should return the collection. 
+
 ### diff
 
 ```php

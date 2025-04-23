@@ -10,12 +10,24 @@ declare(strict_types=1);
 
 use Kununu\Collection\AbstractCollection;
 
+/**
+ * @method static self fromIterable(iterable $data)
+ * @method        self add(mixed $value)
+ * @method        self clear()
+ * @method        self diff(Collection $other)
+ * @method        self duplicates(bool $strict = true, bool $uniques = false)
+ * @method        self each(callable $function, bool $rewind = true)
+ * @method        self reverse()
+ * @method        self unique()
+ */
 final class MyCollection extends AbstractCollection 
 {
 }
 
 $collection = MyCollection::fromIterable($myData);
 ```
+
+The docblocks are advisable to help your IDE recognize the proper collection items types.
 
 ## AbstractFilterableCollection
 
@@ -27,6 +39,17 @@ declare(strict_types=1);
 
 use Kununu\Collection\AbstractFilterableCollection;
 
+/**
+ * @method static self fromIterable(iterable $data)
+ * @method        self add(mixed $value)
+ * @method        self clear()
+ * @method        self diff(Collection $other)
+ * @method        self duplicates(bool $strict = true, bool $uniques = false)
+ * @method        self each(callable $function, bool $rewind = true)
+ * @method        self reverse()
+ * @method        self unique()
+ * @method        self filter(CollectionFilter $filter)
+ */
 final class MyCollection extends AbstractFilterableCollection
 {
 }
@@ -36,3 +59,4 @@ $collection = MyCollection::fromIterable($myData);
 $filtered = $collection->filter($filter);
 $groups = $collection->groupBy(true, $group1Filter, $group2Filter);
 ```
+The docblocks are advisable to help your IDE recognize the proper collection items types.
