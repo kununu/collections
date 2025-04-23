@@ -26,6 +26,7 @@ final class AbstractItemToArrayTest extends TestCase
                 'id'         => 50,
                 'name'       => '1000: My Name is?',
                 'industryId' => 13,
+                'stringable' => 'My Name is?',
                 'verified'   => true,
                 'extraData'  => [
                     'id'   => 99,

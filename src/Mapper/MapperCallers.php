@@ -5,9 +5,9 @@ namespace Kununu\Collection\Mapper;
 
 use Closure;
 
-final class MapperCallers
+final readonly class MapperCallers
 {
-    public function __construct(public readonly Closure $fnGetId, public readonly Closure $fnGetValue)
+    public function __construct(public Closure $fnGetId, public Closure $fnGetValue)
     {
     }
 }

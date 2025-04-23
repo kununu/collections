@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\Tests\Stub;
 
-final class StringableStub
+final readonly class StringableStub
 {
-    private function __construct(private readonly ToIntStub $id, private readonly string $value)
+    private function __construct(private ToIntStub $id, private string $value)
     {
     }
 

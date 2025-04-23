@@ -5,9 +5,9 @@ namespace Kununu\Collection\Tests\Stub;
 
 use Kununu\Collection\Convertible\ToArray;
 
-final class DTOStub implements ToArray
+final readonly class DTOStub implements ToArray
 {
-    public function __construct(public readonly string $field, public readonly mixed $value)
+    public function __construct(public string $field, public mixed $value)
     {
     }
 

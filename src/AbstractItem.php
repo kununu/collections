@@ -7,7 +7,7 @@ abstract class AbstractItem extends AbstractBasicItem
 {
     use AbstractItemBuildersTrait;
 
-    public const DATE_FORMAT = 'Y-m-d H:i:s';
+    public const string DATE_FORMAT = 'Y-m-d H:i:s';
 
     public static function build(array $data): self|static
     {

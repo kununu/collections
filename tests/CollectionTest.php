@@ -207,6 +207,21 @@ final class CollectionTest extends TestCase
         ];
     }
 
+    public function testClear(): void
+    {
+        $collection = DTOCollectionStub::fromIterable([
+            new DTOStub('key 1', 100),
+            new DTOStub('key 2', 101),
+            new DTOStub('key 3', 102),
+        ]);
+
+        self::assertFalse($collection->empty());
+
+        $collection->clear();
+
+        self::assertTrue($collection->empty());
+    }
+
     public function testEmpty(): void
     {
         $collection = new CollectionStub();

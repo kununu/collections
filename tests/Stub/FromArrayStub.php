@@ -5,9 +5,9 @@ namespace Kununu\Collection\Tests\Stub;
 
 use Kununu\Collection\Convertible\FromArray;
 
-final class FromArrayStub implements FromArray
+final readonly class FromArrayStub implements FromArray
 {
-    public function __construct(public readonly int $id, public readonly string $name)
+    public function __construct(public int $id, public string $name)
     {
     }
 

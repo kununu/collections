@@ -12,9 +12,9 @@ use Kununu\Collection\AbstractItem;
  */
 final class AbstractItemWithFromArrayStub extends AbstractItem
 {
-    protected const GETTER_PREFIX = '';
+    protected const string GETTER_PREFIX = '';
 
-    protected const PROPERTIES = [
+    protected const array PROPERTIES = [
         'fromArray',
         'notFromArray',
         'defaultFromArray',

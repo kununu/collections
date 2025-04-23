@@ -4,48 +4,48 @@ declare(strict_types=1);
 namespace Kununu\Collection\Tests\Filter;
 
 use Kununu\Collection\Filter\FilterOperator;
-use Kununu\Collection\Filter\FilterOperatorAnd;
+use Kununu\Collection\Filter\FilterOperatorXor;
 
-final class FilterOperatorAndTest extends AbstractFilterOperatorTestCase
+final class FilterOperatorXorTest extends AbstractFilterOperatorTestCase
 {
     public static function operatorDataProvider(): array
     {
         return [
-            'false_and_false' => [
+            'false_xor_false' => [
                 false,
                 false,
                 false,
             ],
-            'false_and_true' => [
+            'false_xor_true'  => [
                 false,
                 true,
-                false,
+                true,
             ],
-            'true_and_false' => [
+            'true_xor_false'  => [
                 true,
                 false,
-                false,
+                true,
             ],
-            'true_and_true' => [
+            'true_xor_true'   => [
                 true,
                 true,
-                true,
+                false,
             ],
         ];
     }
 
     protected function getFilterOperator(): FilterOperator
     {
-        return new FilterOperatorAnd();
+        return new FilterOperatorXor();
     }
 
     protected function getExpectedInitialValue(): bool
     {
-        return true;
+        return false;
     }
 
     protected function getExpectedExitConditionValue(): bool
     {
-        return false;
+        return true;
     }
 }

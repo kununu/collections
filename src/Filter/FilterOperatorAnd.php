@@ -3,20 +3,10 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\Filter;
 
-final class FilterOperatorAnd implements FilterOperator
+final readonly class FilterOperatorAnd extends AbstractFilterOperator
 {
-    public function calculate(bool $operand1, bool $operand2): bool
+    public function __construct()
     {
-        return $operand1 && $operand2;
-    }
-
-    public function initialValue(): bool
-    {
-        return true;
-    }
-
-    public function exitConditionValue(): bool
-    {
-        return false;
+        parent::__construct(static fn(bool $a, bool $b): bool => $a && $b, true, false);
     }
 }
