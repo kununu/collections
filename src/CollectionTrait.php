@@ -42,9 +42,20 @@ trait CollectionTrait
         }
 
         return array_map(
-            static fn(array $chunk) => self::fromIterable($chunk),
+            static fn(array $chunk): self|static => self::fromIterable($chunk),
             array_chunk($this->getArrayCopy(), $size)
         );
+    }
+
+    public function clear(): self|static
+    {
+        $this->rewind();
+
+        foreach ($this->keys() as $key) {
+            $this->offsetUnset($key);
+        }
+
+        return $this;
     }
 
     public function diff(Collection $other): self|static
