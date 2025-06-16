@@ -103,3 +103,7 @@ $mapper = new MyMapper(AnotheCollection::class);
 // Will throw exception because mapper could not create a `MapperCallers` instance
 // for this collection class
 ```
+
+---
+
+[Back to Index](../README.md)
