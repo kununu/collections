@@ -219,3 +219,7 @@ The result should be returned as an array with the following structure:
      ...
 ]
 ```
+
+---
+
+[Back to Index](../README.md)

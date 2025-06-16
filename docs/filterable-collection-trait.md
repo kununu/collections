@@ -145,3 +145,7 @@ $groupByResults = $collection->groupBy(
    )
 );
 ```
+
+---
+
+[Back to Index](../README.md)

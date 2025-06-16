@@ -51,6 +51,7 @@ More details:
 - [Auto Sortable OffsetSet Trait](docs/autosortable-offsetset-trait.md)
 - [Convertible](docs/convertible.md)
 - [Abstract Collections](docs/abstract-collections.md)
+- [Key Value](docs/key-value.md)
 - [Abstract Item](docs/abstract-item.md)
 - [Mapper](docs/mapper.md)
 

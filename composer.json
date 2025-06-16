@@ -18,7 +18,7 @@
   },
   "require-dev": {
     "kununu/scripts": ">=6.0",
-    "phpunit/phpunit": "^11.5"
+    "phpunit/phpunit": "^12.2"
   },
   "autoload": {
     "psr-4": {

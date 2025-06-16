@@ -78,3 +78,7 @@ interface ToString
     public function toString(): string;
 }
 ```
+
+---
+
+[Back to Index](../README.md)

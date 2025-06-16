@@ -412,3 +412,7 @@ If `$useSnakeCase` is `true` each field in `$fields` will be converted to snake 
 This class provide an abstract "item" that implements the `ToArray` interface.
 
 If the members of your class properly implement the `ToArray`, `ToInt` and `ToString` interfaces, this method will then recursively convert each field to a basic PHP representation.
+
+---
+
+[Back to Index](../README.md)
