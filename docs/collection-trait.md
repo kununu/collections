@@ -168,3 +168,7 @@ Then it will create and return a new instance of the collection (with `toIterabl
 ## values
 
 Internally, this method is calling the PHP [array_values](https://www.php.net/manual/en/function.array-values.php) of the array held in the `ArrayIterator` (via the `ArrayIterator::getArrayCopy` method)
+
+---
+
+[Back to Index](../README.md)

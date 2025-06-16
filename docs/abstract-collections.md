@@ -60,3 +60,7 @@ $filtered = $collection->filter($filter);
 $groups = $collection->groupBy(true, $group1Filter, $group2Filter);
 ```
 The docblocks are advisable to help your IDE recognize the proper collection items types.
+
+---
+
+[Back to Index](../README.md)
