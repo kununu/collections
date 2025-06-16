@@ -37,3 +37,7 @@ $collection->append(7);
 
 var_export($collection->toArray()); // Will dump [1, 3, 7, 10]
 ```
+
+---
+
+[Back to Index](../README.md)
