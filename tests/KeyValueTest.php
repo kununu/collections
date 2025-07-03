@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
 
 final class KeyValueTest extends TestCase
 {
-    private const array VALUES = [
+    private const VALUES = [
         'name'  => 'My Name',
         'age'   => 23,
         'score' => 4.2,
     ];
 
-    private const array ITERABLE_DATA = [
+    private const ITERABLE_DATA = [
         'Hello',
         2    => 'World',
         'id' => 5000,

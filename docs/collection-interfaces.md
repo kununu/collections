@@ -122,6 +122,14 @@ This method will tell you if your collection contains the given value.
  
 - `$strict` parameter allows you to use strict comparison (e.g. if your implementation uses PHP `in_array`).
 
+### hasMultipleItems
+
+```php
+public function hasMultipleItems(): bool;
+```
+
+This method will tell you if your collection has more than one element.
+ 
 ### keys
 
 ```php

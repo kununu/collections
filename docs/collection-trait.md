@@ -131,13 +131,17 @@ Internally, this method calls the [chunk](#chunk) method and then executes the p
 
 ## empty
 
-Internally is checking if the `ArrayIterator::count` returns 0
+Internally is checking if the `ArrayIterator::count` returns 0.
 
 ## has
 
 Internally, this method is calling the PHP [in_array](https://www.php.net/manual/en/function.in-array.php) to check if the element is in the array representation of the collection (obtained via `toArray` method).
 
 Please note that since it's using `in_array` it can produce unexpected results when using loose checking.
+
+### hasMultipleItems
+
+Internally is checking if the `ArrayIterator::count` returns a number greater than 1.
 
 ## keys
 
