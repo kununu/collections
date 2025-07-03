@@ -27,6 +27,8 @@ interface Collection extends FromIterable, ToArray
 
     public function has(mixed $value, bool $strict = true): bool;
 
+    public function hasMultipleItems(): bool;
+
     public function keys(): array;
 
     public function map(callable $function, bool $rewind = true): array;

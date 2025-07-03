@@ -4,13 +4,11 @@ declare(strict_types=1);
 namespace Kununu\Collection;
 
 use InvalidArgumentException;
-use Kununu\Collection\Convertible\ToArray;
-use Kununu\Collection\Convertible\ToInt;
-use Kununu\Collection\Convertible\ToString;
-use Stringable;
 
 trait CollectionTrait
 {
+    use MapArrayItemsTrait;
+
     public static function fromIterable(iterable $data): self|static
     {
         $result = new static();
@@ -27,7 +25,7 @@ trait CollectionTrait
         return $this->mapToArray();
     }
 
-    public function add($value): self|static
+    public function add(mixed $value): self|static
     {
         $this->append($value);
 
@@ -119,12 +117,17 @@ trait CollectionTrait
 
     public function empty(): bool
     {
-        return 0 === $this->count();
+        return $this->count() === 0;
     }
 
     public function has(mixed $value, bool $strict = true): bool
     {
         return in_array($value, $this->toArray(), $strict);
+    }
+
+    public function hasMultipleItems(): bool
+    {
+        return $this->count() > 1;
     }
 
     public function keys(): array
@@ -180,15 +183,6 @@ trait CollectionTrait
 
     protected function mapToArray(bool $withKeys = true): array
     {
-        return array_map(
-            static fn(mixed $element): mixed => match (true) {
-                $element instanceof ToArray    => $element->toArray(),
-                $element instanceof ToString   => $element->toString(),
-                $element instanceof ToInt      => $element->toInt(),
-                $element instanceof Stringable => (string) $element,
-                default                        => $element,
-            },
-            $withKeys ? $this->getArrayCopy() : $this->values()
-        );
+        return $this->mapArrayItems($withKeys ? $this->getArrayCopy() : $this->values());
     }
 }
