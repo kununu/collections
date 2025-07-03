@@ -222,15 +222,22 @@ final class CollectionTest extends TestCase
         self::assertTrue($collection->empty());
     }
 
-    public function testEmpty(): void
+    public function testEmptyAndHasMultipleItems(): void
     {
         $collection = new CollectionStub();
 
         self::assertTrue($collection->empty());
+        self::assertFalse($collection->hasMultipleItems());
 
         $collection->add(1);
 
         self::assertFalse($collection->empty());
+        self::assertFalse($collection->hasMultipleItems());
+
+        $collection->add(2);
+
+        self::assertFalse($collection->empty());
+        self::assertTrue($collection->hasMultipleItems());
     }
 
     public function testUnique(): void
