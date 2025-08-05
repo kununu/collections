@@ -81,11 +81,13 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
           dependency-versions: ${{ matrix.dependencies }}
-          composer-options: "--prefer-stable"
+          composer-options: "--prefer-stable --optimize-autoloader --no-progress --no-interaction"
 
       - name: Run PHPUnit
         run: |
-          vendor/bin/phpunit --colors=always \
+          vendor/bin/phpunit \          
+            --colors=always \
+            --testdox \
             --log-junit tests/.results/tests-junit.xml \
             --coverage-clover tests/.results/tests-clover.xml
 
