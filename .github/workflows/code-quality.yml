@@ -27,25 +27,10 @@ jobs:
           coverage: none
           tools: composer-dependency-analyser, composer-normalize, composer-require-checker, php-cs-fixer, phpstan, rector
 
-      - name: Cache Composer dependencies
-        id: cache-composer-dependencies
-        uses: actions/cache@v4
+      - name: Install Composer Dependencies
+        uses: ramsey/composer-install@v3
         with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-composer-${{ github.repository_id }}-${{ github.event.number }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
-
-      - name: Add git exclusions if restoring from cache
-        if: ${{ steps.cache-composer-dependencies.outputs.cache-hit == 'true' }}
-        continue-on-error: true
-        run: git config --global --add safe.directory '*'
-
-      - name: Install composer dependencies
-        uses: php-actions/composer@v6
-        with:
-          php_version: 8.3
-          php_extensions: mbstring
-          version: 2
-          args: --optimize-autoloader --no-progress --no-interaction 
+          composer-options: "--prefer-stable"
 
       - name: Run Composer Dependency Analyser
         run: composer-dependency-analyser
