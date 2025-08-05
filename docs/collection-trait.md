@@ -99,6 +99,10 @@ Internally it is calling the `ArrayIterator::append` and returning the instance 
 
 Internally it is calling the `keys` method and for each key it is call the `ArrayIterator::offsetUnset`  and returning the instance to allow fluent calls.
 
+## count
+
+Internally it is calling the `ArrayIterator::count` method.
+
 ## chunk
 
 Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.

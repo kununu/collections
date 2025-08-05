@@ -11,6 +11,7 @@ abstract class AbstractItem extends AbstractBasicItem
 
     public static function build(array $data): self|static
     {
+        // @phpstan-ignore new.static
         $instance = new static();
 
         foreach (static::getBuilders() as $field => $builderCallable) {

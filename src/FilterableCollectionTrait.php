@@ -12,6 +12,7 @@ trait FilterableCollectionTrait
 
     public function filter(CollectionFilter $filter): self|static
     {
+        // @phpstan-ignore new.static
         $filteredResult = new static();
         foreach ($this as $item) {
             if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {

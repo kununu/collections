@@ -222,6 +222,21 @@ final class CollectionTest extends TestCase
         self::assertTrue($collection->empty());
     }
 
+    public function testCount(): void
+    {
+        $collection = DTOCollectionStub::fromIterable([
+            new DTOStub('key 1', 100),
+            new DTOStub('key 2', 101),
+            new DTOStub('key 3', 102),
+        ]);
+
+        self::assertEquals(3, $collection->count());
+
+        $collection = new DTOCollectionStub();
+
+        self::assertEquals(0, $collection->count());
+    }
+
     public function testEmptyAndHasMultipleItems(): void
     {
         $collection = new CollectionStub();

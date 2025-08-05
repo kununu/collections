@@ -51,7 +51,7 @@ trait GenericBuildersTrait
 
     private static function camelToSnake(string $string): string
     {
-        return mb_strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
+        return mb_strtolower((string) preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
     }
 
     private static function invoke(string $class, string $method, mixed $value): mixed
