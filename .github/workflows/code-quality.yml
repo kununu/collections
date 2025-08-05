@@ -45,7 +45,7 @@ jobs:
           php_version: 8.3
           php_extensions: mbstring
           version: 2
-          args: --optimize-autoloader --no-progress --no-interaction --prefer-stable
+          args: --optimize-autoloader --no-progress --no-interaction 
 
       - name: Run Composer Dependency Analyser
         run: composer-dependency-analyser
