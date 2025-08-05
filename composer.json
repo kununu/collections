@@ -1,9 +1,8 @@
 {
   "name": "kununu/collections",
   "description": "To reduce boilerplate associated with collections",
-  "type": "library",
   "license": "MIT",
-  "minimum-stability": "stable",
+  "type": "library",
   "keywords": [
     "collections"
   ],
@@ -14,12 +13,18 @@
     }
   ],
   "require": {
-    "php": ">=8.3"
+    "php": ">=8.3",
+    "ext-mbstring": "*"
   },
   "require-dev": {
-    "kununu/scripts": ">=6.0",
-    "phpunit/phpunit": "^12.2"
+    "kununu/scripts": ">=6.1",
+    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan-phpunit": "^2.0",
+    "phpunit/phpunit": "^12.3",
+    "rector/rector": "^2.1",
+    "shipmonk/composer-dependency-analyser": "^1.8"
   },
+  "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
       "Kununu\\Collection\\": "src/"
@@ -30,18 +35,24 @@
       "Kununu\\Collection\\Tests\\": "tests/"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "kununu/scripts": true
+    },
+    "sort-packages": true
+  },
   "scripts": {
+    "cs": "composer kununu:cs-fixer-code src/ tests/",
+    "phpstan": "phpstan",
+    "rector": "rector process --dry-run --config rector-ci.php src/ tests/",
     "test": "phpunit --log-events-text phpunit.log --no-coverage --no-logging --no-progress --testsuite Full",
     "test-coverage": "XDEBUG_MODE=coverage phpunit --log-events-text phpunit.log --no-progress --testsuite Full"
   },
   "scripts-descriptions": {
+    "cs": "Run PHP CS Fixer with kununu code standards",
+    "phpstan": "Run PHPStan",
+    "rector": "Run Rector in dry-run mode with CI rules",
     "test": "Run all tests",
     "test-coverage": "Run all tests with coverage report"
-  },
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "kununu/scripts": true
-    }
   }
 }

@@ -11,6 +11,7 @@ trait CollectionTrait
 
     public static function fromIterable(iterable $data): self|static
     {
+        // @phpstan-ignore new.static
         $result = new static();
 
         foreach ($data as $item) {
@@ -77,31 +78,37 @@ trait CollectionTrait
 
     public function duplicates(bool $strict = true, bool $uniques = false): self|static
     {
-        $elements = new static();
-        $duplicates = new static();
+        return $this->doWithRewind(
+            function(Collection $elements, Collection $duplicates, bool $strict, bool $uniques): Collection {
+                foreach ($this as $element) {
+                    match ($elements->has($element, $strict)) {
+                        true  => $duplicates->add($element),
+                        false => $elements->add($element),
+                    };
+                }
 
-        foreach ($this as $element) {
-            match ($elements->has($element, $strict)) {
-                true  => $duplicates->add($element),
-                false => $elements->add($element),
-            };
-        }
-        $this->rewind();
-
-        return $uniques ? $duplicates->unique() : $duplicates;
+                return $uniques ? $duplicates->unique() : $duplicates;
+            },
+            true,
+            // @phpstan-ignore new.static
+            new static(),
+            // @phpstan-ignore new.static
+            new static(),
+            $strict,
+            $uniques
+        );
     }
 
     public function each(callable $function, bool $rewind = true): self|static
     {
-        try {
-            foreach ($this as $element) {
-                $function($element, $this->key());
-            }
-        } finally {
-            if ($rewind) {
-                $this->rewind();
-            }
-        }
+        $this->doWithRewind(
+            function() use ($function): void {
+                foreach ($this as $element) {
+                    $function($element, $this->key());
+                }
+            },
+            $rewind
+        );
 
         return $this;
     }
@@ -137,33 +144,32 @@ trait CollectionTrait
 
     public function map(callable $function, bool $rewind = true): array
     {
-        $map = [];
-        try {
-            foreach ($this as $element) {
-                $map[] = $function($element, $this->key());
-            }
-        } finally {
-            if ($rewind) {
-                $this->rewind();
-            }
-        }
+        return $this->doWithRewind(
+            function(array $map) use ($function): array {
+                foreach ($this as $element) {
+                    $map[] = $function($element, $this->key());
+                }
 
-        return $map;
+                return $map;
+            },
+            $rewind,
+            []
+        );
     }
 
     public function reduce(callable $function, mixed $initial = null, bool $rewind = true): mixed
     {
-        try {
-            foreach ($this as $element) {
-                $initial = $function($initial, $element, $this->key());
-            }
-        } finally {
-            if ($rewind) {
-                $this->rewind();
-            }
-        }
+        return $this->doWithRewind(
+            function(mixed $initial) use ($function): mixed {
+                foreach ($this as $element) {
+                    $initial = $function($initial, $element, $this->key());
+                }
 
-        return $initial;
+                return $initial;
+            },
+            $rewind,
+            $initial
+        );
     }
 
     public function reverse(): self|static
@@ -184,5 +190,16 @@ trait CollectionTrait
     protected function mapToArray(bool $withKeys = true): array
     {
         return $this->mapArrayItems($withKeys ? $this->getArrayCopy() : $this->values());
+    }
+
+    protected function doWithRewind(callable $fn, bool $rewind, mixed ...$arguments): mixed
+    {
+        try {
+            return $fn(...$arguments);
+        } finally {
+            if ($rewind) {
+                $this->rewind();
+            }
+        }
     }
 }

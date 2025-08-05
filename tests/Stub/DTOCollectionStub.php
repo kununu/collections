@@ -5,7 +5,19 @@ namespace Kununu\Collection\Tests\Stub;
 
 use InvalidArgumentException;
 use Kununu\Collection\AbstractCollection;
+use Kununu\Collection\Collection;
 
+/**
+ * @method static self fromIterable(iterable $data)
+ * @method        self add(mixed $value)
+ * @method        self clear()
+ * @method        int  count()
+ * @method        self diff(Collection $other)
+ * @method        self duplicates(bool $strict = true, bool $uniques = false)
+ * @method        self each(callable $function, bool $rewind = true)
+ * @method        self reverse()
+ * @method        self unique()
+ */
 final class DTOCollectionStub extends AbstractCollection
 {
     private const string INVALID = 'Can only append array or %s';
@@ -26,7 +38,7 @@ final class DTOCollectionStub extends AbstractCollection
         return $current;
     }
 
-    public function append($value): void
+    public function append(mixed $value): void
     {
         match (true) {
             is_array($value)          => $this->append(DTOStub::fromArray($value)),

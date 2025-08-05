@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Kununu\Collection;
 
+use Countable;
 use Kununu\Collection\Convertible\FromIterable;
 use Kununu\Collection\Convertible\ToArray;
 
-interface Collection extends FromIterable, ToArray
+interface Collection extends FromIterable, ToArray, Countable
 {
     public function add(mixed $value): self|static;
 

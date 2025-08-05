@@ -54,6 +54,7 @@ More details:
 - [Key Value](docs/key-value.md)
 - [Abstract Item](docs/abstract-item.md)
 - [Mapper](docs/mapper.md)
+- [Collections Test Case](docs/abstract-collection-test-case.md)
 
 ## Contribute
 
