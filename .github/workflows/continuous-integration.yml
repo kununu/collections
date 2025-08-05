@@ -30,7 +30,8 @@ jobs:
       - name: Install Composer Dependencies
         uses: ramsey/composer-install@v3
         with:
-          composer-options: "--prefer-stable"
+          dependency-versions: "highest"
+          composer-options: "--prefer-stable --optimize-autoloader --no-progress --no-interaction"
 
       - name: Run Composer Dependency Analyser
         run: composer-dependency-analyser
