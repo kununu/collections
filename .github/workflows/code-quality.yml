@@ -25,7 +25,7 @@ jobs:
           php-version: 8.3
           extensions: mbstring
           coverage: none
-          tools: composer-dependency-analyser, composer-normalize, composer-require-checker, php-cs-fixer, phpstan, rector
+          tools: composer-dependency-analyser, composer-normalize, composer-require-checker
 
       - name: Install Composer Dependencies
         uses: ramsey/composer-install@v3
@@ -42,10 +42,10 @@ jobs:
         run: composer-normalize --dry-run --indent-size 2 --indent-style space --no-check-lock --no-update-lock
 
       - name: Run PHP CS Fixer
-        run: php-cs-fixer check --using-cache=no --config ./vendor/kununu/scripts/src/PHP/CodeStandards/Scripts/php_cs src/ tests/
+        run: ./vendor/bin/php-cs-fixer check --using-cache=no --config ./vendor/kununu/scripts/src/PHP/CodeStandards/Scripts/php_cs src/ tests/
 
       - name: Run Rector
-        run: rector process --ansi --dry-run --config rector-ci.php src/ tests/
+        run: ./vendor/bin/rector process --ansi --dry-run --config rector-ci.php src/ tests/
 
       - name: Run PHPStan
-        run: phpstan analyse --ansi
+        run: ./vendor/bin/phpstan analyse --ansi
