@@ -21,4 +21,12 @@ use Kununu\Collection\Filter\CollectionFilter;
  */
 final class FilterableCollectionStub extends AbstractFilterableCollection
 {
+    public function __construct(FilterItemStub ...$filterItemStubs)
+    {
+        parent::__construct();
+
+        foreach ($filterItemStubs as $filterItemStub) {
+            $this->append($filterItemStub);
+        }
+    }
 }

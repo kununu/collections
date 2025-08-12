@@ -12,15 +12,41 @@ trait FilterableCollectionTrait
 
     public function filter(CollectionFilter $filter): self|static
     {
-        // @phpstan-ignore new.static
-        $filteredResult = new static();
-        foreach ($this as $item) {
-            if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
-                $filteredResult->add($item);
-            }
-        }
+        return $this->doWithRewind(
+            function(CollectionFilter $filter): self|static {
+                // @phpstan-ignore new.static
+                $filteredResult = new static();
+                foreach ($this as $item) {
+                    if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
+                        $filteredResult->add($item);
+                    }
+                }
 
-        return $filteredResult;
+                return $filteredResult;
+            },
+            true,
+            $filter
+        );
+    }
+
+    public function filterWith(callable $function, bool $rewind = true): self|static
+    {
+        return $this->doWithRewind(
+            function(callable $function): self|static {
+                // @phpstan-ignore new.static
+                $filteredResult = new static();
+                foreach ($this as $element) {
+                    $value = $function($element, $this->key());
+                    if (null !== $value) {
+                        $filteredResult->add($value);
+                    }
+                }
+
+                return $filteredResult;
+            },
+            $rewind,
+            $function
+        );
     }
 
     /**
@@ -43,19 +69,26 @@ trait FilterableCollectionTrait
      */
     public function groupBy(bool $removeEmptyGroups, CollectionFilter ...$filters): array
     {
-        $groups = [];
-        foreach ($filters as $filter) {
-            $groups[$filter->key()] = [];
-        }
-
-        foreach ($this as $item) {
-            foreach ($filters as $filter) {
-                if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
-                    $groups[$filter->key()][$item->groupByKey($filter->customGroupByData())] = $item;
+        return $this->doWithRewind(
+            function(bool $removeEmptyGroups, CollectionFilter ...$filters): array {
+                $groups = [];
+                foreach ($filters as $filter) {
+                    $groups[$filter->key()] = [];
                 }
-            }
-        }
 
-        return $removeEmptyGroups ? array_filter($groups) : $groups;
+                foreach ($this as $item) {
+                    foreach ($filters as $filter) {
+                        if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
+                            $groups[$filter->key()][$item->groupByKey($filter->customGroupByData())] = $item;
+                        }
+                    }
+                }
+
+                return $removeEmptyGroups ? array_filter($groups) : $groups;
+            },
+            true,
+            $removeEmptyGroups,
+            ...$filters
+        );
     }
 }

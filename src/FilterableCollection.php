@@ -9,5 +9,7 @@ interface FilterableCollection extends Collection
 {
     public function filter(CollectionFilter $filter): self|static;
 
+    public function filterWith(callable $function, bool $rewind = true): self|static;
+
     public function groupBy(bool $removeEmptyGroups, CollectionFilter ...$filters): array;
 }

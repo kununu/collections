@@ -206,6 +206,24 @@ public function filter(CollectionFilter $filter): self|static
 
 This will accept a `CollectionFilter` instance (with the definitions of the filter being applied to the collection), and returns a new collection with only the elements that have met the criteria defined in `$filter`.
 
+### filterWith
+
+This will filter a collection via an anonymous function. It's an easy way to filter collections without the need to define `CollectionFilter` instances, and it's more suited for simple filtering scenarios.
+
+That function should return a non-null value if the item is to be considered as a valid element or `null` if it should not be included in the result.
+
+If the value is not null it will be added to the result collection.
+
+```php
+public function filterWith(callable $function, bool $rewind = true): self|static
+```
+
+Callable signature:
+
+```php
+function(mixed $element, string|float|int|bool|null $elementKey): mixed;
+```
+
 ### groupBy
 
 ```php

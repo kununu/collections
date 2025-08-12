@@ -54,6 +54,35 @@ final class FilterableCollectionTest extends TestCase
         self::assertEmpty($collection->filter($filter));
     }
 
+    public function testFilterWith(): void
+    {
+        $collection = (new FilterableCollectionStub())
+            ->add(new FilterItemStub('a'))
+            ->add(new FilterItemStub('aa'))
+            ->add(new FilterItemStub('aa'))
+            ->add(new FilterItemStub('b'))
+            ->add(new FilterItemStub('c'));
+
+        $filter1 = static fn(FilterItemStub $stub): ?FilterItemStub => str_starts_with($stub->itemKey, 'a')
+            ? $stub
+            : null;
+
+        $filter2 = static fn(FilterItemStub $stub): ?FilterItemStub => str_starts_with($stub->itemKey, 'z')
+            ? $stub
+            : null;
+
+        self::assertEquals(
+            new FilterableCollectionStub(
+                new FilterItemStub('a'),
+                new FilterItemStub('aa'),
+                new FilterItemStub('aa')
+            ),
+            $collection->filterWith($filter1)
+        );
+
+        self::assertEmpty($collection->filterWith($filter2));
+    }
+
     public function testGroupBy(): void
     {
         $filter1 = new class extends BaseFilter {
