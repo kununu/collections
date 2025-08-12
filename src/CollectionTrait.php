@@ -160,7 +160,7 @@ trait CollectionTrait
     public function reduce(callable $function, mixed $initial = null, bool $rewind = true): mixed
     {
         return $this->doWithRewind(
-            function(mixed $initial) use ($function): mixed {
+            function(mixed $initial, callable $function): mixed {
                 foreach ($this as $element) {
                     $initial = $function($initial, $element, $this->key());
                 }
@@ -168,7 +168,8 @@ trait CollectionTrait
                 return $initial;
             },
             $rewind,
-            $initial
+            $initial,
+            $function
         );
     }
 

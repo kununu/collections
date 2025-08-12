@@ -7,7 +7,7 @@ use Kununu\Collection\Filter\FilterItem;
 
 final readonly class FilterItemStub implements FilterItem
 {
-    public function __construct(private string $itemKey, private ?string $extra = null)
+    public function __construct(public string $itemKey, private ?string $extra = null)
     {
     }
 

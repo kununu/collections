@@ -10,6 +10,12 @@ Internally, this method will create a new empty collection and then iterate thro
 
 If each element is an implementation of `FilterItem` and that item matches the criteria of the `CollectionFilter` (by calling the `isSatisfiedBy` method) the item will be added to the result collection.  
 
+## filterWith
+
+Internally, this method will create a new empty collection and then iterate through your collection:
+
+If the callable for each element returns a non-null value it will be added to the result collection, otherwise it will be skipped. 
+
 ## groupBy
 
 Internally, this method will create an array and initialize the groups, where each group will have as the key the value returned by the `key` of each filter passed.
