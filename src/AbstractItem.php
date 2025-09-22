@@ -29,6 +29,8 @@ abstract class AbstractItem extends AbstractBasicItem
      * [
      *  'itemProperty' => fn(array $data): mixed => $valueForTheProperty
      * ]
+     *
+     * @return array<string, callable>
      */
     abstract protected static function getBuilders(): array;
 }
