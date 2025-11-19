@@ -66,7 +66,7 @@ trait CollectionTrait
         return static::fromIterable(
             array_values(
                 array_map(
-                    'unserialize',
+                    unserialize(...),
                     array_diff(
                         array_map(serialize(...), $this->toArray()),
                         array_map(serialize(...), $other->toArray())
