@@ -14,7 +14,8 @@ abstract class AbstractItemToArray extends AbstractItem implements ToArray
         return array_combine(
             $properties = $this->getAllProperties(),
             $this->mapArrayItems(
-                array_map(fn(string $property): mixed => $this->getAttribute($property),
+                array_map(
+                    $this->getAttribute(...),
                     $properties
                 )
             )

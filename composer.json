@@ -17,7 +17,7 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "kununu/scripts": ">=6.1",
+    "kununu/code-tools": "^3.1",
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpunit/phpunit": "^12.3",
@@ -37,12 +37,12 @@
   },
   "config": {
     "allow-plugins": {
-      "kununu/scripts": true
+      "kununu/code-tools": true
     },
     "sort-packages": true
   },
   "scripts": {
-    "cs": "composer kununu:cs-fixer-code src/ tests/",
+    "cs": "composer kununu:cs-fixer src/ tests/",
     "phpstan": "phpstan",
     "rector": "rector process --dry-run --config rector-ci.php src/ tests/",
     "test": "phpunit --log-events-text phpunit.log --no-coverage --no-logging --no-progress --testsuite Full",

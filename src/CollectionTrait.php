@@ -41,7 +41,7 @@ trait CollectionTrait
         }
 
         return array_map(
-            static fn(array $chunk): self|static => self::fromIterable($chunk),
+            self::fromIterable(...),
             array_chunk($this->getArrayCopy(), $size)
         );
     }
@@ -66,10 +66,10 @@ trait CollectionTrait
         return static::fromIterable(
             array_values(
                 array_map(
-                    'unserialize',
+                    unserialize(...),
                     array_diff(
-                        array_map('serialize', $this->toArray()),
-                        array_map('serialize', $other->toArray())
+                        array_map(serialize(...), $this->toArray()),
+                        array_map(serialize(...), $other->toArray())
                     )
                 )
             )
