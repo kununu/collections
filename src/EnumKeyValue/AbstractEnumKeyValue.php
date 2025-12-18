@@ -27,10 +27,6 @@ abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, Fro
 
     private array $values = [];
 
-    public function __construct()
-    {
-    }
-
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self|static
     {
