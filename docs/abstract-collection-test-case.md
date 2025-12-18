@@ -20,12 +20,32 @@ Override the following constant to the expected count of your populated collecti
 protected const int EXPECTED_COUNT = 0;
 ```
 
-- The class of the item return by the `current` method
+This value should be greater than zero in your test class, otherwise the test will fail.
+
+- Assertions about the item returned by the `current` method  
+
+Override the following constant to false if your collection is not holding objects but **scalar** values:
+
+```php
+protected const bool EXPECTED_ITEM_IS_OBJECT = true;
+```
+
+- If the class of the item is an object then: 
 
 Override the following constant to the expected class of items of the collection:
 
 ```php
 protected const string EXPECTED_ITEM_CLASS = '';
+```
+- 
+- If the item is a scalar then: 
+
+It will test that the item is scalar.
+
+If you want to do additional assertions (e.g. check that it is an integer) then you can override the following method:
+
+```php
+protected function doExtraAssertionForScalarCurrent(mixed $current): void
 ```
 
 - (Optional) The value return by the `toArray` method
@@ -97,7 +117,7 @@ This test also uses the collection created with the `createEmptyCollection` meth
 
 ## Example
 
-Take a look at [this](../tests/TestCase/AbstractCollectionTestCaseTest.php) test to see an example of using the test case. 
+Take a look at [this](../tests/TestCase/AbstractCollectionTestCaseObjectCollectionTest.php) and [this](../tests/TestCase/AbstractCollectionTestCaseScalarCollectionTest.php) tests to see examples of using the test case. 
 
 ---
 

@@ -6,7 +6,7 @@ We accept contributions via Pull Requests on [GitHub](https://github.com/kununu/
 
 ## Pull Requests
 
-- **[kununu Coding Standards](https://github.com/kununu/kununu-scripts)** - The kununu coding standards are an extension of the [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md). Check out [kununu Coding Standards](https://github.com/kununu/kununu-scripts) for more details. In development mode the package [kununu-scripts](https://github.com/kununu/kununu-scripts) is already a dependency that expose commands that you can use to meet our standards.
+- **[kununu Coding Standards](https://github.com/kununu/code-tools)** - The kununu coding standards are an extension of the [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md). Check out [kununu Coding Standards](https://github.com/kununu/code-tools) for more details. In development mode the package [kununu/code-tools](https://github.com/kununu/code-tools) is already a dependency that expose commands that you can use to meet our standards.
 
 - **Add tests!** - to ensure a high quality code base, your code patch can't be accepted if it does not have tests.
 

@@ -4,13 +4,19 @@ declare(strict_types=1);
 namespace Kununu\Collection;
 
 use BadMethodCallException;
+use Kununu\Collection\Helper\FormatOption;
+use Kununu\Collection\Helper\MethodsHelperTrait;
 use OutOfBoundsException;
 
 abstract class AbstractBasicItem
 {
+    use MethodsHelperTrait;
+
     protected const string SETTER_PREFIX = 'set';
     protected const string GETTER_PREFIX = 'get';
     protected const array PROPERTIES = [];
+
+    private const FormatOption FORMAT_OPTION = FormatOption::LowerCaseFirst;
 
     private array $attributes = [];
 
@@ -27,11 +33,11 @@ abstract class AbstractBasicItem
     {
         return match (true) {
             $this->matches($method, static::SETTER_PREFIX) => $this->setAttribute(
-                $this->getAttributeFromMethod($method, static::SETTER_PREFIX),
+                $this->fromMethodName($method, static::SETTER_PREFIX, self::FORMAT_OPTION),
                 current($args)
             ),
             $this->matches($method, static::GETTER_PREFIX) => $this->getAttribute(
-                $this->getAttributeFromMethod($method, static::GETTER_PREFIX)
+                $this->fromMethodName($method, static::GETTER_PREFIX, self::FORMAT_OPTION),
             ),
             default                                        => $this->throwBadMethodCallException($method),
         };
@@ -74,16 +80,6 @@ abstract class AbstractBasicItem
         }
 
         return $properties;
-    }
-
-    private function matches(string $method, string $prefix): bool
-    {
-        return str_starts_with($method, $prefix);
-    }
-
-    private function getAttributeFromMethod(string $method, string $prefix): string
-    {
-        return lcfirst(substr($method, strlen($prefix)));
     }
 
     private function checkAttribute(string $name, callable $fn): mixed

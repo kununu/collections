@@ -52,6 +52,7 @@ More details:
 - [Convertible](docs/convertible.md)
 - [Abstract Collections](docs/abstract-collections.md)
 - [Key Value](docs/key-value.md)
+  - [AbstractEnumKeyValue](docs/abstract-enum-key-value.md)
 - [Abstract Item](docs/abstract-item.md)
 - [Mapper](docs/mapper.md)
 - [Collections Test Case](docs/abstract-collection-test-case.md)

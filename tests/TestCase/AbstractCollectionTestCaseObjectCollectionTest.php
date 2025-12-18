@@ -8,7 +8,7 @@ use Kununu\Collection\TestCase\AbstractCollectionTestCase;
 use Kununu\Collection\Tests\Stub\DTOCollectionStub;
 use Kununu\Collection\Tests\Stub\DTOStub;
 
-final class AbstractCollectionTestCaseTest extends AbstractCollectionTestCase
+final class AbstractCollectionTestCaseObjectCollectionTest extends AbstractCollectionTestCase
 {
     protected const int EXPECTED_COUNT = 3;
     protected const string EXPECTED_ITEM_CLASS = DTOStub::class;

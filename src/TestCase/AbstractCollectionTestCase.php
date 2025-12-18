@@ -11,6 +11,7 @@ abstract class AbstractCollectionTestCase extends TestCase
 {
     protected const int EXPECTED_COUNT = 0;
     protected const string EXPECTED_ITEM_CLASS = '';
+    protected const bool EXPECTED_ITEM_IS_OBJECT = true;
     protected const bool TEST_TO_ARRAY = true;
     protected const mixed INVALID_VALUE = 42;
     protected const string INVALID_EXCEPTION_CLASS = InvalidArgumentException::class;
@@ -20,8 +21,20 @@ abstract class AbstractCollectionTestCase extends TestCase
     {
         $collection = $this->createCollection();
 
+        self::assertGreaterThan(
+            0,
+            static::EXPECTED_COUNT,
+            'Make sure you change the EXPECTED_COUNT constant to a value greater than zero!'
+        );
         self::assertCount(static::EXPECTED_COUNT, $collection);
-        self::assertInstanceOf(static::EXPECTED_ITEM_CLASS, $collection->current());
+
+        if (static::EXPECTED_ITEM_IS_OBJECT) {
+            self::assertInstanceOf(static::EXPECTED_ITEM_CLASS, $collection->current());
+        } else {
+            self::assertIsScalar($collection->current());
+            $this->doExtraAssertionForScalarCurrent($collection->current());
+        }
+
         if (static::TEST_TO_ARRAY) {
             self::assertEquals($this->getExpectedToArray(), $collection->toArray());
         }
@@ -56,6 +69,12 @@ abstract class AbstractCollectionTestCase extends TestCase
     protected function getExpectedToArray(): array
     {
         return [];
+    }
+
+    /** @codeCoverageIgnore */
+    protected function doExtraAssertionForScalarCurrent(mixed $current): void
+    {
+        // Ready to be overridden in your test
     }
 
     /** @codeCoverageIgnore */
