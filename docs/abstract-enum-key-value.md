@@ -77,7 +77,7 @@ final class MyKeyValue extends AbstractEnumKeyValue
 
 If you don't want to use a backed enumeration or don't want to use the `value` of the enumeration then you need to implement a method to create an enumeration value from the case name.
 
-Since PHP didn't provide a way to do this you can use the [EnumKeyFromNameTrait](../src/EnumKeyValue/EnumKeyFromNameTrait.php) 
+Since PHP didn't provide a way to do this you can use the [EnumFromNameTrait](../src/EnumKeyValue/EnumFromNameTrait.php) 
 
 This will allow you to use the **case name** as the string representation of the key.
 
@@ -87,13 +87,13 @@ declare(strict_types=1);
 
 use Kununu\Collection\EnumKeyValue\AbstractEnumKeyValue;
 use Kununu\Collection\EnumKeyValue\EnumKeyInterface;
-use Kununu\Collection\EnumKeyValue\EnumKeyFromNameTrait;
+use Kununu\Collection\EnumKeyValue\EnumFromNameTrait;
 use Kununu\Collection\EnumKeyValue\EnumKeyRequiredTrait;
 use Kununu\Collection\EnumKeyValue\Required;
 
 enum MyKeys: string implements EnumKeyInterface
 {
-    use EnumKeyFromNameTrait;
+    use EnumFromNameTrait;
     use EnumKeyRequiredTrait;
 
     #[Required]
@@ -382,13 +382,13 @@ declare(strict_types=1);
 
 use Kununu\Collection\EnumKeyValue\AbstractEnumKeyValue;
 use Kununu\Collection\EnumKeyValue\EnumKeyInterface;
-use Kununu\Collection\EnumKeyValue\EnumKeyFromNameTrait;
+use Kununu\Collection\EnumKeyValue\EnumFromNameTrait;
 use Kununu\Collection\EnumKeyValue\EnumKeyRequiredTrait;
 use Kununu\Collection\EnumKeyValue\Required;
 
 enum Key implements EnumKeyInterface
 {
-    use EnumKeyFromNameTrait;
+    use EnumFromNameTrait;
     use EnumKeyRequiredTrait;
 
     #[Required]

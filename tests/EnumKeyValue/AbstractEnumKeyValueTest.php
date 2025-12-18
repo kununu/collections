@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Kununu\Collection\Tests\EnumKeyValue;
 
 use BadMethodCallException;
-use InvalidArgumentException;
 use Kununu\Collection\EnumKeyValue\Exception\RemovingRequiredKeyException;
 use Kununu\Collection\EnumKeyValue\Exception\RequiredKeyMissingException;
 use Kununu\Collection\KeyValue;
 use Kununu\Collection\Tests\Stub\EnumKeyValueStub;
 use Kununu\Collection\Tests\Stub\EnumStub;
 use PHPUnit\Framework\TestCase;
+use ValueError;
 
 final class AbstractEnumKeyValueTest extends TestCase
 {
@@ -29,6 +29,7 @@ final class AbstractEnumKeyValueTest extends TestCase
         self::KEY_3 => self::KEY_3_VALUE,
     ];
 
+    private const string INVALID_ENUM_CASE_MESSAGE = '"%s" is not a valid case for enum "%s"';
     private const string KEY_INVALID = 'Invalid';
 
     private string $invalidCaseMessage;
@@ -75,7 +76,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testGetWithInvalidKey(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         $this->keyValue->get(self::KEY_INVALID);
@@ -125,7 +126,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testHasWithInvalidKey(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         $this->keyValue->has(self::KEY_INVALID);
@@ -156,7 +157,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testRemoveWithInvalidValidKey(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         $this->keyValue->remove(self::KEY_INVALID);
@@ -177,7 +178,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testSetWithInvalidValidKey(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         $this->keyValue->set(self::KEY_INVALID, self::KEY_1_VALUE);
@@ -201,7 +202,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testInvalidGetMethod(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         (new EnumKeyValueStub())->getInvalid();
@@ -209,7 +210,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testInvalidHasMethod(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         (new EnumKeyValueStub())->hasInvalid();
@@ -217,7 +218,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     public function testInvalidSetMethod(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         (new EnumKeyValueStub())->setInvalid(self::KEY_3_VALUE);
@@ -233,11 +234,7 @@ final class AbstractEnumKeyValueTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->invalidCaseMessage = sprintf(
-            '"%s" is not a valid case for enum "%s"',
-            self::KEY_INVALID,
-            EnumStub::class
-        );
+        $this->invalidCaseMessage = sprintf(self::INVALID_ENUM_CASE_MESSAGE, self::KEY_INVALID, EnumStub::class);
 
         $this->keyValue = (new EnumKeyValueStub())
             ->setKey1(self::KEY_1_VALUE)
