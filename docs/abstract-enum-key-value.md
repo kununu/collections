@@ -21,6 +21,10 @@ public function required(): bool;
 - The `key` method must return a distinct value for each allowed key.
     - In the case of an enumeration you can simply return the `name` property (or the `value` if you are using a string backed enumeration).
     - Be aware of this as the `key` value will be used for magic methods (described bellow in this document)
+  - If you don't want to rewrite this on every case, the [EnumKeyTrait](../src/EnumKeyValue/EnumKeyTrait.php) implements this method:
+    - For **simple** or **integer backed** enumerations it will return the case **name** as key
+    - For **string backed** enumerations it will return the case **value** as key
+    - If **not a PHP enumeration** it will throw an exception
 
 - The `required` method should return a boolean value that will be used to indicate that this key is mandatory 
     - The `get` method will throw an exception if the key is required, but it's not set in the key value storage (e.g. a required value must exist to be used)
