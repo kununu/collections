@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\Filter;
 
-use Exception;
 use InvalidArgumentException;
 use Kununu\Collection\AbstractCollection;
 use Kununu\Collection\Collection;
@@ -42,7 +41,7 @@ final class CollectionFilters extends AbstractCollection
         return $current;
     }
 
-    /** @throws Exception */
+    /** @throws InvalidArgumentException */
     public function append(mixed $value): void
     {
         match (true) {
