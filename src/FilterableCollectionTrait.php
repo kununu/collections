@@ -4,49 +4,42 @@ declare(strict_types=1);
 namespace Kununu\Collection;
 
 use Kununu\Collection\Filter\CollectionFilter;
-use Kununu\Collection\Filter\FilterItem;
+use Kununu\Collection\Filter\CollectionFilters;
+use Kununu\Collection\Filter\FilterItemTrait;
 
 trait FilterableCollectionTrait
 {
     use CollectionTrait;
+    use FilterItemTrait;
 
     public function filter(CollectionFilter $filter): self|static
     {
-        return $this->doWithRewind(
-            function(CollectionFilter $filter): self|static {
-                // @phpstan-ignore new.static
-                $filteredResult = new static();
-                foreach ($this as $item) {
-                    if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
-                        $filteredResult->add($item);
-                    }
-                }
-
-                return $filteredResult;
-            },
-            true,
-            $filter
+        // @phpstan-ignore new.static
+        $filteredResult = new static();
+        $this->each(
+            static fn(mixed $item) => match (self::filterIsSatisfiedByItem($filter, $item)) {
+                false => null,
+                true  => $filteredResult->add($item),
+            }
         );
+
+        return $filteredResult;
     }
 
     public function filterWith(callable $function, bool $rewind = true): self|static
     {
-        return $this->doWithRewind(
-            function(callable $function): self|static {
-                // @phpstan-ignore new.static
-                $filteredResult = new static();
-                foreach ($this as $element) {
-                    $value = $function($element, $this->key());
-                    if (null !== $value) {
-                        $filteredResult->add($value);
-                    }
+        // @phpstan-ignore new.static
+        $filteredResult = new static();
+        $this->each(
+            static function(mixed $item, int|string|null $key) use ($function, $filteredResult): void {
+                $value = $function($item, $key);
+                if (null !== $value) {
+                    $filteredResult->add($value);
                 }
-
-                return $filteredResult;
-            },
-            $rewind,
-            $function
+            }
         );
+
+        return $filteredResult;
     }
 
     /**
@@ -69,26 +62,6 @@ trait FilterableCollectionTrait
      */
     public function groupBy(bool $removeEmptyGroups, CollectionFilter ...$filters): array
     {
-        return $this->doWithRewind(
-            function(bool $removeEmptyGroups, CollectionFilter ...$filters): array {
-                $groups = [];
-                foreach ($filters as $filter) {
-                    $groups[$filter->key()] = [];
-                }
-
-                foreach ($this as $item) {
-                    foreach ($filters as $filter) {
-                        if ($item instanceof FilterItem && $filter->isSatisfiedBy($item)) {
-                            $groups[$filter->key()][$item->groupByKey($filter->customGroupByData())] = $item;
-                        }
-                    }
-                }
-
-                return $removeEmptyGroups ? array_filter($groups) : $groups;
-            },
-            true,
-            $removeEmptyGroups,
-            ...$filters
-        );
+        return new CollectionFilters(...$filters)->getGroupsForCollection($this, $removeEmptyGroups);
     }
 }

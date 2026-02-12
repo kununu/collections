@@ -14,7 +14,7 @@ trait StringBuildersTrait
     ): callable {
         return self::buildGetterOptionalField(
             $fieldName,
-            fn($value): string => (string) $value,
+            static fn(mixed $value): string => (string) $value,
             $default,
             $useSnakeCase
         );

@@ -592,7 +592,7 @@ final class CollectionTest extends TestCase
 
         try {
             $collection->each(
-                function(int $value) use (&$collectedValues, $expectException, $exception): void {
+                static function(int $value) use (&$collectedValues, $expectException, $exception): void {
                     if ($value === 3 && $expectException) {
                         throw $exception;
                     }
@@ -643,7 +643,7 @@ final class CollectionTest extends TestCase
 
         $collection->eachChunk(
             $chunkSize,
-            function(CollectionStub $collection) use (&$i, $expectedChunks): void {
+            static function(CollectionStub $collection) use (&$i, $expectedChunks): void {
                 self::assertEquals($collection, $expectedChunks[$i++]);
             }
         );
@@ -700,7 +700,7 @@ final class CollectionTest extends TestCase
         $mapResult = null;
         try {
             $mapResult = $collection->map(
-                function(array $value) use ($expectException, $exception): int {
+                static function(array $value) use ($expectException, $exception): int {
                     if ($value['id'] === 3 && $expectException) {
                         throw $exception;
                     }
@@ -756,7 +756,7 @@ final class CollectionTest extends TestCase
         $value = null;
         try {
             $value = $collection->reduce(
-                function(int $carry, int $element) use ($expectException, $exception): int {
+                static function(int $carry, int $element) use ($expectException, $exception): int {
                     if ($element === 3 && $expectException) {
                         throw $exception;
                     }

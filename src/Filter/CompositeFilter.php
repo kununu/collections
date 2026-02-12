@@ -8,8 +8,7 @@ namespace Kununu\Collection\Filter;
  */
 final class CompositeFilter extends BaseFilter
 {
-    /** @var CollectionFilter[] */
-    private readonly array $filters;
+    private readonly CollectionFilters $filters;
 
     public function __construct(
         string $key,
@@ -17,7 +16,7 @@ final class CompositeFilter extends BaseFilter
         CollectionFilter ...$filters,
     ) {
         parent::__construct($key);
-        $this->filters = $filters;
+        $this->filters = new CollectionFilters(...$filters);
     }
 
     public function isSatisfiedBy(FilterItem $item): bool
@@ -25,13 +24,17 @@ final class CompositeFilter extends BaseFilter
         $result = $this->filterOperator->initialValue();
         $exitConditionValue = $this->filterOperator->exitConditionValue();
 
-        foreach ($this->filters as $filter) {
-            $result = $this->filterOperator->calculate($result, $filter->isSatisfiedBy($item));
-            if ($result === $exitConditionValue) {
-                return $exitConditionValue;
+        try {
+            foreach ($this->filters as $filter) {
+                $result = $this->filterOperator->calculate($result, $filter->isSatisfiedBy($item));
+                if ($result === $exitConditionValue) {
+                    return $exitConditionValue;
+                }
             }
-        }
 
-        return $result;
+            return $result;
+        } finally {
+            $this->filters->rewind();
+        }
     }
 }

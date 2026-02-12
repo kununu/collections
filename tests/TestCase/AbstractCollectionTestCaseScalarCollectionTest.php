@@ -17,7 +17,7 @@ final class AbstractCollectionTestCaseScalarCollectionTest extends AbstractColle
 
     protected function createCollection(): ScalarCollectionStub
     {
-        return (new ScalarCollectionStub(3))
+        return new ScalarCollectionStub(3)
             ->add(ToIntStub::fromInt(1))
             ->add(2)
             ->add(ToIntStub::fromInt(1))

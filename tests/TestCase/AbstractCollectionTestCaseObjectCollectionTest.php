@@ -16,7 +16,7 @@ final class AbstractCollectionTestCaseObjectCollectionTest extends AbstractColle
 
     protected function createCollection(): DTOCollectionStub
     {
-        return (new DTOCollectionStub(new DTOStub('field_3', 3000), new DTOStub('field_1', 'value 1')))
+        return new DTOCollectionStub(new DTOStub('field_3', 3000), new DTOStub('field_1', 'value 1'))
             ->add(['field' => 'field_1', 'value' => 1000])
             ->add(new DTOStub('field_2', 2000))
             ->add(new DTOStub('field_2', 2000));

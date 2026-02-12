@@ -7,7 +7,7 @@ use Closure;
 
 abstract readonly class AbstractFilterOperator implements FilterOperator
 {
-    public function __construct(
+    protected function __construct(
         private Closure $calculator,
         private bool $initialValue,
         private bool $exitConditionValue,

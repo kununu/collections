@@ -13,15 +13,15 @@
     }
   ],
   "require": {
-    "php": ">=8.3",
+    "php": ">=8.4",
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "kununu/code-tools": "^3.1",
+    "kununu/code-tools": "^4.0",
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpunit/phpunit": "^12.5",
-    "rector/rector": "^2.2",
+    "rector/rector": "^2.3",
     "shipmonk/composer-dependency-analyser": "^1.8"
   },
   "minimum-stability": "stable",
@@ -45,6 +45,7 @@
     "cs": "composer kununu:cs-fixer src/ tests/",
     "phpstan": "phpstan",
     "rector": "rector process --dry-run --config rector-ci.php src/ tests/",
+    "rector-fix": "rector process --config rector-ci.php src/ tests/",
     "test": "phpunit --log-events-text phpunit.log --no-coverage --no-logging --no-progress --testsuite Full",
     "test-coverage": "XDEBUG_MODE=coverage phpunit --log-events-text phpunit.log --no-progress --testsuite Full"
   },
@@ -52,6 +53,7 @@
     "cs": "Run PHP CS Fixer with kununu code standards",
     "phpstan": "Run PHPStan",
     "rector": "Run Rector in dry-run mode with CI rules",
+    "rector-fix": "Run Rector in fix mode with CI rules",
     "test": "Run all tests",
     "test-coverage": "Run all tests with coverage report"
   }

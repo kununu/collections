@@ -16,7 +16,7 @@ final class FilterableCollectionTest extends TestCase
 {
     public function testFilter(): void
     {
-        $collection = (new FilterableCollectionStub())
+        $collection = new FilterableCollectionStub()
             ->add(1)
             ->add(new FilterItemStub('a'))
             ->add(new FilterItemStub('b'))
@@ -45,7 +45,7 @@ final class FilterableCollectionTest extends TestCase
         self::assertEquals('a', $filteredCollection[0]->groupByKey());
         self::assertEquals('c', $filteredCollection[1]->groupByKey());
 
-        $collection = (new FilterableCollectionStub())
+        $collection = new FilterableCollectionStub()
             ->add(1)
             ->add(new FilterItemStub('b'))
             ->add(new FilterItemStub('d'))
@@ -56,7 +56,7 @@ final class FilterableCollectionTest extends TestCase
 
     public function testFilterWith(): void
     {
-        $collection = (new FilterableCollectionStub())
+        $collection = new FilterableCollectionStub()
             ->add(new FilterItemStub('a'))
             ->add(new FilterItemStub('aa'))
             ->add(new FilterItemStub('aa'))
@@ -138,7 +138,7 @@ final class FilterableCollectionTest extends TestCase
             }
         };
 
-        $collection = (new FilterableCollectionStub())
+        $collection = new FilterableCollectionStub()
             ->add(1)
             ->add(new FilterItemStub('ab'))
             ->add(new FilterItemStub('b'))
