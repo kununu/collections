@@ -205,7 +205,7 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
-        (new EnumKeyValueStub())->getInvalid();
+        new EnumKeyValueStub()->getInvalid();
     }
 
     public function testInvalidHasMethod(): void
@@ -213,7 +213,7 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
-        (new EnumKeyValueStub())->hasInvalid();
+        new EnumKeyValueStub()->hasInvalid();
     }
 
     public function testInvalidSetMethod(): void
@@ -221,7 +221,7 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->expectException(ValueError::class);
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
-        (new EnumKeyValueStub())->setInvalid(self::KEY_3_VALUE);
+        new EnumKeyValueStub()->setInvalid(self::KEY_3_VALUE);
     }
 
     public function testUnknownMethod(): void
@@ -229,18 +229,18 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage(sprintf('%s: Invalid method "invalidMethod" called', EnumKeyValueStub::class));
 
-        (new EnumKeyValueStub())->invalidMethod();
+        new EnumKeyValueStub()->invalidMethod();
     }
 
     protected function setUp(): void
     {
         $this->invalidCaseMessage = sprintf(self::INVALID_ENUM_CASE_MESSAGE, self::KEY_INVALID, EnumStub::class);
 
-        $this->keyValue = (new EnumKeyValueStub())
+        $this->keyValue = new EnumKeyValueStub()
             ->setKey1(self::KEY_1_VALUE)
             ->setKey2(self::KEY_2_VALUE);
 
-        $this->keyValueNoRequired = (new EnumKeyValueStub())
+        $this->keyValueNoRequired = new EnumKeyValueStub()
             ->setKey2(self::KEY_2_VALUE);
     }
 }

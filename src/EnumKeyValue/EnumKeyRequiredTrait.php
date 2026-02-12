@@ -12,8 +12,7 @@ trait EnumKeyRequiredTrait
     {
         $attributes = array_map(
             static fn(ReflectionAttribute $attr): object => $attr->newInstance(),
-            (new ReflectionClassConstant(self::class, $this->name))
-                ->getAttributes(Required::class)
+            new ReflectionClassConstant(self::class, $this->name)->getAttributes(Required::class)
         );
 
         return current($attributes) instanceof Required;

@@ -8,7 +8,7 @@ namespace Kununu\Collection\Filter;
  */
 final class CompositeFilter extends BaseFilter
 {
-    /** @var CollectionFilter[] */
+    /** @var array<CollectionFilter> */
     private readonly array $filters;
 
     public function __construct(

@@ -2,7 +2,7 @@
 
 The following interfaces are defined to easy the process of creating/converting collections/collection items to basic PHP types.
 
-## fromIterable
+## FromIterable
 
 This interface defines how to create a collection item from an iterable:
 
@@ -13,7 +13,7 @@ interface FromIterable
 }
 ```
 
-## fromArray
+## FromArray
 
 This interface defines how to create a collection item from an array:
 
@@ -24,7 +24,7 @@ interface FromArray
 }
 ```
 
-## toArray
+## ToArray
 
 This interface defines how to convert a collection item (or a collection itself) to an array:
 
@@ -35,7 +35,7 @@ interface ToArray
 }
 ```
 
-## fromInt
+## FromInt
 
 This interface defines how to create a collection item from an integer:
 
@@ -46,7 +46,7 @@ interface FromInt
 }
 ```
 
-## toInt
+## ToInt
 
 This interface defines how to convert a collection item to an integer:
 
@@ -57,7 +57,7 @@ interface ToInt
 }
 ```
 
-## fromString
+## FromString
 
 This interface defines how to create a collection item from a string:
 
@@ -68,7 +68,7 @@ interface FromString
 }
 ```
 
-## toString
+## ToString
 
 This interface defines how to convert a collection item to a string:
 
@@ -76,6 +76,17 @@ This interface defines how to convert a collection item to a string:
 interface ToString
 {
     public function toString(): string;
+}
+```
+
+## FromStringable
+
+This interface defines how to create a collection item from a string or from a `Stringable` object:
+
+```php
+interface FromStringable
+{
+    public static function fromStringable(string|Stringable $value): self|static;
 }
 ```
 
