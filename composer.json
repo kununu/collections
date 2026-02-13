@@ -46,6 +46,7 @@
     "phpstan": "phpstan",
     "rector": "rector process --dry-run --config rector-ci.php src/ tests/",
     "rector-fix": "rector process --config rector-ci.php src/ tests/",
+    "sniffer": "phpcs",
     "test": "phpunit --log-events-text phpunit.log --no-coverage --no-logging --no-progress --testsuite Full",
     "test-coverage": "XDEBUG_MODE=coverage phpunit --log-events-text phpunit.log --no-progress --testsuite Full"
   },
@@ -54,6 +55,7 @@
     "phpstan": "Run PHPStan",
     "rector": "Run Rector in dry-run mode with CI rules",
     "rector-fix": "Run Rector in fix mode with CI rules",
+    "sniffer": "Run PHP_CodeSniffer",
     "test": "Run all tests",
     "test-coverage": "Run all tests with coverage report"
   }
