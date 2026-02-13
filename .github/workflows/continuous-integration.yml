@@ -12,6 +12,7 @@ env:
 
 jobs:
   checks:
+    name: Code Checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -105,6 +106,7 @@ jobs:
 
   code_analysis:
     needs: tests
+    name: Code Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
