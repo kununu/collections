@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Kununu\Collection;
 
+use ArrayIterator;
 use Kununu\Collection\Filter\CollectionFilter;
 use Kununu\Collection\Filter\CollectionFilters;
 use Kununu\Collection\Filter\FilterItemTrait;
 
+/** @phpstan-require-extends ArrayIterator */
 trait FilterableCollectionTrait
 {
     use CollectionTrait;

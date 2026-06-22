@@ -57,6 +57,10 @@ More details:
 - [Mapper](docs/mapper.md)
 - [Collections Test Case](docs/abstract-collection-test-case.md)
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for the list of notable changes in each release.
+
 ## Contribute
 
 If you are interested in contributing read our [contributing guidelines](/CONTRIBUTING.md).

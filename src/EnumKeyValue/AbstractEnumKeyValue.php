@@ -3,20 +3,17 @@ declare(strict_types=1);
 
 namespace Kununu\Collection\EnumKeyValue;
 
-use ArrayIterator;
 use BadMethodCallException;
-use Countable;
-use IteratorAggregate;
-use Kununu\Collection\Convertible\FromArray;
-use Kununu\Collection\Convertible\FromIterable;
-use Kununu\Collection\Convertible\ToArray;
 use Kununu\Collection\EnumKeyValue\Exception\RemovingRequiredKeyException;
 use Kununu\Collection\EnumKeyValue\Exception\RequiredKeyMissingException;
 use Kununu\Collection\Helper\FormatOption;
 use Kununu\Collection\Helper\MethodsHelperTrait;
+use Kununu\Collection\KeyValueInterface;
+use Kununu\Collection\KeyValueTrait;
 
-abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, FromArray, FromIterable, ToArray
+abstract class AbstractEnumKeyValue implements KeyValueInterface
 {
+    use KeyValueTrait;
     use MethodsHelperTrait;
 
     protected const string HAS_PREFIX = 'has';
@@ -24,27 +21,6 @@ abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, Fro
     protected const string GETTER_PREFIX = 'get';
     protected const string REMOVE_PREFIX = 'remove';
     protected const FormatOption FORMAT_OPTION = FormatOption::UpperCaseFirst;
-
-    private array $values = [];
-
-    /** @param array<string, mixed> $data */
-    public static function fromArray(array $data): self|static
-    {
-        return self::fromIterable($data);
-    }
-
-    /** @param iterable<string, mixed> $data */
-    public static function fromIterable(iterable $data): self|static
-    {
-        // @phpstan-ignore new.static
-        $instance = new static();
-
-        foreach ($data as $key => $value) {
-            $instance->set($key, $value);
-        }
-
-        return $instance;
-    }
 
     public function __call(string $method, array $args)
     {
@@ -66,11 +42,6 @@ abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, Fro
         };
     }
 
-    public function count(): int
-    {
-        return count($this->values);
-    }
-
     /** @throws RequiredKeyMissingException */
     public function get(string|EnumKeyInterface $key, mixed $default = null): mixed
     {
@@ -81,12 +52,6 @@ abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, Fro
         }
 
         return $this->has($key) ? $this->values[$key->key()] : $default;
-    }
-
-    /** @return ArrayIterator<string, mixed> */
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->values);
     }
 
     public function has(string|EnumKeyInterface $key): bool
@@ -121,16 +86,6 @@ abstract class AbstractEnumKeyValue implements Countable, IteratorAggregate, Fro
         $this->values[self::createKey($key)->key()] = $value;
 
         return $this;
-    }
-
-    public function toArray(): array
-    {
-        return $this->values;
-    }
-
-    public function values(): array
-    {
-        return array_values($this->values);
     }
 
     abstract protected static function createKeyFromString(string $key): EnumKeyInterface;

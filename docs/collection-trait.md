@@ -1,6 +1,6 @@
 # CollectionTrait
 
-This is the most basic trait, and it provides an implementation of the `Collection` interface.
+This is the most basic trait, and it provides an implementation of the `Collection` interface. It can be used directly on a class that is extending `ArrayIterator` (or a child of it, like `AbstractCollection`).
 
 Some details about the implementation:
 
@@ -95,25 +95,49 @@ $collection->toArray();
 
 Internally it is calling the `ArrayIterator::append` and returning the instance to allow fluent calls.
 
+## chunk
+
+Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
+
 ## clear
 
-Internally it is calling the `keys` method and for each key it is call the `ArrayIterator::offsetUnset`  and returning the instance to allow fluent calls.
+Internally it is calling the `keys` method and for each key it is call the `ArrayIterator::offsetUnset` and returning the instance to allow fluent calls.
+
+## collectionOrNull
+
+Returns `null` when the collection is empty (relying on the `empty()` method), otherwise returns the collection itself.
+
+This is handy when an empty collection should be treated as "no value", for example when returning from a repository or service method whose contract is to return either a collection or `null`.
 
 ## count
 
 Internally it is calling the `ArrayIterator::count` method.
 
-## chunk
-
-Internally this method chunks the collection (by getting a copy with [getArrayCopy](https://www.php.net/manual/en/arrayiterator.getarraycopy.php) method) with the PHP [array_chunk](https://www.php.net/manual/function.array-chunk.php) function, returning a zero indexed array of collections of the same type as the initial one.
-
 ## diff
 
-To check the difference between two collections first it checks that the other collection is of the same type as the current one.
+To check the difference between two collections first it checks that the other collection is of the same type as the current one (otherwise a `NotSameCollectionTypeException` is thrown).
 
 Then it is calling the PHP [array_diff](https://www.php.net/manual/en/function.array-diff.php) between the [serialize](https://www.php.net/manual/en/https://www.php.net/manual/en/function.serialize.php) representation of each collection represented as an array (by calling the `toArray` method on each collection).
 
 Finally, it is creating a new instance of the collection by using [unserialize](https://www.php.net/manual/en/function.unserialize) on each member of the diff.
+
+## intersect
+
+To check the intersection between two collections first it checks that the other collection is of the same type as the current one (otherwise a `NotSameCollectionTypeException` is thrown).
+
+Then it is calling the PHP [array_intersect](https://www.php.net/manual/en/function.array-intersect.php) between the [serialize](https://www.php.net/manual/en/https://www.php.net/manual/en/function.serialize.php) representation of each collection represented as an array (by calling the `toArray` method on each collection).
+
+Finally, it is creating a new instance of the collection by using [unserialize](https://www.php.net/manual/en/function.unserialize) on each member of the intersection.
+
+## merge
+
+Merges the current collection with one or more other collections (it is variadic) into a brand-new collection, leaving the source collections untouched.
+
+First it checks that every given collection is of the same type as the current one (otherwise a `NotSameCollectionTypeException` is thrown).
+
+Then it creates a new instance of the collection and iterates the current collection and each of the given ones (with the `each` method), appending every element to the result via its `append` method.
+
+Because it relies on `append`, any custom logic your collection defines there (validation, transformation, keying, deduplication, ...) is applied to the merged elements as well.
 
 ## duplicates
 
@@ -143,7 +167,7 @@ Internally, this method is calling the PHP [in_array](https://www.php.net/manual
 
 Please note that since it's using `in_array` it can produce unexpected results when using loose checking.
 
-### hasMultipleItems
+## hasMultipleItems
 
 Internally is checking if the `ArrayIterator::count` returns a number greater than 1.
 
