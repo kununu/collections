@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Kununu\Collection;
 
-use InvalidArgumentException;
+use ArrayIterator;
+use Kununu\Collection\Exception\NotSameCollectionTypeException;
 
+/** @phpstan-require-extends ArrayIterator */
 trait CollectionTrait
 {
     use MapArrayItemsTrait;
@@ -33,7 +35,7 @@ trait CollectionTrait
         return $this;
     }
 
-    /** @return self[] */
+    /** @return array<self|static> */
     public function chunk(int $size): array
     {
         if ($size < 1) {
@@ -57,10 +59,15 @@ trait CollectionTrait
         return $this;
     }
 
+    public function collectionOrNull(): self|static|null
+    {
+        return $this->empty() ? null : $this;
+    }
+
     public function diff(Collection $other): self|static
     {
         if (!$other instanceof static) {
-            throw new InvalidArgumentException('Other collection must be of the same type');
+            throw new NotSameCollectionTypeException();
         }
 
         return static::fromIterable(
@@ -76,14 +83,49 @@ trait CollectionTrait
         );
     }
 
+    public function intersect(Collection $other): self|static
+    {
+        if (!$other instanceof static) {
+            throw new NotSameCollectionTypeException();
+        }
+
+        return static::fromIterable(
+            array_values(
+                array_map(
+                    unserialize(...),
+                    array_intersect(
+                        array_map(serialize(...), $this->toArray()),
+                        array_map(serialize(...), $other->toArray())
+                    )
+                )
+            )
+        );
+    }
+
+    public function merge(Collection ...$others): self|static
+    {
+        // @phpstan-ignore new.static
+        $result = new static();
+
+        foreach ([$this, ...$others] as $collection) {
+            if (!$collection instanceof static) {
+                throw new NotSameCollectionTypeException();
+            }
+
+            $collection->each(static fn(mixed $element) => $result->append($element));
+        }
+
+        return $result;
+    }
+
     public function duplicates(bool $strict = true, bool $uniques = false): self|static
     {
         return $this->doWithRewind(
             function(Collection $elements, Collection $duplicates, bool $strict, bool $uniques): Collection {
                 foreach ($this as $element) {
                     match ($elements->has($element, $strict)) {
-                        true  => $duplicates->add($element),
                         false => $elements->add($element),
+                        true  => $duplicates->add($element),
                     };
                 }
 

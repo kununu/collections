@@ -17,12 +17,15 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "kununu/code-tools": "^4.0",
-    "phpstan/phpstan": "^2.1",
+    "kununu/code-tools": "^4.1",
+    "phpstan/phpstan": "^2.2",
     "phpstan/phpstan-phpunit": "^2.0",
     "phpunit/phpunit": "^13.1",
     "rector/rector": "^2.4",
     "shipmonk/composer-dependency-analyser": "^1.8"
+  },
+  "suggest": {
+    "phpunit/phpunit": "Required only if you extend AbstractCollectionTestCase in your own test suite"
   },
   "minimum-stability": "stable",
   "autoload": {
@@ -48,8 +51,11 @@
     "rector-fix": "rector process --config rector-ci.php src/ tests/",
     "sniffer": "phpcs",
     "sniffer-fix": "phpcbf",
-    "test": "phpunit --testsuite Full --testdox --testdox-summary --no-coverage --no-logging",
-    "test-coverage": "XDEBUG_MODE=coverage phpunit --testsuite Full --testdox --testdox-summary --log-junit tests/.results/tests-junit.xml --coverage-clover tests/.results/tests-clover.xml --coverage-html tests/.results/html/"
+    "test": "@php -d zend.assertions=1 vendor/bin/phpunit --testsuite Full --testdox --testdox-summary --no-coverage --no-logging",
+    "test-coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "@php -d zend.assertions=1 vendor/bin/phpunit --testsuite Full --testdox --testdox-summary --log-junit tests/.results/tests-junit.xml --coverage-clover tests/.results/tests-clover.xml --coverage-html tests/.results/html/"
+    ]
   },
   "scripts-descriptions": {
     "cs": "Run PHP CS Fixer with kununu code standards",

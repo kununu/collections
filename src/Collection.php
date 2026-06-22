@@ -11,12 +11,18 @@ interface Collection extends FromIterable, ToArray, Countable
 {
     public function add(mixed $value): self|static;
 
-    /** @return self[]|static[] */
+    /** @return array<self|static> */
     public function chunk(int $size): array;
 
     public function clear(): self|static;
 
+    public function collectionOrNull(): self|static|null;
+
     public function diff(self $other): self|static;
+
+    public function intersect(self $other): self|static;
+
+    public function merge(self ...$others): self|static;
 
     public function duplicates(bool $strict = true, bool $uniques = false): self|static;
 

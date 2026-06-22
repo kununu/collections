@@ -6,8 +6,8 @@ namespace Kununu\Collection\Tests;
 use ArrayIterator;
 use Exception;
 use Generator;
-use InvalidArgumentException;
 use Kununu\Collection\Collection;
+use Kununu\Collection\Exception\NotSameCollectionTypeException;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
 use Kununu\Collection\Tests\Stub\AutoSortedCollectionStub;
 use Kununu\Collection\Tests\Stub\CollectionStub;
@@ -253,6 +253,17 @@ final class CollectionTest extends TestCase
 
         self::assertFalse($collection->empty());
         self::assertTrue($collection->hasMultipleItems());
+    }
+
+    public function testCollectionOrNull(): void
+    {
+        $collection = new CollectionStub();
+
+        self::assertNull($collection->collectionOrNull());
+
+        $collection->add(1);
+
+        self::assertSame($collection, $collection->collectionOrNull());
     }
 
     public function testUnique(): void
@@ -576,10 +587,66 @@ final class CollectionTest extends TestCase
         self::assertEquals([4, 5], $collection1->diff($collection2)->toArray());
         self::assertEquals([6, 7], $collection2->diff($collection1)->toArray());
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(NotSameCollectionTypeException::class);
         $this->expectExceptionMessage('Other collection must be of the same type');
 
         $collection1->diff(new FilterableCollectionStub());
+    }
+
+    public function testIntersect(): void
+    {
+        $collection1 = CollectionStub::fromIterable([1, 2, 3, 4, 5]);
+        $collection2 = CollectionStub::fromIterable([1, 2, 3, 6, 7]);
+
+        self::assertEquals([1, 2, 3], $collection1->intersect($collection2)->toArray());
+        self::assertEquals([1, 2, 3], $collection2->intersect($collection1)->toArray());
+
+        $this->expectException(NotSameCollectionTypeException::class);
+        $this->expectExceptionMessage('Other collection must be of the same type');
+
+        $collection1->intersect(new FilterableCollectionStub());
+    }
+
+    public function testMerge(): void
+    {
+        $collection1 = CollectionStub::fromIterable([1, 2, 3]);
+        $collection2 = CollectionStub::fromIterable([4, 5]);
+        $collection3 = CollectionStub::fromIterable([6]);
+
+        $merged = $collection1->merge($collection2, $collection3);
+
+        self::assertEquals([1, 2, 3, 4, 5, 6], $merged->toArray());
+        // Source collections are left untouched
+        self::assertEquals([1, 2, 3], $collection1->toArray());
+        self::assertEquals([4, 5], $collection2->toArray());
+
+        // Calling merge with no arguments produces a copy of the collection
+        self::assertEquals([1, 2, 3], $collection1->merge()->toArray());
+    }
+
+    public function testMergeUsesAppendOfResultingCollection(): void
+    {
+        $collection1 = new DTOCollectionStub(new DTOStub('a', 1), new DTOStub('b', 2));
+        $collection2 = new DTOCollectionStub(new DTOStub('b', 3), new DTOStub('c', 4));
+
+        // DTOCollectionStub::append keys items by their field, so merging via append
+        // overwrites the duplicated "b" entry with the value coming from $collection2
+        self::assertEquals(
+            [
+                'a' => ['field' => 'a', 'value' => 1],
+                'b' => ['field' => 'b', 'value' => 3],
+                'c' => ['field' => 'c', 'value' => 4],
+            ],
+            $collection1->merge($collection2)->toArray()
+        );
+    }
+
+    public function testMergeThrowsWhenCollectionsAreNotTheSameType(): void
+    {
+        $this->expectException(NotSameCollectionTypeException::class);
+        $this->expectExceptionMessage('Other collection must be of the same type');
+
+        CollectionStub::fromIterable([1, 2, 3])->merge(new FilterableCollectionStub());
     }
 
     #[DataProvider('eachDataProvider')]

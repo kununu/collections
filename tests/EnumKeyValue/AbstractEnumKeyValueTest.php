@@ -91,6 +91,27 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->keyValueNoRequired->get(EnumStub::Key1);
     }
 
+    public function testOffsetGetWithValidKeys(): void
+    {
+        self::assertEquals(self::KEY_1_VALUE, $this->keyValue->offsetGet(EnumStub::Key1));
+        self::assertEquals(self::KEY_1_VALUE, $this->keyValue->offsetGet(self::KEY_1));
+        self::assertEquals(self::KEY_1_VALUE, $this->keyValue[self::KEY_1]);
+
+        self::assertEquals(self::KEY_2_VALUE, $this->keyValue->offsetGet(EnumStub::Key2));
+        self::assertEquals(self::KEY_2_VALUE, $this->keyValue->offsetGet(self::KEY_2));
+        self::assertEquals(self::KEY_2_VALUE, $this->keyValue[self::KEY_2]);
+
+        self::assertNull($this->keyValue->offsetGet(EnumStub::Key3));
+    }
+
+    public function testOffsetGetWithInvalidKey(): void
+    {
+        $this->expectException(ValueError::class);
+        $this->expectExceptionMessage($this->invalidCaseMessage);
+
+        $this->keyValue->offsetGet(self::KEY_INVALID);
+    }
+
     public function testGetIterator(): void
     {
         $result = [];
@@ -132,6 +153,26 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->keyValue->has(self::KEY_INVALID);
     }
 
+    public function testOffsetExistsWithValidKeys(): void
+    {
+        self::assertTrue($this->keyValue->offsetExists(EnumStub::Key1));
+        self::assertTrue($this->keyValue->offsetExists(self::KEY_1));
+
+        self::assertTrue($this->keyValue->offsetExists(EnumStub::Key2));
+        self::assertTrue($this->keyValue->offsetExists(self::KEY_2));
+
+        self::assertFalse($this->keyValue->offsetExists(EnumStub::Key3));
+        self::assertFalse($this->keyValue->offsetExists(self::KEY_3));
+    }
+
+    public function testOffsetExistsWithInvalidKey(): void
+    {
+        $this->expectException(ValueError::class);
+        $this->expectExceptionMessage($this->invalidCaseMessage);
+
+        $this->keyValue->offsetExists(self::KEY_INVALID);
+    }
+
     public function testKeys(): void
     {
         self::assertEquals([EnumStub::Key1, EnumStub::Key2], $this->keyValue->keys(false));
@@ -163,6 +204,34 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->keyValue->remove(self::KEY_INVALID);
     }
 
+    public function testOffsetUnsetWithValidKeys(): void
+    {
+        $kv = new EnumKeyValueStub()->setKey2('hello')->setKey3(5.0);
+
+        self::assertTrue($kv->hasKey2());
+        self::assertTrue($kv->hasKey3());
+
+        unset($kv[self::KEY_2]);
+        $kv->offsetUnset(EnumStub::Key3);
+
+        self::assertFalse($kv->hasKey2());
+        self::assertFalse($kv->hasKey3());
+
+        $kv = new EnumKeyValueStub()->setKey2('hello')->setKey3(5.0);
+
+        $kv->offsetUnset(self::KEY_3);
+
+        self::assertFalse($kv->hasKey3());
+    }
+
+    public function testOffsetUnsetWithInvalidValidKey(): void
+    {
+        $this->expectException(ValueError::class);
+        $this->expectExceptionMessage($this->invalidCaseMessage);
+
+        $this->keyValue->offsetUnset(self::KEY_INVALID);
+    }
+
     public function testSetWithValidKeys(): void
     {
         $kv = new EnumKeyValueStub();
@@ -182,6 +251,23 @@ final class AbstractEnumKeyValueTest extends TestCase
         $this->expectExceptionMessage($this->invalidCaseMessage);
 
         $this->keyValue->set(self::KEY_INVALID, self::KEY_1_VALUE);
+    }
+
+    public function testOffsetSetWithValidKeys(): void
+    {
+        $kv = new EnumKeyValueStub();
+
+        self::assertFalse($kv->hasKey1());
+        self::assertFalse($kv->hasKey2());
+        self::assertFalse($kv->hasKey3());
+
+        $kv->offsetSet(self::KEY_1, self::KEY_1_VALUE);
+        $kv[self::KEY_2] = self::KEY_2_VALUE;
+        $kv->offsetSet(self::KEY_3, self::KEY_3_VALUE);
+
+        self::assertEquals(self::KEY_1_VALUE, $kv->getKey1());
+        self::assertEquals(self::KEY_2_VALUE, $kv->getKey2());
+        self::assertEquals(self::KEY_3_VALUE, $kv->getKey3());
     }
 
     public function testToArray(): void

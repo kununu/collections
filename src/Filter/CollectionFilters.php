@@ -24,8 +24,6 @@ final class CollectionFilters extends AbstractCollection
 
     private const string INVALID = 'Can only append %s or another instance of %s';
 
-    private ?array $groups = null;
-
     public function __construct(CollectionFilter ...$filters)
     {
         if (count($filters)) {
@@ -55,32 +53,25 @@ final class CollectionFilters extends AbstractCollection
 
     public function getGroupsForCollection(Collection $collection, bool $removeEmptyGroups): array
     {
-        $this->groups = $this->reduce(
-            static function(array $group, CollectionFilter $filter): array {
-                $group[$filter->key()] = [];
+        $groups = array_merge(...$this->map(static fn(CollectionFilter $filter): array => [$filter->key() => []]));
 
-                return $group;
-            },
-            []
-        );
+        $collection->each(function(mixed $item) use (&$groups): void {
+            $groups = $this->updateGroupsForItem($item, $groups);
+        });
 
-        $collection->each(fn(mixed $item) => $this->updateGroupsForItem($item));
-
-        $groups = $removeEmptyGroups ? array_filter($this->groups) : $this->groups;
-        $this->groups = null;
-
-        return $groups;
+        return $removeEmptyGroups ? array_filter($groups) : $groups;
     }
 
-    private function updateGroupsForItem(mixed $item): self
+    private function updateGroupsForItem(mixed $item, array $groups): array
     {
         $this->each(
-            fn(CollectionFilter $filter) => match (self::filterIsSatisfiedByItem($filter, $item)) {
-                false => null,
-                true  => $this->groups[$filter->key()][$item->groupByKey($filter->customGroupByData())] = $item,
+            static function(CollectionFilter $filter) use (&$groups, $item): void {
+                if (self::filterIsSatisfiedByItem($filter, $item)) {
+                    $groups[$filter->key()][$item->groupByKey($filter->customGroupByData())] = $item;
+                }
             }
         );
 
-        return $this;
+        return $groups;
     }
 }

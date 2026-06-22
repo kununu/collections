@@ -18,6 +18,9 @@ abstract class AbstractBasicItem
 
     private const FormatOption FORMAT_OPTION = FormatOption::LowerCaseFirst;
 
+    /** @var array<class-string, list<string>> */
+    private static array $propertiesCache = [];
+
     private array $attributes = [];
 
     public function __construct(array $attributes = [])
@@ -74,8 +77,14 @@ abstract class AbstractBasicItem
 
     protected function getAllProperties(): array
     {
+        return self::$propertiesCache[static::class] ??= self::resolveAllProperties();
+    }
+
+    /** @return list<string> */
+    private static function resolveAllProperties(): array
+    {
         $properties = static::PROPERTIES;
-        foreach (class_parents($this) as $parentClass) {
+        foreach (class_parents(static::class) as $parentClass) {
             $properties = array_merge($properties, $parentClass::PROPERTIES);
         }
 

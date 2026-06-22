@@ -47,15 +47,23 @@ $collection->add($item1)->add($item2);
 ### chunk
 
 ```php
-/** @return self[]|static[] */
+/** @return array<self|static> */
 public function chunk(int $size): array
 ```
 
-This method [mirrors the behavior of `array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
+This method mirrors the behavior of [`array_chunk`](https://www.php.net/manual/function.array-chunk.php) and returns a zero indexed numeric array of the current collection based on the chunk size provided.
 
 ### clear
 
 This method should remove all the items of the collection and since is fluent it should return the collection. 
+
+### collectionOrNull
+
+```php
+public function collectionOrNull(): self|static|null;
+```
+
+This method should return `null` when the collection is empty, otherwise the collection itself.
 
 ### count
 
@@ -68,6 +76,22 @@ public function diff(self $other): self|static;
 ```
 
 This method will produce a collection with the difference between your collection and another instance.
+
+### intersect
+
+```php
+public function intersect(self $other): self|static;
+```
+
+This method will produce a collection with the intersection between your collection and another instance.
+
+### merge
+
+```php
+public function merge(self ...$others): self|static;
+```
+
+This method will produce a new collection containing the items of your collection followed by the items of the given instances.
 
 ### duplicates
 
