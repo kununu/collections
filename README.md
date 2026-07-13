@@ -10,29 +10,6 @@ You can use this library by issuing the following command:
 composer require kununu/collections
 ```
 
-## Running Tests
-
-Run the tests by doing:
-
-```bash
-composer install
-vendor/bin/phpunit
-```
-
-or
-
-```bash
-composer install
-composer test
-```
-
-To run test and generate coverage information:
-
-```bash
-composer install
-composer test-coverage
-```
-
 ## Usage
 
 The library defines interfaces to deal with collections and also boilerplate code with default implementations.
@@ -61,12 +38,11 @@ More details:
 
 See [CHANGELOG.md](CHANGELOG.md) for the list of notable changes in each release.
 
-## Contribute
+## Contributing
 
-If you are interested in contributing read our [contributing guidelines](/CONTRIBUTING.md).
+If you are interested in contributing read our [contributing guidelines](CONTRIBUTING.md).
 
 ------------------------------
 
 ![Continuous Integration](https://github.com/kununu/collections/actions/workflows/continuous-integration.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kununu_collections&metric=alert_status)](https://sonarcloud.io/dashboard?id=kununu_collections)
-
