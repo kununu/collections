@@ -142,5 +142,7 @@ jobs:
 
       - name: Quality Gate check
         uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          pollingTimeoutSec: 60
         env:
-          SONAR_TOKEN: ${{ inputs.sonar-token }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
