@@ -17,11 +17,10 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "kununu/code-tools": "^4.1",
-    "phpstan/phpstan": "^2.2",
-    "phpstan/phpstan-phpunit": "^2.0",
-    "phpunit/phpunit": "^13.1",
-    "rector/rector": "^2.4",
+    "ergebnis/composer-normalize": "^2.53",
+    "kununu/code-tools": "^5.0",
+    "maglnet/composer-require-checker": "^4.20",
+    "phpunit/phpunit": "^13.3",
     "shipmonk/composer-dependency-analyser": "^1.8"
   },
   "suggest": {
@@ -40,11 +39,23 @@
   },
   "config": {
     "allow-plugins": {
+      "ergebnis/composer-normalize": true,
       "kununu/code-tools": true
     },
     "sort-packages": true
   },
   "scripts": {
+    "ci": [
+      "composer audit --abandoned=report",
+      "composer-dependency-analyser",
+      "composer-require-checker",
+      "composer normalize --dry-run --indent-size 2 --indent-style space --no-check-lock --no-update-lock",
+      "@cs",
+      "@sniffer",
+      "@rector",
+      "@phpstan",
+      "@test-coverage"
+    ],
     "cs": "composer kununu:cs-fixer src/ tests/",
     "phpstan": "phpstan",
     "rector": "rector process --dry-run --config rector-ci.php src/ tests/",

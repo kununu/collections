@@ -588,7 +588,7 @@ final class CollectionTest extends TestCase
         self::assertEquals([6, 7], $collection2->diff($collection1)->toArray());
 
         $this->expectException(NotSameCollectionTypeException::class);
-        $this->expectExceptionMessage('Other collection must be of the same type');
+        $this->expectExceptionMessageIs('Other collection must be of the same type');
 
         $collection1->diff(new FilterableCollectionStub());
     }
@@ -602,7 +602,7 @@ final class CollectionTest extends TestCase
         self::assertEquals([1, 2, 3], $collection2->intersect($collection1)->toArray());
 
         $this->expectException(NotSameCollectionTypeException::class);
-        $this->expectExceptionMessage('Other collection must be of the same type');
+        $this->expectExceptionMessageIs('Other collection must be of the same type');
 
         $collection1->intersect(new FilterableCollectionStub());
     }
@@ -644,7 +644,7 @@ final class CollectionTest extends TestCase
     public function testMergeThrowsWhenCollectionsAreNotTheSameType(): void
     {
         $this->expectException(NotSameCollectionTypeException::class);
-        $this->expectExceptionMessage('Other collection must be of the same type');
+        $this->expectExceptionMessageIs('Other collection must be of the same type');
 
         CollectionStub::fromIterable([1, 2, 3])->merge(new FilterableCollectionStub());
     }

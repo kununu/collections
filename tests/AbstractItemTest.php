@@ -170,7 +170,7 @@ final class AbstractItemTest extends TestCase
     {
         if (null !== $expectedExceptionMessage) {
             $this->expectException(InvalidArgumentException::class);
-            $this->expectExceptionMessage($expectedExceptionMessage);
+            $this->expectExceptionMessageIs($expectedExceptionMessage);
         }
 
         $item = AbstractItemWithRequiredFieldsStub::build($data);
@@ -394,8 +394,8 @@ final class AbstractItemTest extends TestCase
     {
         $item = new AbstractItemStub();
 
-        $this->expectExceptionMessage(BadMethodCallException::class);
-        $this->expectExceptionMessage(
+        $this->expectException(BadMethodCallException::class);
+        $this->expectExceptionMessageIs(
             'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "thisMethodReallyDoesNotExists" called'
         );
 
@@ -407,7 +407,7 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIs(
             'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
         );
 
@@ -419,7 +419,7 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(OutOfBoundsException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIs(
             'Kununu\Collection\Tests\Stub\AbstractItemStub : Invalid attribute "invalidProperty"'
         );
 
@@ -431,7 +431,7 @@ final class AbstractItemTest extends TestCase
         $item = new AbstractItemStub();
 
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage(
+        $this->expectExceptionMessageIs(
             'Kununu\Collection\Tests\Stub\AbstractItemStub: Invalid method "withInvalidProperty" called'
         );
 

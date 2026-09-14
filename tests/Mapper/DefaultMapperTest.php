@@ -32,7 +32,7 @@ final class DefaultMapperTest extends TestCase
         );
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid collection');
+        $this->expectExceptionMessageIs('Invalid collection');
 
         $mapper->map(new CollectionStub());
     }
@@ -40,7 +40,7 @@ final class DefaultMapperTest extends TestCase
     public function testMapperWithInvalidCallerRegistration(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid collection class: Kununu\Collection\Tests\Stub\CollectionStub');
+        $this->expectExceptionMessageIs('Invalid collection class: Kununu\Collection\Tests\Stub\CollectionStub');
 
         self::assertNull(new MapperStub(CollectionStub::class));
     }

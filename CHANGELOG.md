@@ -10,6 +10,30 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 _No unreleased changes yet._
 
+## [8.1.0] - 2026-09-14
+
+### Added
+
+- CI workflows:
+  - Run SonarQube Quality Gate check after analysis 
+  - Configure dependabot updates for GitHub Actions versions pinned in workflows
+
+### Changed
+
+- Bumped `kununu/code-tools` to `^5.0`
+  - Removed dependencies already imported by it
+  - Fixed breaking changes in `phpcs.xml.dist`
+- Bumped PHPUnit to `^13.3` 
+  - Resolved PHPUnit deprecations
+  - Updated PHPUnit configuration file
+- Fix Rector configuration file
+- Added `ci` script to `composer.json` to run all checks performed in the CI pipelines locally
+  - Added dev dependencies to enable this 
+- CI workflows:
+  - Bumped `toshimaru/auto-author-assign` to `v3.1.0` in `auto_assign_owner.yml`
+  - In `continuous-integration.yml`:
+    - Bumped `actions/checkout` to `v7` 
+
 ## [8.0.0] - 2026-06-22
 
 Major release. See **Backwards compatibility** below before upgrading.
@@ -313,7 +337,8 @@ Major release. See **Backwards compatibility** below before upgrading.
 
 - Initial release: `CollectionTrait` and `FilterableCollectionTrait`.
 
-[unreleased]: https://github.com/kununu/collections/compare/v8.0.0...HEAD
+[unreleased]: https://github.com/kununu/collections/compare/v8.1.0...HEAD
+[8.1.0]: https://github.com/kununu/collections/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kununu/collections/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kununu/collections/compare/v6.6.0...v7.0.0
 [6.6.0]: https://github.com/kununu/collections/compare/v6.5.0...v6.6.0

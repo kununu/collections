@@ -36,7 +36,7 @@ final class EnumKeyTraitTest extends TestCase
     public function testNotAnEnum(): void
     {
         $this->expectException(NotAnEnumException::class);
-        $this->expectExceptionMessage(sprintf('"%s" is not an enum', NotAnEnumStub::class));
+        $this->expectExceptionMessageIs(sprintf('"%s" is not an enum', NotAnEnumStub::class));
         $this->expectExceptionCode(400);
 
         new NotAnEnumStub()->key();

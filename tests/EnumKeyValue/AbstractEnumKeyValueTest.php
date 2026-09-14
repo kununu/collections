@@ -77,7 +77,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testGetWithInvalidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->get(self::KEY_INVALID);
     }
@@ -85,7 +85,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testGetWithMissingRequiredKey(): void
     {
         $this->expectException(RequiredKeyMissingException::class);
-        $this->expectExceptionMessage(sprintf('Missing required key: "%s"', EnumStub::Key1->name));
+        $this->expectExceptionMessageIs(sprintf('Missing required key: "%s"', EnumStub::Key1->name));
         $this->expectExceptionCode(400);
 
         $this->keyValueNoRequired->get(EnumStub::Key1);
@@ -107,7 +107,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testOffsetGetWithInvalidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->offsetGet(self::KEY_INVALID);
     }
@@ -148,7 +148,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testHasWithInvalidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->has(self::KEY_INVALID);
     }
@@ -168,7 +168,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testOffsetExistsWithInvalidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->offsetExists(self::KEY_INVALID);
     }
@@ -191,7 +191,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testRemoveRequiredSetKey(): void
     {
         $this->expectException(RemovingRequiredKeyException::class);
-        $this->expectExceptionMessage('Removing required key: "Key1"');
+        $this->expectExceptionMessageIs('Removing required key: "Key1"');
 
         $this->keyValue->remove(EnumStub::Key1);
     }
@@ -199,7 +199,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testRemoveWithInvalidValidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->remove(self::KEY_INVALID);
     }
@@ -227,7 +227,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testOffsetUnsetWithInvalidValidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->offsetUnset(self::KEY_INVALID);
     }
@@ -248,7 +248,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testSetWithInvalidValidKey(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         $this->keyValue->set(self::KEY_INVALID, self::KEY_1_VALUE);
     }
@@ -289,7 +289,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testInvalidGetMethod(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         new EnumKeyValueStub()->getInvalid();
     }
@@ -297,7 +297,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testInvalidHasMethod(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         new EnumKeyValueStub()->hasInvalid();
     }
@@ -305,7 +305,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testInvalidSetMethod(): void
     {
         $this->expectException(ValueError::class);
-        $this->expectExceptionMessage($this->invalidCaseMessage);
+        $this->expectExceptionMessageIs($this->invalidCaseMessage);
 
         new EnumKeyValueStub()->setInvalid(self::KEY_3_VALUE);
     }
@@ -313,7 +313,7 @@ final class AbstractEnumKeyValueTest extends TestCase
     public function testUnknownMethod(): void
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage(sprintf('%s: Invalid method "invalidMethod" called', EnumKeyValueStub::class));
+        $this->expectExceptionMessageIs(sprintf('%s: Invalid method "invalidMethod" called', EnumKeyValueStub::class));
 
         new EnumKeyValueStub()->invalidMethod();
     }

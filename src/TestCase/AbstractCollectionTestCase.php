@@ -55,7 +55,7 @@ abstract class AbstractCollectionTestCase extends TestCase
         $this->expectException(static::INVALID_EXCEPTION_CLASS);
 
         if (static::INVALID_ERROR_MESSAGE !== null) {
-            $this->expectExceptionMessage(static::INVALID_ERROR_MESSAGE);
+            $this->expectExceptionMessageIsOrContains(static::INVALID_ERROR_MESSAGE);
         }
 
         $this->createEmptyCollection()->add(static::INVALID_VALUE);
