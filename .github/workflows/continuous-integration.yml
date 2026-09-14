@@ -34,6 +34,9 @@ jobs:
           dependency-versions: "highest"
           composer-options: "--prefer-stable --optimize-autoloader --no-progress --no-interaction"
 
+      - name: Run Composer Audit
+        run: composer audit --abandoned=report
+
       - name: Run Composer Dependency Analyser
         run: vendor/bin/composer-dependency-analyser
 
@@ -41,7 +44,7 @@ jobs:
         run: vendor/bin/composer-require-checker
 
       - name: Run Composer Normalize
-        run: composer-normalize --dry-run --indent-size 2 --indent-style space --no-check-lock --no-update-lock
+        run: composer normalize --dry-run --indent-size 2 --indent-style space --no-check-lock --no-update-lock
 
       - name: Run PHP CS Fixer
         run: |
