@@ -5,6 +5,7 @@
          bootstrap="vendor/autoload.php"
          colors="true"
          beStrictAboutChangesToGlobalState="true"
+         displayDetailsOnAllIssues="true"
          cacheDirectory=".phpunit.cache">
     <testsuites>
         <testsuite name="Full">
