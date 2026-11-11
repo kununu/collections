@@ -20,7 +20,16 @@ _No unreleased changes yet._
 
 ### Changed
 
+- Bumped `kununu/code-tools` to `^5.2`
+  - Removed `ergebnis/composer-normalize` and `maglnet/composer-require-checker` from `require-dev`
+  - Composer Normalize and Composer Require Checker now run as PHARs downloaded into `tools/`, which is ignored by git
+  - Added `normalize-check`, `normalize-fix` and `require-checker` scripts, and the `ci` script now uses them
 - Bumped PHPUnit to `^13.4`
+- CI workflows:
+  - In `continuous-integration.yml`:
+    - Install Composer Normalize and Composer Require Checker with `setup-php` and run them directly
+    - Pinned `sonarsource/sonarqube-quality-gate-action` to `v1` instead of `master`
+  - Bumped `toshimaru/auto-author-assign` to `v3.1.1` in `auto_assign_owner.yml`
 
 ## [8.1.1] - 2026-09-15
 
