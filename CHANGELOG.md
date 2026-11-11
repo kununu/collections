@@ -8,6 +8,10 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 ## [Unreleased]
 
+_No unreleased changes yet._
+
+## [8.1.2] - 2026-11-11
+
 ### Fixed
 
 - `AbstractBasicItem` no longer declares the static `$propertiesCache` property added in 8.0.0
@@ -341,7 +345,8 @@ Major release. See **Backwards compatibility** below before upgrading.
 
 - Initial release: `CollectionTrait` and `FilterableCollectionTrait`.
 
-[unreleased]: https://github.com/kununu/collections/compare/v8.1.0...HEAD
+[unreleased]: https://github.com/kununu/collections/compare/v8.1.2...HEAD
+[8.1.2]: https://github.com/kununu/collections/compare/v8.1.1...v8.1.2
 [8.1.0]: https://github.com/kununu/collections/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kununu/collections/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kununu/collections/compare/v6.6.0...v7.0.0
