@@ -10,6 +10,7 @@ use Kununu\Collection\Filter\FilterOperatorAnd;
 use Kununu\Collection\Filter\FilterOperatorOr;
 use Kununu\Collection\Tests\Stub\FilterableCollectionStub;
 use Kununu\Collection\Tests\Stub\FilterItemStub;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class FilterableCollectionTest extends TestCase
@@ -81,6 +82,32 @@ final class FilterableCollectionTest extends TestCase
         );
 
         self::assertEmpty($collection->filterWith($filter2));
+    }
+
+    #[DataProvider('filterWithRewindDataProvider')]
+    public function testFilterWithRewind(bool $rewind, ?string $expectedCurrentKey): void
+    {
+        $collection = new FilterableCollectionStub()
+            ->add(new FilterItemStub('a'))
+            ->add(new FilterItemStub('b'));
+
+        $collection->filterWith(static fn(FilterItemStub $stub): FilterItemStub => $stub, $rewind);
+
+        self::assertEquals($expectedCurrentKey, $collection->current()?->itemKey);
+    }
+
+    public static function filterWithRewindDataProvider(): array
+    {
+        return [
+            'rewind'    => [
+                true,
+                'a',
+            ],
+            'no_rewind' => [
+                false,
+                null,
+            ],
+        ];
     }
 
     public function testGroupBy(): void
