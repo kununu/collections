@@ -18,6 +18,10 @@ _No unreleased changes yet._
   - Serializers that read properties by reflection (e.g. JMS Serializer) output it with every item, as a `properties_cache` key
   - The per-class property cache is now a static variable inside `getAllProperties()`
 
+## [8.1.1] - 2026-09-15
+
+Re-release of [8.1.0], with no changes. Both tags point to the same commit.
+
 ## [8.1.0] - 2026-09-14
 
 ### Added
@@ -347,6 +351,7 @@ Major release. See **Backwards compatibility** below before upgrading.
 
 [unreleased]: https://github.com/kununu/collections/compare/v8.2.0...HEAD
 [8.2.0]: https://github.com/kununu/collections/compare/v8.1.1...v8.2.0
+[8.1.1]: https://github.com/kununu/collections/compare/v8.1.0...v8.1.1
 [8.1.0]: https://github.com/kununu/collections/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kununu/collections/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kununu/collections/compare/v6.6.0...v7.0.0
