@@ -8,7 +8,10 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 ## [Unreleased]
 
-_No unreleased changes yet._
+### Fixed
+
+- `FilterableCollectionTrait::filterWith()` now honours its `$rewind` argument
+  - It ignored the argument and always rewound the collection after iterating, even when called with `false`
 
 ## [8.2.0] - 2026-11-11
 

@@ -38,7 +38,8 @@ trait FilterableCollectionTrait
                 if (null !== $value) {
                     $filteredResult->add($value);
                 }
-            }
+            },
+            $rewind
         );
 
         return $filteredResult;
