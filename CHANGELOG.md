@@ -18,6 +18,10 @@ _No unreleased changes yet._
   - Serializers that read properties by reflection (e.g. JMS Serializer) output it with every item, as a `properties_cache` key
   - The per-class property cache is now a static variable inside `getAllProperties()`
 
+### Changed
+
+- Bumped PHPUnit to `^13.4`
+
 ## [8.1.1] - 2026-09-15
 
 Re-release of [8.1.0], with no changes. Both tags point to the same commit.
