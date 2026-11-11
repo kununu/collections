@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Kununu\Collection\Tests\Stub\AbstractItemSnakeCaseStub;
 use Kununu\Collection\Tests\Stub\AbstractItemStub;
+use Kununu\Collection\Tests\Stub\AbstractItemToArrayStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithCollectionsStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithConditionalBuilderStub;
 use Kununu\Collection\Tests\Stub\AbstractItemWithConverterBuilderStub;
@@ -20,6 +21,8 @@ use Kununu\Collection\Tests\Stub\FromArrayStub;
 use OutOfBoundsException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionProperty;
 
 final class AbstractItemTest extends TestCase
 {
@@ -479,5 +482,35 @@ final class AbstractItemTest extends TestCase
             DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2023-10-11 12:34:04'),
             $item->requiredDateTimeImmutableField()
         );
+    }
+
+    public function testItemDeclaresNoStaticProperties(): void
+    {
+        // Serializers that read properties by reflection (e.g. JMS) would output static properties too
+        $item = new AbstractItemStub(['id' => 1]);
+
+        $staticProperties = [];
+        for ($class = new ReflectionClass($item); $class !== false; $class = $class->getParentClass()) {
+            foreach ($class->getProperties(ReflectionProperty::IS_STATIC) as $property) {
+                $staticProperties[] = sprintf('%s::$%s', $property->class, $property->getName());
+            }
+        }
+
+        self::assertSame([], $staticProperties);
+    }
+
+    public function testItemPropertiesAreResolvedPerClass(): void
+    {
+        $item = new AbstractItemStub();
+        $childItem = new AbstractItemToArrayStub();
+
+        self::assertNull($item->getSimpleName());
+        self::assertNull($childItem->getExtraData());
+        self::assertNull($childItem->getIndustryId());
+
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessageIs(sprintf('%s : Invalid attribute "extraData"', AbstractItemStub::class));
+
+        $item->getExtraData();
     }
 }

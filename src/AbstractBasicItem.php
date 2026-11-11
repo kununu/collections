@@ -18,9 +18,6 @@ abstract class AbstractBasicItem
 
     private const FormatOption FORMAT_OPTION = FormatOption::LowerCaseFirst;
 
-    /** @var array<class-string, list<string>> */
-    private static array $propertiesCache = [];
-
     private array $attributes = [];
 
     public function __construct(array $attributes = [])
@@ -77,7 +74,12 @@ abstract class AbstractBasicItem
 
     protected function getAllProperties(): array
     {
-        return self::$propertiesCache[static::class] ??= self::resolveAllProperties();
+        // A static local variable instead of a static property because serializers that read properties by reflection
+        // (e.g. JMS) would otherwise output the cache with every item.
+        /** @var array<class-string, list<string>> $cache */
+        static $cache = [];
+
+        return $cache[static::class] ??= self::resolveAllProperties();
     }
 
     /** @return list<string> */

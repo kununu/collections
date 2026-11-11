@@ -8,7 +8,11 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 ## [Unreleased]
 
-_No unreleased changes yet._
+### Fixed
+
+- `AbstractBasicItem` no longer declares the static `$propertiesCache` property added in 8.0.0
+  - Serializers that read properties by reflection (e.g. JMS Serializer) output it with every item, as a `properties_cache` key
+  - The per-class property cache is now a static variable inside `getAllProperties()`
 
 ## [8.1.0] - 2026-09-14
 
