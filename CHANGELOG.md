@@ -22,7 +22,7 @@ _No unreleased changes yet._
 
 Re-release of [8.1.0], with no changes. Both tags point to the same commit.
 
-## [8.1.0] - 2026-09-14
+## [8.1.0] - 2026-09-15
 
 ### Added
 
