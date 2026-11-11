@@ -18,7 +18,7 @@
   },
   "require-dev": {
     "kununu/code-tools": "^5.2",
-    "phpunit/phpunit": "^13.3",
+    "phpunit/phpunit": "^13.4",
     "shipmonk/composer-dependency-analyser": "^1.8"
   },
   "suggest": {

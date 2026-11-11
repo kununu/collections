@@ -8,13 +8,34 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 ## [Unreleased]
 
+_No unreleased changes yet._
+
+## [8.2.0] - 2026-11-11
+
 ### Fixed
 
 - `AbstractBasicItem` no longer declares the static `$propertiesCache` property added in 8.0.0
   - Serializers that read properties by reflection (e.g. JMS Serializer) output it with every item, as a `properties_cache` key
   - The per-class property cache is now a static variable inside `getAllProperties()`
 
-## [8.1.0] - 2026-09-14
+### Changed
+
+- Bumped `kununu/code-tools` to `^5.2`
+  - Removed `ergebnis/composer-normalize` and `maglnet/composer-require-checker` from `require-dev`
+  - Composer Normalize and Composer Require Checker now run as PHARs downloaded into `tools/`, which is ignored by git
+  - Added `normalize-check`, `normalize-fix` and `require-checker` scripts, and the `ci` script now uses them
+- Bumped PHPUnit to `^13.4`
+- CI workflows:
+  - In `continuous-integration.yml`:
+    - Install Composer Normalize and Composer Require Checker with `setup-php` and run them directly
+    - Pinned `sonarsource/sonarqube-quality-gate-action` to `v1` instead of `master`
+  - Bumped `toshimaru/auto-author-assign` to `v3.1.1` in `auto_assign_owner.yml`
+
+## [8.1.1] - 2026-09-15
+
+Re-release of [8.1.0], with no changes. Both tags point to the same commit.
+
+## [8.1.0] - 2026-09-15
 
 ### Added
 
@@ -341,7 +362,9 @@ Major release. See **Backwards compatibility** below before upgrading.
 
 - Initial release: `CollectionTrait` and `FilterableCollectionTrait`.
 
-[unreleased]: https://github.com/kununu/collections/compare/v8.1.0...HEAD
+[unreleased]: https://github.com/kununu/collections/compare/v8.2.0...HEAD
+[8.2.0]: https://github.com/kununu/collections/compare/v8.1.1...v8.2.0
+[8.1.1]: https://github.com/kununu/collections/compare/v8.1.0...v8.1.1
 [8.1.0]: https://github.com/kununu/collections/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/kununu/collections/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/kununu/collections/compare/v6.6.0...v7.0.0
