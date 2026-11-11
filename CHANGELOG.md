@@ -8,6 +8,10 @@ Entries before this file existed were reconstructed from the [git tags](https://
 
 ## [Unreleased]
 
+_No unreleased changes yet._
+
+## [8.2.1] - 2026-11-11
+
 ### Fixed
 
 - `FilterableCollectionTrait::filterWith()` now honours its `$rewind` argument
@@ -365,7 +369,8 @@ Major release. See **Backwards compatibility** below before upgrading.
 
 - Initial release: `CollectionTrait` and `FilterableCollectionTrait`.
 
-[unreleased]: https://github.com/kununu/collections/compare/v8.2.0...HEAD
+[unreleased]: https://github.com/kununu/collections/compare/v8.2.1...HEAD
+[8.2.1]: https://github.com/kununu/collections/compare/v8.2.0...v8.2.1
 [8.2.0]: https://github.com/kununu/collections/compare/v8.1.1...v8.2.0
 [8.1.1]: https://github.com/kununu/collections/compare/v8.1.0...v8.1.1
 [8.1.0]: https://github.com/kununu/collections/compare/v8.0.0...v8.1.0
